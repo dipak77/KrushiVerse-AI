@@ -693,7 +693,7 @@ Same **workers, schema, tokenizer family, eval gates**:
 | Field | Value |
 |---|---|
 | Owner | KrushiVerse-AI engineering |
-| Status | Approved for Sprint 0 kickoff (implementation pending) |
+| Status | Sprint 0 (FP-0) **implemented & tested** (58/58); pushed to `arena/019f74ea-krushiverse-ai` |
 | Related | `ARCHITECTURE.md`, `README.md`, platform v10.2 RAG stack |
 | Next doc | `docs/sprint-notes/S00.md` after Sprint 0 execution |
 
