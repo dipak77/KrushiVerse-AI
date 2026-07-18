@@ -27,6 +27,8 @@ mini/models/**
 !mini/models/config.py
 !mini/models/model.py
 !mini/models/train.py
+!mini/models/corpus.py
+!mini/models/pretrain.py
 !mini/models/PARAM_COUNT.json
 mini/models/checkpoints/
 mini/models/*.pt
