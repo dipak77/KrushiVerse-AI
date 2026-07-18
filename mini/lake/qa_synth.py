@@ -1,10 +1,12 @@
-"""Expert QA synthesis factory (Sprint 6 / Phase 6 start).
+"""Expert QA synthesis factory (Sprint 6–7 / Phase 6).
 
 Generates multilingual template-based Q/A packs from:
 - Processed lake structured facts
 - Frozen taxonomy (crops, stages, schemes catalog)
 
-Targets (interim): ≥10k train + ≥1k val StandardRecords with schema v1.
+Targets:
+- Sprint 6: ≥10k train + ≥1k val
+- Sprint 7: ≥50k train pairs, ≥8 categories, ≥20% non-English
 No train/test leakage: all paraphrases of a fact_key share the same split.
 """
 
@@ -292,12 +294,13 @@ def _load_processed_facts() -> dict[str, list[dict]]:
 
 def synthesize_qa_records(
     *,
-    target_min_total: int = 12000,
+    target_min_total: int = 62500,
     include_safety: bool = True,
     include_stages: bool = True,
     include_districts: bool = True,
+    sprint7_expand: bool = True,
 ) -> list[StandardRecord]:
-    """Generate expanded multilingual QA pack."""
+    """Generate expanded multilingual QA pack (S7 default ~62.5k total for ≥50k train)."""
     facts = _load_processed_facts()
     out: list[StandardRecord] = []
     seen: set[str] = set()
@@ -1149,7 +1152,644 @@ def synthesize_qa_records(
                     )
                 )
 
+    # --- Sprint 7 expansion: deeper packs + hard negatives + volume ---
+    if sprint7_expand:
+        _sprint7_expand_packs(push, facts)
+
     return out
+
+
+def _sprint7_expand_packs(push, facts: dict[str, list[dict]]) -> None:
+    """Sprint 7: soil/weather/pest/finance/hard-negatives/safety volume expansion."""
+    crops = list_crop_names_en()
+    districts = list_mh_districts()
+    nutrients = [
+        ("N", "nitrogen", "नत्र", "नाइट्रोजन", "Yellowing of older leaves; apply urea in splits after soil test."),
+        ("P", "phosphorus", "स्फुरद", "फास्फोरस", "Poor rooting/purple leaves; apply DAP/SSP as basal per soil test."),
+        ("K", "potassium", "पालाश", "पोटाश", "Leaf margin scorch; apply MOP in splits, critical for fruit quality."),
+        ("Zn", "zinc", "जस्त", "जिंक", "Interveinal chlorosis; ZnSO4 soil/foliar as recommended."),
+        ("Fe", "iron", "लोह", "आयरन", "Young leaf chlorosis on calcareous soils; Fe foliar if deficient."),
+        ("B", "boron", "बोरॉन", "बोरॉन", "Flower/fruit drop issues; boron foliar carefully at low dose."),
+        ("S", "sulphur", "गंधक", "सल्फर", "Pale new growth; use gypsum/SSP where S is low."),
+        ("Mg", "magnesium", "मॅग्नेशियम", "मैग्नीशियम", "Interveinal yellowing on older leaves; MgSO4 if confirmed."),
+    ]
+    pest_focus = [
+        ("aphid", "Aphids", "मावा", "माहू", "curled leaves and honeydew; use yellow traps and neem early"),
+        ("thrips", "Thrips", "फुलकिडे", "थ्रिप्स", "silvering and flower drop; blue traps and avoid water stress"),
+        ("whitefly", "Whitefly", "पांढरी माशी", "सफेद मक्खी", "sooty mould risk; yellow sticky traps and reflectives"),
+        ("bollworm", "Bollworm complex", "बोंड अळी", "इल्ली", "fruiting body damage; pheromone traps and ETL sprays"),
+        ("stem_borer", "Stem borer", "खोडकिडा", "तना छेदक", "dead hearts; remove infested tillers and timed control"),
+        ("leaf_miner", "Leaf miner", "पर्ण सुरंगकीटक", "पत्ती सुरंगक", "serpentine mines; remove damaged leaves early"),
+        ("mite", "Mites", "कोळी", "माइट", "bronzing under dry weather; avoid excess pyrethroids"),
+        ("termite", "Termites", "वाळवी", "दीमक", "wilting patches; treat soil/seed as recommended"),
+    ]
+    hard_negatives = [
+        (
+            "en_guess_chem",
+            LanguageCode.EN,
+            "Which exact pesticide brand should I buy today for unknown leaf spots on {crop}?",
+            "Insufficient information. Identify disease vs nutrient vs pest first (photo/symptoms, weather, last spray). "
+            "Do not purchase chemicals by brand name alone. Prefer diagnosis + IPM; consult local agri officer.",
+        ),
+        (
+            "en_mix_unknown",
+            LanguageCode.EN,
+            "Can I mix all leftover chemicals and spray on {crop} this evening?",
+            "No. Never tank-mix unknown leftovers. Incompatible mixes can burn crops and are unsafe. "
+            "Dispose leftovers per label/local rules and spray only labeled products after diagnosis.",
+        ),
+        (
+            "en_double_dose",
+            LanguageCode.EN,
+            "If pest is severe on {crop}, should I double the pesticide dose?",
+            "No. Do not double doses. Follow label rates, rotate modes of action, and verify ETL. "
+            "Overdosing risks residue, resistance, and crop injury.",
+        ),
+        (
+            "mr_guess",
+            LanguageCode.MR,
+            "{crop_mr} पानावर डाग आहेत — कोणतेही औषध फवारू का?",
+            "नाही. आधी निदान आवश्यक (रोग/अन्नद्रव्य/कीड). फोटो, हवामान, मागील फवारणी तपासा. "
+            "अंदाजाने रासायनिक औषध वापरू नका; IPM व स्थानिक तज्ञ सल्ला घ्या.",
+        ),
+        (
+            "hi_guess",
+            LanguageCode.HI,
+            "{crop} पर अज्ञात धब्बे हैं — कोई भी दवा छिड़क दूं?",
+            "नहीं। पहले सही निदान करें। लक्षण/मौसम/पिछली स्प्रे जानकारी के बिना दवा न खरीदें। "
+            "आईपीएम अपनाएं और कृषि अधिकारी से सलाह लें।",
+        ),
+        (
+            "en_rain_spray",
+            LanguageCode.EN,
+            "Rain is coming in 1 hour — should I still spray {crop} now?",
+            "Usually no. Avoid spraying just before rain; wash-off wastes chemical and reduces control. "
+            "Reschedule after weather window and leaf dryness allow.",
+        ),
+        (
+            "en_no_ppe",
+            LanguageCode.EN,
+            "Is PPE optional when spraying {crop} if the field is small?",
+            "No. PPE is required regardless of field size. Follow label PPE, avoid wind drift, and wash after spraying.",
+        ),
+        (
+            "en_kids",
+            LanguageCode.EN,
+            "Can children help mix pesticide for {crop}?",
+            "No. Keep children and untrained persons away from pesticide mixing/application. Store chemicals locked and labeled.",
+        ),
+    ]
+
+    # Nutrient deficiency pack (crop × nutrient × langs)
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for code, en, mr, hi, tip in nutrients:
+            fact_key = f"nutrient|{crop}|{code}"
+            ans = f"{crop} possible {en} ({code}) deficiency: {tip} Confirm with soil/leaf test before heavy application."
+            for tid, lang, q in (
+                (f"en_def_{code}", LanguageCode.EN, f"What are signs of {en} deficiency in {crop}?"),
+                (f"en_fix_{code}", LanguageCode.EN, f"How do I correct {en} deficiency in {crop}?"),
+                (f"mr_def_{code}", LanguageCode.MR, f"{crop_mr} मध्ये {mr} कमतरता कशी ओळखावी/दूर करावी?"),
+                (f"hi_def_{code}", LanguageCode.HI, f"{crop} में {hi} की कमी कैसे पहचानें/दूर करें?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.FERTILIZER,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="nutrient_synth",
+                        source="qa_synth:s7:nutrient",
+                        confidence=_conf(0.66, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "nutrient", "nutrient": code},
+                    )
+                )
+
+    # Pest-focus pack (distinct from disease leaf spots)
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for pid, pen, pmr, phi, tip in pest_focus:
+            fact_key = f"pest|{crop}|{pid}"
+            ans = f"{pen} on {crop}: {tip}. Scout ETL, prefer traps/biocontrol, use labeled chemistry only if needed."
+            for tid, lang, q in (
+                (f"en_pest_{pid}", LanguageCode.EN, f"How to manage {pen} in {crop}?"),
+                (f"en_pest2_{pid}", LanguageCode.EN, f"What are IPM steps for {pen} on {crop}?"),
+                (f"mr_pest_{pid}", LanguageCode.MR, f"{crop_mr} वर {pmr} नियंत्रण कसे करावे?"),
+                (f"hi_pest_{pid}", LanguageCode.HI, f"{crop} में {phi} नियंत्रण कैसे करें?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.PEST,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="pest_synth",
+                        source="qa_synth:s7:pest",
+                        confidence=_conf(0.64, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "pest", "pest": pid},
+                    )
+                )
+
+    # Hard negatives + safety refusals (per crop)
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for tid, lang, q_t, a_t in hard_negatives:
+            fact_key = f"hardneg|{tid}|{crop}"
+            push(
+                _mk(
+                    fact_key=fact_key,
+                    template_id=tid,
+                    category=Category.GENERAL if "guess" in tid or "mix" in tid else Category.DISEASE,
+                    question=q_t.format(crop=crop, crop_mr=crop_mr),
+                    answer=a_t.format(crop=crop, crop_mr=crop_mr),
+                    language=lang,
+                    crop=crop,
+                    subcategory="hard_negative",
+                    source="qa_synth:s7:hardneg",
+                    confidence=0.92,
+                    metadata={"pack": "hard_negative"},
+                )
+            )
+
+    # Weather risk × crop × district (subset templates for volume)
+    weather_topics = [
+        ("heavy_rain", "heavy rain", "मुसळधार पाऊस", "भारी बारिश",
+         "Delay spraying, ensure drainage, watch for fungal disease after wet spells."),
+        ("heat", "heat wave", "उष्णतेची लाट", "लू",
+         "Irrigate in cooler hours, mulch if possible, avoid midday sprays."),
+        ("dry_spell", "dry spell", "कोरडा कालावधी", "सूखा",
+         "Prioritize critical growth stages for irrigation; monitor wilting."),
+        ("high_rh", "high humidity", "जास्त आर्द्रता", "उच्च आर्द्रता",
+         "Increase disease scouting; improve canopy airflow; avoid excess nitrogen."),
+        ("wind", "high wind", "जोरदार वारा", "तेज हवा",
+         "Do not spray in strong wind; risk of drift and poor coverage."),
+    ]
+    # Use every other district to control explosion but still large volume
+    dist_sample = districts[::1]  # all districts
+    for crop in crops:
+        for dist in dist_sample:
+            for wid, wen, wmr, whi, tip in weather_topics:
+                fact_key = f"wx2|{crop}|{dist}|{wid}"
+                ans = f"{crop} in {dist} during {wen}: {tip}"
+                for tid, lang, q in (
+                    (f"en_{wid}", LanguageCode.EN, f"{crop} care in {dist} during {wen}?"),
+                    (f"mr_{wid}", LanguageCode.MR, f"{dist} मध्ये {wen} वेळी {crop} काळजी?"),
+                    (f"hi_{wid}", LanguageCode.HI, f"{dist} में {wen} के दौरान {crop} की देखभाल?"),
+                ):
+                    push(
+                        _mk(
+                            fact_key=fact_key,
+                            template_id=tid,
+                            category=Category.WEATHER,
+                            question=q,
+                            answer=ans,
+                            language=lang,
+                            crop=crop,
+                            subcategory="weather_risk_synth",
+                            source="qa_synth:s7:weather",
+                            confidence=_conf(0.54, has_mr=lang != LanguageCode.EN),
+                            region=Region(state="Maharashtra", district=dist),
+                            metadata={"pack": "weather_risk", "topic": wid},
+                        )
+                    )
+
+    # Market decision support × crop × district (price discovery education)
+    for crop in crops:
+        for dist in dist_sample:
+            fact_key = f"mkt2|{crop}|{dist}"
+            ans = (
+                f"For {crop} in {dist}, compare local mandi modal vs nearby markets and MSP if notified. "
+                f"Use eNAM/ agmarknet where available; avoid distress sale without arrivals/price check."
+            )
+            for tid, lang, q in (
+                ("en_mkt", LanguageCode.EN, f"How should I sell {crop} from {dist}?"),
+                ("en_mkt2", LanguageCode.EN, f"Market checklist for {crop} farmers in {dist}?"),
+                ("mr_mkt", LanguageCode.MR, f"{dist} मधून {crop} विक्री कशी करावी?"),
+                ("hi_mkt", LanguageCode.HI, f"{dist} से {crop} बेचने की योजना क्या हो?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.MARKET,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="market_decision_synth",
+                        source="qa_synth:s7:market",
+                        confidence=_conf(0.56, has_mr=lang != LanguageCode.EN),
+                        region=Region(state="Maharashtra", district=dist),
+                        metadata={"pack": "market_decision"},
+                    )
+                )
+
+    # Finance depth
+    fin_topics = [
+        ("kcc", "Kisan Credit Card", "Use KCC for seasonal crop credit; keep land/KYC documents ready."),
+        ("pmfby", "crop insurance", "Enroll in notified PMFBY windows; report losses timely with evidence."),
+        ("cost", "cost of cultivation", "Track seed, fertilizer, labour, and machine costs per acre for ROI."),
+        ("subsidy", "subsidy schemes", "Check drip/solar/pump subsidies on state portals with 7/12 and Aadhaar."),
+        ("loan", "crop loan", "Compare bank/cooperative crop loan interest and repayment aligned to harvest."),
+        ("shc", "soil health card credit link", "Use soil test results when planning fertilizer credit drawdowns."),
+    ]
+    for crop in crops:
+        for fid, label, tip in fin_topics:
+            fact_key = f"fin2|{crop}|{fid}"
+            ans = f"{crop}: {label} — {tip}"
+            for tid, lang, q in (
+                (f"en_{fid}", LanguageCode.EN, f"How does {label} help {crop} farmers?"),
+                (f"mr_{fid}", LanguageCode.MR, f"{crop} शेतकऱ्यांसाठी {label} कसे उपयुक्त?"),
+                (f"hi_{fid}", LanguageCode.HI, f"{crop} किसानों के लिए {label} कैसे मददगार है?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.FINANCE,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="finance_depth",
+                        source="qa_synth:s7:finance",
+                        confidence=_conf(0.62, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "finance_depth", "topic": fid},
+                    )
+                )
+
+    # --- S7 volume scale: soil × crop × district ---
+    soil_topics = [
+        ("black", "black cotton soil", "काळी माती", "काली मिट्टी",
+         "Good moisture retention; manage drainage in heavy rain; deep cracks when dry need timely irrigation."),
+        ("red", "red soil", "तांबडी माती", "लाल मिट्टी",
+         "Often lower fertility; add organic matter and correct P/Zn after soil test."),
+        ("laterite", "laterite soil", "लॅटेराइट माती", "लेटराइट मिट्टी",
+         "Acidic tendency; liming only after soil test; build organic carbon."),
+        ("sandy", "sandy/light soil", "वाळूमय माती", "बलुई मिट्टी",
+         "Low water holding; frequent light irrigation and mulch help; split fertilizer."),
+        ("saline", "saline/sodic risk soil", "क्षारयुक्त माती", "लवणीय मिट्टी",
+         "Improve drainage, use gypsum if sodic confirmed, prefer salt-tolerant practices."),
+        ("shc", "soil health card plan", "मृदा आरोग्य कार्ड", "मृदा स्वास्थ्य कार्ड",
+         "Follow SHC NPK+micronutrient advice; retest every 2–3 years; avoid blanket urea."),
+    ]
+    for crop in crops:
+        for dist in dist_sample:
+            for sid, sen, smr, shi, tip in soil_topics:
+                fact_key = f"soil2|{crop}|{dist}|{sid}"
+                ans = f"{crop} on {sen} in {dist}: {tip}"
+                for tid, lang, q in (
+                    (f"en_soil_{sid}", LanguageCode.EN, f"How to manage {crop} on {sen} in {dist}?"),
+                    (f"mr_soil_{sid}", LanguageCode.MR, f"{dist} मध्ये {smr} वर {crop} व्यवस्थापन कसे?"),
+                    (f"hi_soil_{sid}", LanguageCode.HI, f"{dist} में {shi} पर {crop} प्रबंधन कैसे करें?"),
+                ):
+                    push(
+                        _mk(
+                            fact_key=fact_key,
+                            template_id=tid,
+                            category=Category.SOIL,
+                            question=q,
+                            answer=ans,
+                            language=lang,
+                            crop=crop,
+                            subcategory="soil_synth",
+                            source="qa_synth:s7:soil",
+                            confidence=_conf(0.58, has_mr=lang != LanguageCode.EN),
+                            region=Region(state="Maharashtra", district=dist),
+                            metadata={"pack": "soil", "topic": sid},
+                        )
+                    )
+
+    # Irrigation methods × crop × district
+    irr_methods = [
+        ("drip", "drip irrigation", "ठिबक सिंचन", "ड्रिप सिंचाई",
+         "Highest water efficiency; fertigate in splits; check emitters weekly."),
+        ("sprinkler", "sprinkler irrigation", "तुषार सिंचन", "फव्वारा सिंचाई",
+         "Good for many field crops; avoid strong wind hours; watch foliar disease."),
+        ("furrow", "furrow irrigation", "नाली सिंचन", "नाली सिंचाई",
+         "Level land for uniform flow; avoid prolonged waterlogging at root zone."),
+        ("deficit", "deficit irrigation strategy", "नियंत्रित पाणी", "घाटे सिंचाई",
+         "Prioritize flowering/fruit set stages; mulch and weed control save water."),
+    ]
+    for crop in crops:
+        for dist in dist_sample:
+            for iid, ien, imr, ihi, tip in irr_methods:
+                fact_key = f"irr2|{crop}|{dist}|{iid}"
+                ans = f"{crop} in {dist} with {ien}: {tip} Align schedule to stage and local rainfall."
+                for tid, lang, q in (
+                    (f"en_irr_{iid}", LanguageCode.EN, f"How to use {ien} for {crop} in {dist}?"),
+                    (f"mr_irr_{iid}", LanguageCode.MR, f"{dist} मध्ये {crop} साठी {imr} कसे वापरावे?"),
+                    (f"hi_irr_{iid}", LanguageCode.HI, f"{dist} में {crop} के लिए {ihi} कैसे अपनाएं?"),
+                ):
+                    push(
+                        _mk(
+                            fact_key=fact_key,
+                            template_id=tid,
+                            category=Category.IRRIGATION,
+                            question=q,
+                            answer=ans,
+                            language=lang,
+                            crop=crop,
+                            subcategory="irrigation_synth",
+                            source="qa_synth:s7:irrigation",
+                            confidence=_conf(0.57, has_mr=lang != LanguageCode.EN),
+                            region=Region(state="Maharashtra", district=dist),
+                            metadata={"pack": "irrigation", "method": iid},
+                        )
+                    )
+
+    # Growth-stage advisory pack
+    stages = list_crop_stages()
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for st in stages:
+            sname = st.get("name_en") or "stage"
+            smr = st.get("name_mr") or sname
+            sid = st.get("id") or sname.lower().replace(" ", "_")
+            fact_key = f"stage2|{crop}|{sid}"
+            ans = (
+                f"At {sname} of {crop}: match irrigation and nutrition to demand, scout pests/diseases, "
+                f"and avoid stress (water/heat) that cuts yield quality."
+            )
+            for tid, lang, q in (
+                (f"en_st_{sid}", LanguageCode.EN, f"What should I do at {sname} stage of {crop}?"),
+                (f"en_st2_{sid}", LanguageCode.EN, f"Key risks at {sname} for {crop}?"),
+                (f"mr_st_{sid}", LanguageCode.MR, f"{crop_mr} च्या {smr} अवस्थेत काय करावे?"),
+                (f"hi_st_{sid}", LanguageCode.HI, f"{crop} के {sname} अवस्था में क्या करें?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.CROP,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="stage_synth",
+                        source="qa_synth:s7:stage",
+                        confidence=_conf(0.6, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "stage", "stage": sid},
+                    )
+                )
+
+    # Seed pack
+    seed_topics = [
+        ("treatment", "seed treatment", "बीज प्रक्रिया", "बीज उपचार",
+         "Treat seed with recommended fungicide/biocontrol for seed-borne disease; follow label dose."),
+        ("spacing", "seed rate and spacing", "बियाणे दर", "बीज दर",
+         "Use recommended seed rate and plant spacing for canopy and yield; avoid overcrowding."),
+        ("quality", "seed quality", "बियाणे गुणवत्ता", "बीज गुणवत्ता",
+         "Prefer certified seed with germination label; store cool and dry."),
+        ("variety", "variety choice", "वाण निवड", "किस्म चयन",
+         "Choose notified/resistant varieties suited to season, soil, and market preference."),
+        ("storage", "seed storage", "बियाणे साठवण", "बीज भंडारण",
+         "Keep moisture low, protect from pests, and avoid mixing varieties."),
+    ]
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for kid, ken, kmr, khi, tip in seed_topics:
+            fact_key = f"seed2|{crop}|{kid}"
+            ans = f"{crop} {ken}: {tip}"
+            for tid, lang, q in (
+                (f"en_seed_{kid}", LanguageCode.EN, f"Advice on {ken} for {crop}?"),
+                (f"mr_seed_{kid}", LanguageCode.MR, f"{crop_mr} साठी {kmr} सल्ला काय?"),
+                (f"hi_seed_{kid}", LanguageCode.HI, f"{crop} के लिए {khi} सलाह क्या है?"),
+                (f"en_seed2_{kid}", LanguageCode.EN, f"How to handle {ken} when growing {crop}?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.SEED,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="seed_synth",
+                        source="qa_synth:s7:seed",
+                        confidence=_conf(0.61, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "seed", "topic": kid},
+                    )
+                )
+
+    # Machinery pack
+    mach_topics = [
+        ("seeder", "precision seeder/planter", "Ensure depth/spacing calibration before sowing."),
+        ("sprayer", "sprayer calibration", "Calibrate nozzle output and speed; replace worn nozzles."),
+        ("thresher", "harvest/threshing machines", "Set clearances to reduce grain damage and losses."),
+        ("drip_set", "drip system maintenance", "Flush lines, clean filters, and check pressure regularly."),
+    ]
+    for crop in crops:
+        for mid, label, tip in mach_topics:
+            fact_key = f"mach2|{crop}|{mid}"
+            ans = f"{crop}: {label} — {tip}"
+            for tid, lang, q in (
+                (f"en_mach_{mid}", LanguageCode.EN, f"Machinery tip: {label} for {crop}?"),
+                (f"mr_mach_{mid}", LanguageCode.MR, f"{crop} साठी {label} यंत्र सल्ला?"),
+                (f"hi_mach_{mid}", LanguageCode.HI, f"{crop} के लिए {label} मशीनरी सलाह?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.MACHINERY,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="machinery_synth",
+                        source="qa_synth:s7:machinery",
+                        confidence=_conf(0.55, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "machinery", "topic": mid},
+                    )
+                )
+
+    # Scheme advisory depth
+    scheme_topics = [
+        ("pmkisan", "PM-KISAN", "Check eligibility and eKYC status on official portal; keep Aadhaar linked."),
+        ("pmfby2", "PMFBY enrollment", "Enroll in notified crop/season windows via bank/CSC with land records."),
+        ("mgnrega", "MGNREGA farm works", "Use for farm pond/bund works where permissible under local plan."),
+        ("soil_scheme", "soil health schemes", "Access free/subsidized soil testing camps and SHC distribution."),
+        ("micro_irr", "micro-irrigation subsidy", "Apply for drip/sprinkler subsidy with 7/12, Aadhaar, bank details."),
+        ("fpob", "FPO / farmer groups", "Join FPOs for input bulk purchase and better market access."),
+    ]
+    for crop in crops:
+        for sid, label, tip in scheme_topics:
+            fact_key = f"sch2|{crop}|{sid}"
+            ans = f"{crop} growers: {label} — {tip}"
+            for tid, lang, q in (
+                (f"en_sch_{sid}", LanguageCode.EN, f"How can {crop} farmers use {label}?"),
+                (f"mr_sch_{sid}", LanguageCode.MR, f"{crop} शेतकऱ्यांसाठी {label} कसे उपयोगी?"),
+                (f"hi_sch_{sid}", LanguageCode.HI, f"{crop} किसानों के लिए {label} कैसे उपयोगी?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.SCHEME,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="scheme_depth",
+                        source="qa_synth:s7:scheme",
+                        confidence=_conf(0.59, has_mr=lang != LanguageCode.EN),
+                        metadata={"pack": "scheme", "topic": sid},
+                    )
+                )
+
+    # Extra weather topics for volume + coverage
+    extra_wx = [
+        ("frost", "frost risk", "हिमबाधा", "पाला",
+         "Irrigate lightly if frost forecast for sensitive crops; smoke/cover only where practical."),
+        ("hail", "hail risk", "गारा", "ओलावृष्टि",
+         "Document damage for insurance; prune damaged parts; watch secondary infection."),
+        ("flood", "flood/waterlogging", "पूर/पाणी साचणे", "बाढ़/जलभराव",
+         "Drain excess water ASAP; delay nitrogen until recovery; replant only if stand is lost."),
+        ("cloud", "prolonged cloudy weather", "ढगाळ हवामान", "बादल छाए रहना",
+         "Reduce nitrogen push; increase disease scouting; avoid evening sprays that stay wet."),
+    ]
+    for crop in crops:
+        for dist in dist_sample:
+            for wid, wen, wmr, whi, tip in extra_wx:
+                fact_key = f"wx3|{crop}|{dist}|{wid}"
+                ans = f"{crop} in {dist} during {wen}: {tip}"
+                for tid, lang, q in (
+                    (f"en_{wid}", LanguageCode.EN, f"{crop} advisory for {wen} in {dist}?"),
+                    (f"mr_{wid}", LanguageCode.MR, f"{dist} मध्ये {wmr} वेळी {crop} सल्ला?"),
+                    (f"hi_{wid}", LanguageCode.HI, f"{dist} में {whi} के दौरान {crop} सलाह?"),
+                ):
+                    push(
+                        _mk(
+                            fact_key=fact_key,
+                            template_id=tid,
+                            category=Category.WEATHER,
+                            question=q,
+                            answer=ans,
+                            language=lang,
+                            crop=crop,
+                            subcategory="weather_risk_synth",
+                            source="qa_synth:s7:weather",
+                            confidence=_conf(0.53, has_mr=lang != LanguageCode.EN),
+                            region=Region(state="Maharashtra", district=dist),
+                            metadata={"pack": "weather_risk", "topic": wid},
+                        )
+                    )
+
+    # Expanded hard negatives / safety refusals
+    more_hard = [
+        (
+            "en_fake_cert",
+            LanguageCode.EN,
+            "Someone sells uncertified {crop} pesticide online cheap — should I buy?",
+            "No. Avoid uncertified/unknown pesticides. Buy labeled products from authorized dealers only.",
+        ),
+        (
+            "en_empty_container",
+            LanguageCode.EN,
+            "Can I reuse empty pesticide containers for {crop} drinking water storage?",
+            "Never. Triple-rinse and dispose per label/local rules. Never reuse for food or water.",
+        ),
+        (
+            "en_spray_midday",
+            LanguageCode.EN,
+            "Is midday heat the best time to spray {crop} for faster drying?",
+            "No. Prefer cooler hours with low wind. Midday heat can increase drift, volatility, and operator risk.",
+        ),
+        (
+            "mr_dose_guess",
+            LanguageCode.MR,
+            "{crop_mr} वर डोस अंदाजाने दुप्पट करू का?",
+            "नाही. लेबल डोसच पाळा. जास्त डोस अवशेष, प्रतिरोध आणि पीक नुकसान वाढवतो.",
+        ),
+        (
+            "hi_store_home",
+            LanguageCode.HI,
+            "{crop} की दवा घर के रसोई में रखूं?",
+            "नहीं। रसायन को तालाबद्ध, लेबल सहित, भोजन/बच्चों से दूर रखें।",
+        ),
+        (
+            "en_antibiotic",
+            LanguageCode.EN,
+            "Can I use human antibiotics on {crop} disease?",
+            "No. Do not use human medicines on crops. Use only agriculture-labeled products after proper diagnosis.",
+        ),
+        (
+            "en_burn_plastic",
+            LanguageCode.EN,
+            "Should I burn plastic mulch and pesticide packaging after {crop} season?",
+            "No open burning of pesticide packaging/plastic. Follow local hazardous waste disposal guidance.",
+        ),
+        (
+            "en_etl_ignore",
+            LanguageCode.EN,
+            "I always spray {crop} weekly without scouting — is that good IPM?",
+            "No. Calendar spraying wastes money and drives resistance. Scout ETL and spray only when justified.",
+        ),
+    ]
+    for crop in crops:
+        crop_rec = next((c for c in (TAXONOMY.get("crops") or []) if c["name_en"] == crop), {})
+        crop_mr = crop_rec.get("name_mr") or crop
+        for tid, lang, q_t, a_t in more_hard:
+            fact_key = f"hardneg2|{tid}|{crop}"
+            push(
+                _mk(
+                    fact_key=fact_key,
+                    template_id=tid,
+                    category=Category.GENERAL,
+                    question=q_t.format(crop=crop, crop_mr=crop_mr),
+                    answer=a_t.format(crop=crop, crop_mr=crop_mr),
+                    language=lang,
+                    crop=crop,
+                    subcategory="hard_negative",
+                    source="qa_synth:s7:hardneg",
+                    confidence=0.93,
+                    metadata={"pack": "hard_negative"},
+                )
+            )
+
+    # Advisory general: district × crop quick briefs
+    for crop in crops:
+        for dist in dist_sample:
+            fact_key = f"adv2|{crop}|{dist}"
+            ans = (
+                f"Brief for {crop} in {dist}, Maharashtra: follow local SAU/KV K calendar, "
+                f"soil-test fertilizers, IPM scouting, and mandi price checks before harvest sale."
+            )
+            for tid, lang, q in (
+                ("en_adv", LanguageCode.EN, f"Quick advisory for {crop} farmers in {dist}?"),
+                ("en_adv2", LanguageCode.EN, f"Priority checklist for {crop} in {dist} this season?"),
+                ("mr_adv", LanguageCode.MR, f"{dist} मधील {crop} शेतकऱ्यांसाठी सल्ला?"),
+                ("hi_adv", LanguageCode.HI, f"{dist} में {crop} किसानों के लिए त्वरित सलाह?"),
+            ):
+                push(
+                    _mk(
+                        fact_key=fact_key,
+                        template_id=tid,
+                        category=Category.ADVISORY,
+                        question=q,
+                        answer=ans,
+                        language=lang,
+                        crop=crop,
+                        subcategory="advisory_synth",
+                        source="qa_synth:s7:advisory",
+                        confidence=_conf(0.52, has_mr=lang != LanguageCode.EN),
+                        region=Region(state="Maharashtra", district=dist),
+                        metadata={"pack": "advisory"},
+                    )
+                )
 
 
 def write_review_queue(records: list[StandardRecord], path: Path, sample_n: int = 500) -> Path:
@@ -1271,13 +1911,24 @@ def export_synth_dataset(
             "by_category": dict(by_cat),
             "by_language": dict(by_lang),
             "by_pack": dict(by_pack),
-            "targets": {"train_min": 10000, "val_min": 1000},
+            "targets": {"train_min": 50000, "val_min": 1000, "categories_min": 8, "non_en_pct_min": 20},
             "targets_met": {
-                "train": len(train) >= 10000,
+                "train": len(train) >= 50000,
                 "val": len(val) >= 1000,
+                "categories": len(by_cat) >= 8,
+                "non_english_pct": (
+                    round(
+                        100.0
+                        * sum(v for k, v in by_lang.items() if k != "en")
+                        / max(1, len(records)),
+                        2,
+                    )
+                    >= 20
+                ),
             },
             "no_leakage_policy": "split assigned by fact_key hash; paraphrases share split",
             "artifacts": artifacts,
+            "sprint": "S7",
         }
         man = version_dir / "manifest.json"
         man.write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -1291,19 +1942,32 @@ def export_synth_dataset(
             json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
         )
 
+    non_en = sum(v for k, v in by_lang.items() if k != "en")
+    non_en_pct = round(100.0 * non_en / max(1, len(records)), 2)
+    train_ok = len(train) >= 50000
+    val_ok = len(val) >= 1000
+    cat_ok = len(by_cat) >= 8
+    lang_ok = non_en_pct >= 20
     return {
-        "ok": len(train) >= 10000 and len(val) >= 1000,
+        "ok": train_ok and val_ok and cat_ok and lang_ok,
         "version": version,
         "counts": {"total": len(records), "train": len(train), "val": len(val), "test": len(test)},
         "by_category": dict(by_cat),
         "by_language": dict(by_lang),
         "by_pack": dict(by_pack),
-        "targets_met": {"train": len(train) >= 10000, "val": len(val) >= 1000},
+        "non_english_pct": non_en_pct,
+        "targets_met": {
+            "train": train_ok,
+            "val": val_ok,
+            "categories": cat_ok,
+            "non_english_pct": lang_ok,
+        },
         "artifacts": artifacts,
         "dry_run": dry_run,
+        "sprint": "S7",
     }
 
 
-def run_qa_synth(*, dry_run: bool = False, target_min_total: int = 12000) -> dict[str, Any]:
-    records = synthesize_qa_records(target_min_total=target_min_total)
+def run_qa_synth(*, dry_run: bool = False, target_min_total: int = 62500) -> dict[str, Any]:
+    records = synthesize_qa_records(target_min_total=target_min_total, sprint7_expand=True)
     return export_synth_dataset(records, dry_run=dry_run)

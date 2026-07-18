@@ -1,7 +1,7 @@
 {
-  "run_id": "20260718T144247Z-102c8b25",
-  "started_at": "2026-07-18T14:42:47Z",
-  "finished_at": "2026-07-18T14:42:47Z",
+  "run_id": "20260718T151106Z-cd9de1cb",
+  "started_at": "2026-07-18T15:11:06Z",
+  "finished_at": "2026-07-18T15:11:07Z",
   "dry_run": false,
   "ok": true,
   "sources_considered": 11,
@@ -161,7 +161,7 @@
     }
   ],
   "manifest_paths": [
-    "data\\lake\\manifests\\ingest_20260718T144247Z-102c8b25.json"
+    "data\\lake\\manifests\\ingest_20260718T151106Z-cd9de1cb.json"
   ],
   "lake_raw": "data\\lake\\raw",
   "errors": []

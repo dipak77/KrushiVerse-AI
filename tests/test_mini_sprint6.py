@@ -25,7 +25,7 @@ def _prep_processed():
 
 
 def test_sprint6_markers():
-    assert __sprint__ == "S6"
+    assert __sprint__ in {"S6", "S7"}
     assert __feature_phase__ == "FP-3"
 
 

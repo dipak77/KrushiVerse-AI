@@ -303,9 +303,9 @@ with tabs[1]:
         )
 
     st.subheader("QA Synthesis (Sprint 6)")
-    if st.button("Run W-QASYNTH (≥10k train target)"):
-        with st.spinner("Synthesizing expert QA packs (may take a minute)..."):
-            qsyn = get_worker("W-QASYNTH").run(dry_run=False, target_min_total=12000)
+    if st.button("Run W-QASYNTH (≥50k train target)"):
+        with st.spinner("Synthesizing expert QA packs (may take 1–2 minutes)..."):
+            qsyn = get_worker("W-QASYNTH").run(dry_run=False, target_min_total=62500)
         st.session_state["factory_qasynth"] = qsyn
         st.success(qsyn.message if qsyn.ok else "Synth finished — check targets")
         st.json(

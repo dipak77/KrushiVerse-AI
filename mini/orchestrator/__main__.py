@@ -187,9 +187,9 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--execute", action="store_true", help="Write ANALYZE_LATEST.json + HTML")
     s.set_defaults(func=cmd_analyze)
 
-    s = sub.add_parser("qasynth", help="Synthesize expert QA packs (W-QASYNTH)")
+    s = sub.add_parser("qasynth", help="Synthesize expert QA packs (W-QASYNTH, S7 ≥50k train)")
     s.add_argument("--execute", action="store_true", help="Write synth dataset version + review CSV")
-    s.add_argument("--target", type=int, default=12000, help="Minimum total synth records target")
+    s.add_argument("--target", type=int, default=62500, help="Minimum total synth records target")
     s.set_defaults(func=cmd_qasynth)
 
     s = sub.add_parser("run-worker", help="Run a single worker")

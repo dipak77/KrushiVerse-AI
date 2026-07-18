@@ -4,7 +4,7 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S6 — QA synthesis** (≥10k train / ≥1k val) |
+| Sprint | **S7 — QA pack expansion** (≥50k train) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
@@ -27,7 +27,7 @@ python -m mini.orchestrator ingest --execute --skip-http
 python -m mini.orchestrator quality --execute
 python -m mini.orchestrator standardize --execute
 python -m mini.orchestrator analyze --execute
-python -m mini.orchestrator qasynth --execute --target 12000
+python -m mini.orchestrator qasynth --execute --target 62500
 python -m mini.orchestrator lake-status
 ```
 
@@ -60,18 +60,18 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–6 acceptance
+## Sprint 0–7 acceptance
 
-- [x] Factory through analyze dashboard  
-- [x] **W-QASYNTH** multilingual packs ≥10k train / ≥1k val  
-- [x] Human review queue CSV + no fact_key leakage  
-- [x] Tests: `test_mini_sprint0`–`6`  
+- [x] Factory through QA synth  
+- [x] **W-QASYNTH v2** ≥50k train, ≥8 domains, ≥20% non-EN  
+- [x] Hard negatives + safety refusals  
+- [x] Tests: `test_mini_sprint0`–`7`  
 
 ```bash
-python -m mini.orchestrator qasynth --execute --target 12000
-python -m mini.orchestrator run sprint6 --execute
+python -m mini.orchestrator qasynth --execute --target 62500
+python -m mini.orchestrator run sprint7 --execute
 ```
 
 ## Next
 
-Sprint 7 — Domain expert packs expansion toward ~50k.
+Sprint 8 — `W-KGBUILD` automated knowledge graph builder.

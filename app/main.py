@@ -288,8 +288,8 @@ def lake_qasynth_status():
     return json.loads(latest.read_text(encoding="utf-8"))
 
 @app.post("/api/lake/qasynth")
-def lake_qasynth_run(execute: bool = False, target: int = 12000):
-    """Run W-QASYNTH multilingual expert QA synthesis."""
+def lake_qasynth_run(execute: bool = False, target: int = 62500):
+    """Run W-QASYNTH multilingual expert QA synthesis (S7 default ≥50k train)."""
     from mini.workers.base import get_worker
 
     result = get_worker("W-QASYNTH").run(dry_run=not execute, target_min_total=target)
