@@ -14,5 +14,8 @@ data/lake/**
 !data/lake/**/.gitkeep
 !data/lake/BOOTSTRAP.json
 !data/lake/INGEST_LATEST.json
+!data/lake/QUALITY_LATEST.json
 !data/lake/manifests/
 !data/lake/manifests/**
+!data/lake/reports/
+!data/lake/reports/**

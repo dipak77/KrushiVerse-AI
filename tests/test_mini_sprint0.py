@@ -34,7 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 def test_mini_version_markers():
     # Sprint markers advance with each sprint; earlier artifacts remain valid.
-    assert __sprint__ in {"S0", "S1", "S2"}
+    assert __sprint__ in {"S0", "S1", "S2", "S3"}
     assert __feature_phase__.startswith("FP-")
     assert __version__
 
@@ -101,6 +101,8 @@ def test_workers_registered():
     missing = required - ids
     assert not missing, f"Missing workers: {missing}"
     assert len(workers) >= 21
+    # quality workers from Sprint 3
+    assert "W-QUALITY" in ids or "W-VALIDATE" in ids
 
 
 def test_bootstrap_worker_execute(tmp_path, monkeypatch):
@@ -151,7 +153,7 @@ def test_bootstrap_pipeline_execute():
 
 def test_describe_factory():
     info = describe_factory()
-    assert info["sprint"] in {"S0", "S1", "S2"}
+    assert info["sprint"] in {"S0", "S1", "S2", "S3"}
     assert info["feature_phase"].startswith("FP-")
     assert info["worker_count"] >= 20
     assert "bootstrap" in info["pipelines"]

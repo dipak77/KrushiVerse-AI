@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S2 — Lake ingest** (S0 bootstrap + S1 taxonomy complete) |
+| Sprint | **S3 — Quality pipeline** (validate / clean / dedup) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-1** (raw lake populated) |
+| Feature phase | **FP-2** (processed lake) |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -24,6 +24,7 @@ python -m mini.orchestrator run dry-factory          # dry-run all workers
 python -m mini.orchestrator run-worker W-BOOTSTRAP --dry-run
 python -m mini.orchestrator sources
 python -m mini.orchestrator ingest --execute --skip-http
+python -m mini.orchestrator quality --execute
 python -m mini.orchestrator lake-status
 ```
 
@@ -56,19 +57,19 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–2 acceptance
+## Sprint 0–3 acceptance
 
-- [x] Factory CLI + lake layout  
-- [x] Schema v1 + taxonomy v1.0.0 frozen  
-- [x] Source registry + **W-INGEST ready** (idempotent, checksums)  
-- [x] Tests: `test_mini_sprint0/1/2.py`  
+- [x] Factory CLI + lake layout + taxonomy freeze  
+- [x] W-INGEST source registry (idempotent)  
+- [x] **W-VALIDATE / W-CLEAN / W-DEDUP / W-QUALITY**  
+- [x] Tests: `test_mini_sprint0`–`3`  
 
 ```bash
-python -m mini.orchestrator taxonomy-validate
 python -m mini.orchestrator ingest --execute --skip-http
-python -m mini.orchestrator run sprint2 --execute
+python -m mini.orchestrator quality --execute
+python -m mini.orchestrator run sprint3 --execute
 ```
 
 ## Next
 
-Sprint 3 — Validate / clean / dedup pipeline on raw batches.
+Sprint 4 — Normalize + language detect + Schema v1 standard records → training/.

@@ -17,6 +17,8 @@ PIPELINES: dict[str, list[str]] = {
     "taxonomy": ["W-TAXONOMY"],
     "sprint1": ["W-BOOTSTRAP", "W-TAXONOMY", "W-NORMALIZE"],
     "sprint2": ["W-BOOTSTRAP", "W-TAXONOMY", "W-INGEST"],
+    "sprint3": ["W-BOOTSTRAP", "W-INGEST", "W-VALIDATE", "W-CLEAN", "W-DEDUP"],
+    "quality": ["W-QUALITY"],
     "ingest": ["W-BOOTSTRAP", "W-INGEST"],
     "dry-factory": [
         "W-BOOTSTRAP",
@@ -41,7 +43,7 @@ PIPELINES: dict[str, list[str]] = {
         "W-AGENT",
         "W-INFER",
     ],
-    "ingest-pipeline": ["W-BOOTSTRAP", "W-INGEST", "W-VALIDATE", "W-CLEAN"],
+    "ingest-pipeline": ["W-BOOTSTRAP", "W-INGEST", "W-VALIDATE", "W-CLEAN", "W-DEDUP"],
     "train": ["W-TOKEN", "W-PRETRAIN", "W-SFT", "W-EVAL"],
     "eval": ["W-EVAL"],
     "full": [

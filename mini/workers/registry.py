@@ -25,43 +25,8 @@ def _stub_result(worker_id: str, dry_run: bool, message: str, **metrics: Any) ->
     )
 
 
-# W-INGEST is implemented in mini.workers.ingest (Sprint 2)
-
-
-@register_worker
-class ValidateWorker(BaseWorker):
-    worker_id = "W-VALIDATE"
-    name = "Validate"
-    description = "Schema/type validation of raw batches"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: validation scheduled Sprint 3")
-
-
-@register_worker
-class CleanWorker(BaseWorker):
-    worker_id = "W-CLEAN"
-    name = "Clean"
-    description = "Text cleaning and encoding normalization"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: clean pipeline Sprint 3")
-
-
-@register_worker
-class DedupWorker(BaseWorker):
-    worker_id = "W-DEDUP"
-    name = "Deduplicate"
-    description = "Exact and near-duplicate removal"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: dedup Sprint 3")
+# W-INGEST → mini.workers.ingest
+# W-VALIDATE / W-CLEAN / W-DEDUP / W-QUALITY → mini.workers.quality
 
 
 @register_worker
@@ -314,8 +279,14 @@ class InferWorker(BaseWorker):
         return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: inference chain Sprint 15")
 
 
-# Import real ingest worker so it registers into WORKER_REGISTRY
+# Import real workers so they register into WORKER_REGISTRY
 from mini.workers.ingest import IngestWorker  # noqa: E402,F401
+from mini.workers.quality import (  # noqa: E402,F401
+    CleanWorker,
+    DedupWorker,
+    QualityPipelineWorker,
+    ValidateWorker,
+)
 
 
 @register_worker

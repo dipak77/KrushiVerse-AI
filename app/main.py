@@ -205,6 +205,29 @@ def lake_ingest_api(execute: bool = False, skip_http: bool = False):
     result = get_worker("W-INGEST").run(dry_run=not execute, include_http=not skip_http)
     return result.model_dump()
 
+@app.get("/api/lake/quality")
+def lake_quality_status():
+    """Latest quality pipeline report if present."""
+    from pathlib import Path
+    from mini.paths import LAKE_ROOT
+    import json
+
+    latest = LAKE_ROOT / "QUALITY_LATEST.json"
+    if not latest.exists():
+        return {"ok": False, "message": "No quality report yet. Run POST /api/lake/quality?execute=true"}
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/quality")
+def lake_quality_run(execute: bool = False, near_threshold: float = 0.92):
+    """Run validate → clean → dedup quality pipeline."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QUALITY").run(
+        dry_run=not execute,
+        near_threshold=near_threshold,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

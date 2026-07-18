@@ -269,6 +269,25 @@ with tabs[1]:
     st.caption("Lake raw inventory")
     st.json(lake_tree_summary())
 
+    st.subheader("Quality pipeline (Sprint 3)")
+    if st.button("Run validate → clean → dedup"):
+        with st.spinner("Running quality pipeline..."):
+            qres = get_worker("W-QUALITY").run(dry_run=False)
+        st.success(qres.message if qres.ok else "Quality run finished with issues")
+        st.json(
+            {
+                "validation": (qres.metrics or {}).get("validation", {}),
+                "cleaning": {
+                    k: (qres.metrics or {}).get("cleaning", {}).get(k)
+                    for k in ("cleaned", "skipped", "failed")
+                },
+                "dedup": {
+                    k: (qres.metrics or {}).get("dedup", {}).get(k)
+                    for k in ("exact_removed", "near_removed", "records_kept", "files")
+                },
+            }
+        )
+
 # TAB 3: Domain Taxonomy browser (Sprint 1)
 with tabs[2]:
     st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")
