@@ -1,0 +1,83 @@
+{
+  "practices": [
+    {
+      "id": "irr1",
+      "title": "Drip irrigation scheduling",
+      "content": "Estimate ETc = ETo x Kc; run drip to replace 100% ETc in peak; reduce 20-30% in cool cloudy periods. Pulse irrigation on sandy soils.",
+      "crops": [
+        "Grapes",
+        "Pomegranate",
+        "Onion",
+        "Tomato",
+        "Cotton"
+      ],
+      "source": "FAO-56 / PMKSY open"
+    },
+    {
+      "id": "irr2",
+      "title": "Rice water management AWD",
+      "content": "Alternate wetting and drying can save water vs continuous flooding while maintaining yield if soils allow.",
+      "crops": [
+        "Rice"
+      ],
+      "source": "IRRI open AWD"
+    },
+    {
+      "id": "irr3",
+      "title": "Critical irrigation stages wheat",
+      "content": "CRI, tillering, jointing, flowering, milk: missing CRI causes largest yield loss.",
+      "crops": [
+        "Wheat"
+      ],
+      "source": "ICAR-IIWBR"
+    },
+    {
+      "id": "irr4",
+      "title": "Onion bulb development water",
+      "content": "Uniform moisture during bulbing reduces doubles and splits; stop irrigation 10-15 days pre-harvest.",
+      "crops": [
+        "Onion"
+      ],
+      "source": "ICAR-DOGR"
+    },
+    {
+      "id": "irr5",
+      "title": "Pomegranate stress for bahar",
+      "content": "Withhold water 30-45 days then resume with fertigation to force uniform bahar.",
+      "crops": [
+        "Pomegranate"
+      ],
+      "source": "ICAR-NRCP"
+    },
+    {
+      "id": "irr6",
+      "title": "Sugarcane grand growth water",
+      "content": "Peak water demand in grand growth; mulching reduces evaporation.",
+      "crops": [
+        "Sugarcane"
+      ],
+      "source": "ICAR-SBI"
+    },
+    {
+      "id": "irr7",
+      "title": "Sprinkler for groundnut",
+      "content": "Light frequent sprinkler helps pegging soils stay moist without crusting.",
+      "crops": [
+        "Groundnut"
+      ],
+      "source": "ICAR-DGR"
+    },
+    {
+      "id": "irr8",
+      "title": "Farm pond + drip integration",
+      "content": "Lift from farm pond to sand filter to drip; chlorinate if algae clog emitters.",
+      "crops": [
+        "General"
+      ],
+      "source": "PoCRA open"
+    }
+  ],
+  "meta": {
+    "count": 8
+  }
+}

@@ -18,11 +18,16 @@ from app.workflows.automation import workflow_engine
 from app.memory.farm_memory import farm_memory_store
 from app.knowledge.graph_rag import graph_rag
 from app.knowledge.hybrid_search import hybrid_retriever
+from app.knowledge.advanced_rag import advanced_rag
+from app.knowledge.dataset_loader import kb_loader
+from app.knowledge.tools.registry import tool_registry
+from app.knowledge.embeddings import embedding_provider
+from app.live_feeds.opendata_client import opendata_client
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.VERSION,
-    description="Generation 10 — Autonomous AI Agriculture Platform (AI Krushi Mitra)"
+    description="Generation 10.2 — Multi-Source RAG with dense embeddings/Qdrant, data.gov.in Agmarknet, web tools, GraphRAG"
 )
 
 # Request Models
@@ -30,6 +35,16 @@ class QueryRequest(BaseModel):
     query: str
     farm_id: Optional[str] = "FARM_101"
     language: Optional[str] = "mr"  # "mr" for Marathi, "en" for English
+    enable_web: Optional[bool] = None
+
+class AdvancedRAGRequest(BaseModel):
+    query: str
+    crop: Optional[str] = None
+    location: Optional[str] = "Pune"
+    top_k: Optional[int] = 8
+    enable_web: Optional[bool] = True
+    enable_tools: Optional[bool] = True
+    force_web: Optional[bool] = False
 
 class YieldPredictRequest(BaseModel):
     crop: str
@@ -59,8 +74,11 @@ def read_root():
         "platform": settings.APP_NAME,
         "version": settings.VERSION,
         "status": "Online",
-        "architecture": "Multi-Agent GraphRAG + Live RAG + Computer Vision + Predictive AI",
-        "supported_languages": ["mr (Marathi)", "en (English)", "hi (Hindi)"]
+        "architecture": "Multi-Agent GraphRAG + Dense RAG (Qdrant/local) + data.gov.in/Agmarknet + Web Tools + Predictive AI",
+        "supported_languages": ["mr (Marathi)", "en (English)", "hi (Hindi)"],
+        "embeddings": embedding_provider.info(),
+        "opendata": opendata_client.status(),
+        "hybrid_backends": hybrid_retriever.backend_info(),
     }
 
 @app.post("/api/query")
@@ -70,11 +88,80 @@ def process_farmer_query(request: QueryRequest):
         response = planner_agent.plan_and_execute(
             query=request.query,
             farm_id=request.farm_id,
-            language=request.language
+            language=request.language,
+            enable_web=request.enable_web,
         )
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/rag/advanced")
+def advanced_rag_search(request: AdvancedRAGRequest):
+    """Advanced multi-source RAG: local hybrid + GraphRAG + external tools + web search fusion."""
+    try:
+        return advanced_rag.retrieve(
+            request.query,
+            crop=request.crop,
+            location=request.location or "Pune",
+            top_k=request.top_k or settings.RAG_TOP_K,
+            enable_web=request.enable_web if request.enable_web is not None else settings.ENABLE_WEB_RAG,
+            enable_tools=request.enable_tools if request.enable_tools is not None else settings.ENABLE_TOOL_RAG,
+            force_web=bool(request.force_web),
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/knowledge/stats")
+def knowledge_stats():
+    """Expanded open-source knowledge base statistics."""
+    return {
+        "version": settings.VERSION,
+        "stats": kb_loader.knowledge_stats(),
+        "web_rag_enabled": settings.ENABLE_WEB_RAG,
+        "tool_rag_enabled": settings.ENABLE_TOOL_RAG,
+        "dense_rag_enabled": settings.ENABLE_DENSE_RAG,
+        "embeddings": embedding_provider.info(),
+        "hybrid_backends": hybrid_retriever.backend_info(),
+        "opendata": opendata_client.status(),
+        "tools": tool_registry.list_tools(),
+    }
+
+@app.get("/api/opendata/agmarknet")
+def agmarknet_prices(
+    commodity: Optional[str] = None,
+    district: Optional[str] = None,
+    state: str = "Maharashtra",
+    limit: int = 40,
+):
+    """Live Agmarknet commodity prices via data.gov.in (falls back to local open KB)."""
+    return opendata_client.fetch_commodity_prices(
+        state=state,
+        district=district,
+        commodity=commodity,
+        limit=limit,
+    )
+
+@app.get("/api/rag/backends")
+def rag_backends():
+    return {
+        "version": settings.VERSION,
+        "embeddings": embedding_provider.info(),
+        "hybrid": hybrid_retriever.backend_info(),
+        "opendata": opendata_client.status(),
+        "qdrant_url": settings.QDRANT_URL,
+        "collection": settings.QDRANT_COLLECTION,
+    }
+
+@app.get("/api/tools")
+def list_external_tools():
+    return {"tools": tool_registry.list_tools()}
+
+@app.post("/api/tools/{tool_name}")
+def run_external_tool(tool_name: str, params: Optional[dict] = None):
+    result = tool_registry.run(tool_name, params or {})
+    if not result.get("ok") and result.get("error", "").startswith("Unknown tool"):
+        raise HTTPException(status_code=404, detail=result.get("error"))
+    return result
 
 @app.post("/api/vision/diagnose")
 async def diagnose_leaf_image(

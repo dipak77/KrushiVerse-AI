@@ -9,18 +9,70 @@ class MarathiResponseSynthesizer:
         "market_prefix": "📈 **बाजारभाव माहिती:**",
         "soil_prefix": "🧪 **माती आरोग्य व खत व्यवस्थापन:**",
         "gov_prefix": "🏛️ **शासकीय योजना माहिती:**",
-        "footer": "\n---\n*कृषी विज्ञान केंद्र आणि ICAR च्या शिफारशींवर आधारित AI कृषी मित्र सल्ला.*"
+        "rag_prefix": "📚 **मल्टी-सोर्स ज्ञानाधार (RAG + Web + Tools):**",
+        "footer": "\n---\n*कृषी विज्ञान केंद्र, ICAR, खुले शासकीय स्रोत, व वेब/टूल-आधारित RAG वर आधारित AI कृषी मित्र सल्ला. फवारणी/खते स्थानिक तज्ञ तपासून घ्या.*"
     }
 
-    def synthesize(self, plan_summary: str, agent_outputs: dict, language: str = "mr") -> str:
+    def synthesize(
+        self,
+        plan_summary: str,
+        agent_outputs: dict,
+        language: str = "mr",
+        rag_context: str | None = None,
+        citations: list | None = None,
+    ) -> str:
         """Synthesize specialized agent outputs into a unified, clear response in Marathi or English."""
         if language.lower() in ["mr", "marathi"]:
-            return self._synthesize_marathi(plan_summary, agent_outputs)
+            return self._synthesize_marathi(plan_summary, agent_outputs, citations=citations)
         else:
-            return self._synthesize_english(plan_summary, agent_outputs)
+            return self._synthesize_english(plan_summary, agent_outputs, citations=citations)
 
-    def _synthesize_marathi(self, plan_summary: str, agent_outputs: dict) -> str:
+    def _format_citations(self, citations: list | None, language: str = "en") -> str:
+        if not citations:
+            return ""
+        lines = []
+        title = "**स्रोत / Sources:**" if language == "mr" else "**Sources:**"
+        lines.append(title)
+        for i, c in enumerate(citations[:6], 1):
+            url = c.get("url") or ""
+            origin = c.get("origin") or ""
+            src = c.get("source") or ""
+            name = c.get("title") or src or origin
+            if url:
+                lines.append(f"{i}. {name} — {origin}/{src} ({url})")
+            else:
+                lines.append(f"{i}. {name} — {origin}/{src}")
+        return "\n".join(lines)
+
+    def _rag_summary_block(self, agent_outputs: dict, language: str = "en") -> str:
+        rag = agent_outputs.get("advanced_rag") or {}
+        if not rag:
+            return ""
+        tools = ", ".join(rag.get("tools_used") or []) or "none"
+        top = rag.get("top_documents") or []
+        if language == "mr":
+            parts = [
+                self.MARATHI_TEMPLATES["rag_prefix"],
+                f"- साधने: {tools}",
+                f"- वेब निकाल: {rag.get('web_result_count', 0)} | स्थानिक hits: {rag.get('local_hit_count', 0)}",
+            ]
+        else:
+            parts = [
+                "### Advanced Multi-Source RAG",
+                f"- Tools: {tools}",
+                f"- Web results: {rag.get('web_result_count', 0)} | Local hits: {rag.get('local_hit_count', 0)}",
+            ]
+        for d in top[:4]:
+            parts.append(f"  • [{d.get('origin')}] {d.get('title')} (score={d.get('score')})")
+        return "\n".join(parts)
+
+    def _synthesize_marathi(self, plan_summary: str, agent_outputs: dict, citations: list | None = None) -> str:
         parts = [self.MARATHI_TEMPLATES["greeting"], f"\n**विश्लेषण निष्कर्ष:** {plan_summary}\n"]
+
+        rag_block = self._rag_summary_block(agent_outputs, language="mr")
+        if rag_block:
+            parts.append(rag_block)
+            parts.append("")
 
         if "weather" in agent_outputs:
             w = agent_outputs["weather"]
@@ -72,15 +124,63 @@ class MarathiResponseSynthesizer:
                     parts.append(f"- **{sch.get('name_mr', sch.get('name_en'))}:** {sch.get('benefits_mr', sch.get('benefits_en'))}")
             parts.append("")
 
+        cite = self._format_citations(citations or (agent_outputs.get("advanced_rag") or {}).get("citations"), language="mr")
+        if cite:
+            parts.append(cite)
+            parts.append("")
+
         parts.append(self.MARATHI_TEMPLATES["footer"])
         return "\n".join(parts)
 
-    def _synthesize_english(self, plan_summary: str, agent_outputs: dict) -> str:
+    def _synthesize_english(self, plan_summary: str, agent_outputs: dict, citations: list | None = None) -> str:
         parts = ["Greetings! Welcome to AI Krushi Mitra Agriculture Platform.", f"\n**Plan Summary:** {plan_summary}\n"]
 
+        rag_block = self._rag_summary_block(agent_outputs, language="en")
+        if rag_block:
+            parts.append(rag_block)
+            parts.append("")
+
         for key, val in agent_outputs.items():
+            if key == "advanced_rag":
+                continue
             parts.append(f"### {key.capitalize()} Advisory")
-            parts.append(f"```json\n{val}\n```\n")
+            # Prefer human-readable summaries over raw dumps when possible
+            if isinstance(val, dict):
+                summary_keys = ("summary_mr", "summary_en", "guidance_mr", "guidance_en", "message")
+                shown = False
+                for sk in summary_keys:
+                    if val.get(sk):
+                        parts.append(str(val[sk]))
+                        shown = True
+                        break
+                if not shown:
+                    # Compact key highlights
+                    for k, v in list(val.items())[:8]:
+                        if k in ("agent", "raw", "records") or isinstance(v, (list, dict)) and k not in (
+                            "recommended_fertilizer_bags",
+                            "net_nutrient_requirement_kg",
+                            "extracted_parameters",
+                            "evaluations",
+                            "organic_treatment",
+                            "chemical_treatment",
+                        ):
+                            if isinstance(v, (list, dict)) and k not in (
+                                "recommended_fertilizer_bags",
+                                "net_nutrient_requirement_kg",
+                                "extracted_parameters",
+                                "evaluations",
+                                "organic_treatment",
+                                "chemical_treatment",
+                            ):
+                                continue
+                        parts.append(f"- **{k}:** {v}")
+            else:
+                parts.append(str(val))
+            parts.append("")
+
+        cite = self._format_citations(citations or (agent_outputs.get("advanced_rag") or {}).get("citations"), language="en")
+        if cite:
+            parts.append(cite)
 
         return "\n".join(parts)
 

@@ -1,0 +1,91 @@
+{
+  "varieties": [
+    {
+      "crop_en": "Cotton",
+      "variety": "Bt Hybrid RCH-2 / Suraj type",
+      "notes_mr": "मध्यम ते लांब तंतू",
+      "agro_climatic_fit": "Kharif irrigated / rainfed black soils",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Soybean",
+      "variety": "JS-335 / JS-9305 / MAUS series",
+      "notes_mr": "उच्च उत्पादक",
+      "agro_climatic_fit": "Central India Kharif",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Pomegranate",
+      "variety": "Bhagwa",
+      "notes_mr": "निर्यात गुणवत्ता",
+      "agro_climatic_fit": "Maharashtra horticulture",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Onion",
+      "variety": "N-2-4-1 / Baswant-780 / Phule Samarth",
+      "notes_mr": "रब्बी/खरीप",
+      "agro_climatic_fit": "MH onion belts",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Rice",
+      "variety": "Sahyadri / Indrayani / Swarna",
+      "notes_mr": "भात",
+      "agro_climatic_fit": "Konkan / irrigated",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Wheat",
+      "variety": "HD-2967 / Lok-1 / GW series",
+      "notes_mr": "गहू",
+      "agro_climatic_fit": "Rabi plains",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Maize",
+      "variety": "African Tall / HQPM / hybrids",
+      "notes_mr": "मका",
+      "agro_climatic_fit": "Kharif/Rabi",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Grapes",
+      "variety": "Thompson Seedless / Sharad Seedless",
+      "notes_mr": "द्राक्ष",
+      "agro_climatic_fit": "Nashik belt",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Banana",
+      "variety": "Grand Naine",
+      "notes_mr": "केळी",
+      "agro_climatic_fit": "Tissue culture",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Turmeric",
+      "variety": "Salem / Rajapore",
+      "notes_mr": "हळद",
+      "agro_climatic_fit": "Sangli belt",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Chilli",
+      "variety": "Teja / Byadgi types",
+      "notes_mr": "मिरची",
+      "agro_climatic_fit": "Spice markets",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    },
+    {
+      "crop_en": "Groundnut",
+      "variety": "TAG-24 / TG-37A",
+      "notes_mr": "भुईमूग",
+      "agro_climatic_fit": "Kharif/summer",
+      "source": "Public SAU/ICAR variety release notes (summary)"
+    }
+  ],
+  "meta": {
+    "count": 12
+  }
+}

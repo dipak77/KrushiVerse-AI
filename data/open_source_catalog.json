@@ -1,0 +1,91 @@
+{
+  "sources": [
+    {
+      "name": "ICAR Package of Practices / open advisories",
+      "url": "https://icar.org.in",
+      "type": "institution",
+      "use": "Crop PoP, IPM, varieties"
+    },
+    {
+      "name": "Agmarknet",
+      "url": "https://agmarknet.gov.in",
+      "type": "market",
+      "use": "Daily mandi prices"
+    },
+    {
+      "name": "eNAM",
+      "url": "https://enam.gov.in",
+      "type": "market",
+      "use": "Online mandi trade"
+    },
+    {
+      "name": "data.gov.in Agriculture",
+      "url": "https://data.gov.in",
+      "type": "open-data",
+      "use": "Gov datasets APIs"
+    },
+    {
+      "name": "IMD",
+      "url": "https://mausam.imd.gov.in",
+      "type": "weather",
+      "use": "Forecasts and warnings"
+    },
+    {
+      "name": "Open-Meteo",
+      "url": "https://open-meteo.com",
+      "type": "weather-api",
+      "use": "Free weather API no key"
+    },
+    {
+      "name": "FAO FAOSTAT / crop calendars",
+      "url": "https://www.fao.org",
+      "type": "global",
+      "use": "Global crop statistics"
+    },
+    {
+      "name": "Wikipedia / Wikidata",
+      "url": "https://www.wikipedia.org",
+      "type": "encyclopedia",
+      "use": "General crop/pest background"
+    },
+    {
+      "name": "DuckDuckGo",
+      "url": "https://duckduckgo.com",
+      "type": "web-search",
+      "use": "Privacy-friendly web search"
+    },
+    {
+      "name": "Soil Health Card",
+      "url": "https://soilhealth.dac.gov.in",
+      "type": "soil",
+      "use": "Soil test recommendations"
+    },
+    {
+      "name": "PM-KISAN",
+      "url": "https://pmkisan.gov.in",
+      "type": "scheme",
+      "use": "Income support scheme"
+    },
+    {
+      "name": "PMFBY",
+      "url": "https://pmfby.gov.in",
+      "type": "scheme",
+      "use": "Crop insurance"
+    },
+    {
+      "name": "NIPHM",
+      "url": "https://niphm.gov.in",
+      "type": "ipm",
+      "use": "IPM and biocontrol"
+    },
+    {
+      "name": "India Meteorological open alerts",
+      "url": "https://mausam.imd.gov.in",
+      "type": "alerts",
+      "use": "District weather warnings"
+    }
+  ],
+  "meta": {
+    "count": 14
+  }
+}

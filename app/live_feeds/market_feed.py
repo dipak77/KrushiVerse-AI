@@ -1,12 +1,24 @@
 from app.knowledge.dataset_loader import kb_loader
+from app.live_feeds.opendata_client import opendata_client
+
 
 class MarketFeedProvider:
-    """Agmarknet live APMC Mandi Market price provider."""
+    """Agmarknet / data.gov.in market price provider with local open KB fallback."""
 
     def __init__(self):
         self.prices_db = kb_loader.market_prices.get("markets", [])
 
     def get_market_prices(self, crop: str | None = None, district: str | None = None) -> list[dict]:
+        # Prefer live open-data when available
+        live = opendata_client.fetch_commodity_prices(
+            state="Maharashtra",
+            district=district,
+            commodity=crop,
+            limit=40,
+        )
+        if live.get("mode") == "live" and live.get("records"):
+            return live["records"]
+
         results = []
         for m in self.prices_db:
             crop_match = crop is None or crop.lower() in m["crop"].lower() or crop in m.get("crop_mr", "")
@@ -16,18 +28,29 @@ class MarketFeedProvider:
                 results.append(m)
 
         if not results and (crop or district):
-            # Fallback to all markets if specific filter yields no records
             return self.prices_db
         return results
 
     def get_market_summary_for_crop(self, crop: str) -> dict:
-        matched = [m for m in self.prices_db if crop.lower() in m["crop"].lower()]
-        if not matched:
-            return {"crop": crop, "found": False, "message": f"No active market feeds found for {crop}."}
+        matched = self.get_market_prices(crop=crop)
+        # normalize field names from live vs local
+        cleaned = []
+        for m in matched:
+            if "modal_price_rs_quintal" in m and m["modal_price_rs_quintal"] is not None:
+                cleaned.append(m)
+            elif m.get("modal_price") is not None:
+                cleaned.append({**m, "modal_price_rs_quintal": m.get("modal_price")})
+        if not cleaned:
+            return {
+                "crop": crop,
+                "found": False,
+                "message": f"No active market feeds found for {crop}.",
+                "opendata": opendata_client.status(),
+            }
 
-        avg_modal = sum(m["modal_price_rs_quintal"] for m in matched) / len(matched)
-        max_price = max(m["max_price_rs_quintal"] for m in matched)
-        min_price = min(m["min_price_rs_quintal"] for m in matched)
+        avg_modal = sum(float(m["modal_price_rs_quintal"]) for m in cleaned) / len(cleaned)
+        max_price = max(float(m.get("max_price_rs_quintal") or m["modal_price_rs_quintal"]) for m in cleaned)
+        min_price = min(float(m.get("min_price_rs_quintal") or m["modal_price_rs_quintal"]) for m in cleaned)
 
         return {
             "crop": crop,
@@ -35,8 +58,11 @@ class MarketFeedProvider:
             "average_modal_price_rs_quintal": round(avg_modal, 2),
             "highest_market_price_rs_quintal": max_price,
             "lowest_market_price_rs_quintal": min_price,
-            "reporting_mandis": [m["mandi"] for m in matched],
-            "records": matched
+            "reporting_mandis": [m.get("mandi") or m.get("market") for m in cleaned],
+            "records": cleaned,
+            "opendata": opendata_client.status(),
+            "source_mode": "live" if any(m.get("source") == "data.gov.in" for m in cleaned) else "local_or_fallback",
         }
+
 
 market_feed = MarketFeedProvider()
