@@ -254,6 +254,21 @@ with tabs[1]:
     st.subheader("Registered tools")
     st.dataframe(pd.DataFrame(tool_registry.list_tools()), use_container_width=True)
 
+    st.markdown("---")
+    st.subheader("🗂 Data lake ingest (Sprint 2)")
+    from mini.lake.registry import load_source_registry
+    from mini.lake.ingest import lake_tree_summary
+    from mini.workers.base import get_worker
+
+    st.json(load_source_registry().summary())
+    if st.button("Run W-INGEST (write to lake/raw)"):
+        with st.spinner("Ingesting sources..."):
+            res = get_worker("W-INGEST").run(dry_run=False, include_http=False)
+        st.success(res.message if res.ok else "Ingest failed")
+        st.json(res.metrics)
+    st.caption("Lake raw inventory")
+    st.json(lake_tree_summary())
+
 # TAB 3: Domain Taxonomy browser (Sprint 1)
 with tabs[2]:
     st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")

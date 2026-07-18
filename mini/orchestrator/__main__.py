@@ -50,6 +50,32 @@ def cmd_taxonomy_summary(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sources(_: argparse.Namespace) -> int:
+    from mini.lake.registry import load_source_registry
+
+    reg = load_source_registry()
+    print(json.dumps({"summary": reg.summary(), "sources": [s.model_dump() for s in reg.sources]}, indent=2))
+    return 0
+
+
+def cmd_lake_status(_: argparse.Namespace) -> int:
+    from mini.lake.ingest import lake_tree_summary
+
+    print(json.dumps(lake_tree_summary(), indent=2))
+    return 0
+
+
+def cmd_ingest(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    kwargs = {"include_http": not args.skip_http}
+    if args.sources:
+        kwargs["source_ids"] = args.sources
+    result = get_worker("W-INGEST").run(dry_run=not args.execute, **kwargs)
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -95,6 +121,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("taxonomy-summary", help="Print taxonomy summary counts")
     s.set_defaults(func=cmd_taxonomy_summary)
+
+    s = sub.add_parser("sources", help="List source registry")
+    s.set_defaults(func=cmd_sources)
+
+    s = sub.add_parser("lake-status", help="Show lake/raw file tree summary")
+    s.set_defaults(func=cmd_lake_status)
+
+    s = sub.add_parser("ingest", help="Run W-INGEST (default dry-run; use --execute to write)")
+    s.add_argument("--execute", action="store_true", help="Write files to lake/raw")
+    s.add_argument("--sources", nargs="*", help="Optional source ids to ingest")
+    s.add_argument("--skip-http", action="store_true", help="Skip http_api sources")
+    s.set_defaults(func=cmd_ingest)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

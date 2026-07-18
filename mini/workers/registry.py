@@ -25,23 +25,7 @@ def _stub_result(worker_id: str, dry_run: bool, message: str, **metrics: Any) ->
     )
 
 
-@register_worker
-class IngestWorker(BaseWorker):
-    worker_id = "W-INGEST"
-    name = "Ingest"
-    description = "Pull sources into lake/raw/{domain}/ with manifests"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        paths = ensure_lake_layout() if not dry_run else []
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Sprint 0 stub: lake layout ready; full ingest in Sprint 2",
-            lake_paths=len(paths),
-            raw_root=relative_to_repo(LAKE_RAW),
-        )
+# W-INGEST is implemented in mini.workers.ingest (Sprint 2)
 
 
 @register_worker
@@ -328,6 +312,10 @@ class InferWorker(BaseWorker):
 
     def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
         return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: inference chain Sprint 15")
+
+
+# Import real ingest worker so it registers into WORKER_REGISTRY
+from mini.workers.ingest import IngestWorker  # noqa: E402,F401
 
 
 @register_worker

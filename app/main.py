@@ -186,6 +186,25 @@ def taxonomy_resolve(crop: Optional[str] = None, district: Optional[str] = None,
         "categories": taxonomy_service.detect_category(text or crop or "") if (text or crop) else [],
     }
 
+@app.get("/api/lake/status")
+def lake_status_api():
+    """Data lake raw inventory (Sprint 2)."""
+    from mini.lake.ingest import lake_tree_summary
+    from mini.lake.registry import load_source_registry
+
+    return {
+        "registry": load_source_registry().summary(),
+        "lake": lake_tree_summary(),
+    }
+
+@app.post("/api/lake/ingest")
+def lake_ingest_api(execute: bool = False, skip_http: bool = False):
+    """Trigger W-INGEST (default dry-run unless execute=true)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-INGEST").run(dry_run=not execute, include_http=not skip_http)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

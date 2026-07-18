@@ -4,10 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S1 — Taxonomy freeze** (S0 bootstrap complete) |
+| Sprint | **S2 — Lake ingest** (S0 bootstrap + S1 taxonomy complete) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
+| Feature phase | **FP-1** (raw lake populated) |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -21,6 +22,9 @@ python -m mini.orchestrator init-lake
 python -m mini.orchestrator run bootstrap --execute
 python -m mini.orchestrator run dry-factory          # dry-run all workers
 python -m mini.orchestrator run-worker W-BOOTSTRAP --dry-run
+python -m mini.orchestrator sources
+python -m mini.orchestrator ingest --execute --skip-http
+python -m mini.orchestrator lake-status
 ```
 
 ## Layout
@@ -52,21 +56,19 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–1 acceptance
+## Sprint 0–2 acceptance
 
-- [x] `python -m mini.orchestrator list-workers` works  
-- [x] Lake dirs creatable via CLI  
-- [x] Schema v1 `StandardRecord` defined  
-- [x] Taxonomy **v1.0.0 frozen** + platform KB coverage  
-- [x] `taxonomy-validate` / `taxonomy-summary` CLI  
-- [x] Dry-run pipeline `dry-factory` / `sprint1` succeeds  
-- [x] Tests: `tests/test_mini_sprint0.py`, `tests/test_mini_sprint1.py`  
+- [x] Factory CLI + lake layout  
+- [x] Schema v1 + taxonomy v1.0.0 frozen  
+- [x] Source registry + **W-INGEST ready** (idempotent, checksums)  
+- [x] Tests: `test_mini_sprint0/1/2.py`  
 
 ```bash
 python -m mini.orchestrator taxonomy-validate
-python -m mini.orchestrator run sprint1 --execute
+python -m mini.orchestrator ingest --execute --skip-http
+python -m mini.orchestrator run sprint2 --execute
 ```
 
 ## Next
 
-Sprint 2 — Real ingest worker + source registry + lake seed manifests.
+Sprint 3 — Validate / clean / dedup pipeline on raw batches.

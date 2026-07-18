@@ -1,0 +1,157 @@
+{
+  "version": "1.0.0",
+  "sprint": "S2",
+  "description": "Open / local source registry for KrushiVerseAI Mini data lake ingest",
+  "sources": [
+    {
+      "id": "platform_crops_diseases",
+      "name": "Platform crops & diseases KB",
+      "type": "local_file",
+      "path": "data/crops_and_diseases.json",
+      "domain": "crop",
+      "also_domains": ["disease", "pest"],
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "ICAR/SAU-style package-of-practice summaries",
+      "enabled": true
+    },
+    {
+      "id": "platform_soil_fertilizers",
+      "name": "Platform soil & fertilizer KB",
+      "type": "local_file",
+      "path": "data/soil_and_fertilizers.json",
+      "domain": "soil",
+      "also_domains": ["fertilizer"],
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "SAU PoP summaries",
+      "enabled": true
+    },
+    {
+      "id": "platform_government_schemes",
+      "name": "Government schemes KB",
+      "type": "local_file",
+      "path": "data/government_schemes.json",
+      "domain": "government",
+      "format": "json",
+      "license": "public-scheme-summaries",
+      "origin": "Gov of India / MH open scheme info",
+      "enabled": true
+    },
+    {
+      "id": "platform_market_prices",
+      "name": "Market prices KB (Agmarknet-style)",
+      "type": "local_file",
+      "path": "data/market_prices.json",
+      "domain": "market",
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "Agmarknet-style mandi snapshot",
+      "enabled": true
+    },
+    {
+      "id": "platform_knowledge_graph",
+      "name": "Knowledge graph seed",
+      "type": "local_file",
+      "path": "data/knowledge_graph.json",
+      "domain": "general",
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "Platform GraphRAG seed",
+      "enabled": true
+    },
+    {
+      "id": "platform_agri_advisories",
+      "name": "Agronomy advisories",
+      "type": "local_file",
+      "path": "data/agri_advisories.json",
+      "domain": "general",
+      "also_domains": ["crop"],
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "ICAR/SAU open advisory compilation",
+      "enabled": true
+    },
+    {
+      "id": "platform_seed_varieties",
+      "name": "Seed varieties",
+      "type": "local_file",
+      "path": "data/seed_varieties.json",
+      "domain": "seed",
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "Public SAU/ICAR variety notes",
+      "enabled": true
+    },
+    {
+      "id": "platform_irrigation_practices",
+      "name": "Irrigation practices",
+      "type": "local_file",
+      "path": "data/irrigation_practices.json",
+      "domain": "irrigation",
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "FAO-56 / PMKSY / ICAR open guides",
+      "enabled": true
+    },
+    {
+      "id": "platform_climate_zones",
+      "name": "Climate zones",
+      "type": "local_file",
+      "path": "data/climate_zones.json",
+      "domain": "weather",
+      "format": "json",
+      "license": "educational-open-compilation",
+      "origin": "IMD/agri-climate zone public summaries",
+      "enabled": true
+    },
+    {
+      "id": "platform_open_source_catalog",
+      "name": "Open source catalog",
+      "type": "local_file",
+      "path": "data/open_source_catalog.json",
+      "domain": "general",
+      "format": "json",
+      "license": "catalog",
+      "origin": "Open data source index",
+      "enabled": true
+    },
+    {
+      "id": "datagov_agmarknet",
+      "name": "data.gov.in Agmarknet commodity prices",
+      "type": "http_api",
+      "url": "https://api.data.gov.in",
+      "domain": "market",
+      "format": "json",
+      "license": "Government of India Open Data",
+      "origin": "https://data.gov.in",
+      "requires_env": ["DATA_GOV_IN_API_KEY"],
+      "enabled": true,
+      "notes": "Fetched live when API key present; otherwise skipped with reason"
+    },
+    {
+      "id": "open_meteo_docs",
+      "name": "Open-Meteo weather API (reference)",
+      "type": "http_api",
+      "url": "https://api.open-meteo.com",
+      "domain": "weather",
+      "format": "json",
+      "license": "Open-Meteo open API",
+      "origin": "https://open-meteo.com",
+      "enabled": false,
+      "notes": "Live weather is via app tools; registry entry for documentation"
+    },
+    {
+      "id": "wikipedia_agri_stub",
+      "name": "Wikipedia agriculture (via web RAG)",
+      "type": "web",
+      "url": "https://en.wikipedia.org",
+      "domain": "general",
+      "format": "html",
+      "license": "CC BY-SA",
+      "origin": "Wikipedia",
+      "enabled": false,
+      "notes": "Not bulk-ingested in S2; retrieved at query time by W-RAG/web tools"
+    }
+  ]
+}

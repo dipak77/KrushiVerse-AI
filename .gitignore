@@ -8,8 +8,11 @@ __pycache__/
 *.npz
 mini/runs/
 mini/orchestrator/events.jsonl
-# Keep lake structure in git; ignore generated content except markers
+# Keep lake structure in git; ignore bulk raw blobs except markers/reports
 data/lake/**
 !data/lake/**/
 !data/lake/**/.gitkeep
 !data/lake/BOOTSTRAP.json
+!data/lake/INGEST_LATEST.json
+!data/lake/manifests/
+!data/lake/manifests/**

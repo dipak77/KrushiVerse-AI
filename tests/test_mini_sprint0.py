@@ -33,8 +33,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def test_mini_version_markers():
-    # Sprint markers advance with each sprint; Sprint 0 artifacts remain valid.
-    assert __sprint__ in {"S0", "S1"}
+    # Sprint markers advance with each sprint; earlier artifacts remain valid.
+    assert __sprint__ in {"S0", "S1", "S2"}
     assert __feature_phase__.startswith("FP-")
     assert __version__
 
@@ -151,7 +151,7 @@ def test_bootstrap_pipeline_execute():
 
 def test_describe_factory():
     info = describe_factory()
-    assert info["sprint"] in {"S0", "S1"}
+    assert info["sprint"] in {"S0", "S1", "S2"}
     assert info["feature_phase"].startswith("FP-")
     assert info["worker_count"] >= 20
     assert "bootstrap" in info["pipelines"]
