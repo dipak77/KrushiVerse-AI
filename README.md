@@ -140,3 +140,7 @@ KrushiVerse-AI/
 
 ## 🤝 License
 Released under the MIT License.
+
+## 📐 Production architecture
+
+See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the complete 2026 nine-layer Agentic GraphRAG blueprint, multilingual voice flow, safety/governance requirements, evaluation plan, observability, and staged production roadmap. Its latency, accuracy, scale, and cost figures are explicitly treated as targets until validated by benchmark and production evidence.
