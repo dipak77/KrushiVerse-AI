@@ -3,75 +3,314 @@
     {
       "type": "Black Cotton Soil (Vertisol)",
       "type_mr": "काळी कसदार माती",
-      "characteristics_en": "High clay content, high water holding capacity, rich in Calcium, Potassium, and Magnesium; deficient in Nitrogen and Phosphorus.",
-      "characteristics_mr": "जमीन जास्त पाणी धरून ठेवते. कॅल्शियम, पोटॅशियम मुबलक, नत्र व स्फुरद कमी.",
-      "suitable_crops": ["Cotton", "Sugarcane", "Soybean", "Gram", "Wheat"]
+      "characteristics_en": "High clay, high WHC, rich Ca/K/Mg; often low N and P.",
+      "characteristics_mr": "जास्त चिकणमाती, पाणी धरते; नत्र-स्फुरद कमी.",
+      "suitable_crops": [
+        "Cotton",
+        "Sugarcane",
+        "Soybean",
+        "Gram",
+        "Wheat",
+        "Sorghum (Jowar)"
+      ]
     },
     {
       "type": "Red & Laterite Soil",
       "type_mr": "तांबडी व जांभी जमीन",
-      "characteristics_en": "Porous, acidic to neutral, high iron oxide content, low organic matter, moderate drainage.",
-      "characteristics_mr": "पाण्याचा निचरा चांगला, सेंद्रिय कर्ब कमी, आम्लयुक्त माती.",
-      "suitable_crops": ["Groundnut", "Cashew", "Rice", "Pulses", "Millets"]
+      "characteristics_en": "Porous, acidic-neutral, high Fe oxides, low OM.",
+      "characteristics_mr": "निचरा चांगला, सेंद्रिय कर्ब कमी.",
+      "suitable_crops": [
+        "Groundnut",
+        "Cashew",
+        "Rice",
+        "Pulses",
+        "Millets",
+        "Turmeric"
+      ]
     },
     {
       "type": "Medium Black Soil",
       "type_mr": "मध्यम काळी जमीन",
-      "characteristics_en": "Balanced texture, versatile fertility, suited for horticulture and field crops.",
-      "characteristics_mr": "सर्व पिकांसाठी उत्तम मध्यम काळी जमीन.",
-      "suitable_crops": ["Pomegranate", "Onion", "Vegetables", "Soybean", "Turmeric"]
+      "characteristics_en": "Balanced texture; versatile for horticulture and field crops.",
+      "characteristics_mr": "फलोत्पादन व पिकांसाठी उत्तम.",
+      "suitable_crops": [
+        "Pomegranate",
+        "Onion",
+        "Vegetables",
+        "Soybean",
+        "Turmeric",
+        "Grapes"
+      ]
+    },
+    {
+      "type": "Alluvial Soil",
+      "type_mr": "गाळाची जमीन",
+      "characteristics_en": "Fertile, deep, good for intensive cereals and vegetables.",
+      "characteristics_mr": "सुपीक; धान्य व भाजीपाला.",
+      "suitable_crops": [
+        "Rice",
+        "Wheat",
+        "Maize",
+        "Sugarcane",
+        "Banana",
+        "Mustard"
+      ]
+    },
+    {
+      "type": "Sandy Loam",
+      "type_mr": "वालुकामय पोयटा",
+      "characteristics_en": "Good drainage; needs organic matter and frequent irrigation.",
+      "characteristics_mr": "निचरा चांगला; सेंद्रिय पदार्थ गरजेचे.",
+      "suitable_crops": [
+        "Groundnut",
+        "Potato",
+        "Onion",
+        "Grapes",
+        "Chilli"
+      ]
+    },
+    {
+      "type": "Clay Loam",
+      "type_mr": "चिकण पोयटा",
+      "characteristics_en": "High nutrient holding; careful drainage needed in monsoon.",
+      "characteristics_mr": "अन्नद्रव्ये धरते; पावसात निचरा आवश्यक.",
+      "suitable_crops": [
+        "Rice",
+        "Wheat",
+        "Cotton",
+        "Sugarcane"
+      ]
     }
   ],
   "fertilizer_recommendations": [
     {
       "crop_en": "Cotton",
       "crop_mr": "कापूस",
-      "recommended_npk_kg_per_acre": {"N": 40, "P": 20, "K": 20},
-      "basal_dose": "50% N + 100% P + 100% K at time of sowing.",
-      "basal_dose_mr": "पेरणीवेळी ५०% नत्र, १००% स्फुरद व १००% पालाश द्यावे.",
-      "top_dressing": "25% N at 30 days and 25% N at 60 days post sowing.",
-      "top_dressing_mr": "उरलेले ५०% नत्र ३० आणि ६० दिवसांनी दोन समान हप्त्यात द्यावे.",
-      "micronutrients": "Zinc Sulphate @ 10 kg/acre if Zn deficient."
+      "recommended_npk_kg_per_acre": {
+        "N": 40,
+        "P": 20,
+        "K": 20
+      },
+      "basal_dose": "50% N + 100% P + 100% K at sowing.",
+      "basal_dose_mr": "पेरणीवेळी ५०% नत्र, १००% स्फुरद व पालाश.",
+      "top_dressing": "25% N at 30 DAS and 25% N at 60 DAS.",
+      "top_dressing_mr": "३० व ६० दिवसांनी नत्र.",
+      "micronutrients": "ZnSO4 @ 10 kg/acre if deficient.",
+      "source": "SAU cotton PoP"
     },
     {
       "crop_en": "Soybean",
       "crop_mr": "सोयाबीन",
-      "recommended_npk_kg_per_acre": {"N": 12, "P": 24, "K": 16},
-      "basal_dose": "100% N, P, K at sowing as basal application.",
-      "basal_dose_mr": "पेरणीच्या वेळी संपूर्ण खताचा हप्ता द्यावा.",
-      "top_dressing": "Foliar spray of 19:19:19 @ 10g/L at flowering.",
-      "top_dressing_mr": "फुलोरा अवस्थेत १९:१९:१९ विद्राव्य खत (१० ग्रॅम/लिटर) फवारावे.",
-      "micronutrients": "Sulphur @ 8 kg/acre for higher oil content."
+      "recommended_npk_kg_per_acre": {
+        "N": 12,
+        "P": 24,
+        "K": 16
+      },
+      "basal_dose": "100% NPK at sowing.",
+      "basal_dose_mr": "पेरणीवेळी पूर्ण NPK.",
+      "top_dressing": "19:19:19 foliar @ 10g/L at flowering.",
+      "top_dressing_mr": "फुलोऱ्यात १९:१९:१९.",
+      "micronutrients": "Sulphur @ 8 kg/acre.",
+      "source": "SAU soybean PoP"
     },
     {
       "crop_en": "Sugarcane",
       "crop_mr": "ऊस",
-      "recommended_npk_kg_per_acre": {"N": 100, "P": 45, "K": 45},
+      "recommended_npk_kg_per_acre": {
+        "N": 100,
+        "P": 45,
+        "K": 45
+      },
       "basal_dose": "10% N + 50% P + 50% K at planting.",
-      "basal_dose_mr": "लागवडीवेळी १०% नत्र, ५०% स्फुरद व ५०% पालाश.",
-      "top_dressing": "Splits at 6, 12, and 16 weeks (big earthing up).",
-      "top_dressing_mr": "उरलेले नत्र, स्फुरद व पालाश ६, १२ आणि १६ व्या आठवड्यात बांधणीच्या वेळी द्यावे.",
-      "micronutrients": "Ferrous Sulphate @ 10 kg/acre and Zinc Sulphate @ 8 kg/acre."
+      "basal_dose_mr": "लागवडीवेळी.",
+      "top_dressing": "Splits at 6, 12, 16 weeks.",
+      "top_dressing_mr": "६, १२, १६ आठवडे.",
+      "micronutrients": "FeSO4 10 kg + ZnSO4 8 kg/acre.",
+      "source": "SAU sugarcane PoP"
     },
     {
       "crop_en": "Pomegranate",
       "crop_mr": "डाळिंब",
-      "recommended_npk_kg_per_acre": {"N": 60, "P": 25, "K": 50},
-      "basal_dose": "FYM 25 kg/tree + 50% N, P, K at stress release.",
-      "basal_dose_mr": "ताण सोडताना २५ किलो शेणखत + ५०% रासायनिक खते.",
-      "top_dressing": "Fertigation via drip at weekly intervals during fruit growth.",
-      "top_dressing_mr": "ठिबकद्वारे दर आठवड्याला विद्राव्य खते (0:52:34, 0:0:50) द्यावीत.",
-      "micronutrients": "Boron @ 1g/L and Calcium Nitrate @ 5g/L during fruit setting."
+      "recommended_npk_kg_per_acre": {
+        "N": 35,
+        "P": 25,
+        "K": 25
+      },
+      "basal_dose": "FYM + full P,K and 1/3 N at bahar.",
+      "basal_dose_mr": "बहार उपचार.",
+      "top_dressing": "Remaining N in 2-3 fertigation splits.",
+      "top_dressing_mr": "उरलेले नत्र ठिबक.",
+      "micronutrients": "Boron and zinc foliar as needed.",
+      "source": "NRCP PoP"
     },
     {
       "crop_en": "Onion",
       "crop_mr": "कांदा",
-      "recommended_npk_kg_per_acre": {"N": 40, "P": 20, "K": 20},
-      "basal_dose": "50% N + 100% P + 100% K at transplanting.",
-      "basal_dose_mr": "पुनर्लागवडीच्या वेळी ५०% नत्र, १००% स्फुरद व १००% पालाश.",
-      "top_dressing": "Remaining 50% N applied 30 days after transplanting.",
-      "top_dressing_mr": "उरलेले ५०% नत्र लागवडीनंतर ३० दिवसांनी द्यावे.",
-      "micronutrients": "Sulphur @ 15 kg/acre."
+      "recommended_npk_kg_per_acre": {
+        "N": 40,
+        "P": 20,
+        "K": 20
+      },
+      "basal_dose": "50% N + full P,K at transplant.",
+      "basal_dose_mr": "लागवडीवेळी.",
+      "top_dressing": "Remaining N at 30 and 45 DAT.",
+      "top_dressing_mr": "३० व ४५ दिवस.",
+      "micronutrients": "Sulphur improves pungency.",
+      "source": "DOGR PoP"
+    },
+    {
+      "crop_en": "Rice",
+      "crop_mr": "भात",
+      "recommended_npk_kg_per_acre": {
+        "N": 40,
+        "P": 20,
+        "K": 20
+      },
+      "basal_dose": "50% N + full P,K basal.",
+      "basal_dose_mr": "बेसल.",
+      "top_dressing": "N at tillering and panicle initiation.",
+      "top_dressing_mr": "कुटणी व कणस.",
+      "micronutrients": "ZnSO4 for Zn deficiency (khaira).",
+      "source": "NRRI PoP"
+    },
+    {
+      "crop_en": "Wheat",
+      "crop_mr": "गहू",
+      "recommended_npk_kg_per_acre": {
+        "N": 48,
+        "P": 24,
+        "K": 16
+      },
+      "basal_dose": "50% N + full P,K at sowing.",
+      "basal_dose_mr": "पेरणी.",
+      "top_dressing": "Remaining N at CRI and tillering.",
+      "top_dressing_mr": "CRI व कुटणी.",
+      "micronutrients": "Zn if deficient.",
+      "source": "IIWBR PoP"
+    },
+    {
+      "crop_en": "Maize",
+      "crop_mr": "मका",
+      "recommended_npk_kg_per_acre": {
+        "N": 48,
+        "P": 24,
+        "K": 16
+      },
+      "basal_dose": "1/3 N + full P,K basal.",
+      "basal_dose_mr": "बेसल.",
+      "top_dressing": "N at knee-high and tasseling.",
+      "top_dressing_mr": "गुडघा व फुलोरा.",
+      "micronutrients": "Zn critical for maize.",
+      "source": "IIMR PoP"
+    },
+    {
+      "crop_en": "Tur (Pigeon Pea)",
+      "crop_mr": "तूर",
+      "recommended_npk_kg_per_acre": {
+        "N": 10,
+        "P": 20,
+        "K": 10
+      },
+      "basal_dose": "Full NPK basal.",
+      "basal_dose_mr": "पूर्ण बेसल.",
+      "top_dressing": "Rhizobium + PSB seed treatment.",
+      "top_dressing_mr": "रायझोबियम+PSB.",
+      "micronutrients": "Sulphur beneficial.",
+      "source": "IIPR PoP"
+    },
+    {
+      "crop_en": "Gram (Chickpea)",
+      "crop_mr": "हरभरा",
+      "recommended_npk_kg_per_acre": {
+        "N": 8,
+        "P": 16,
+        "K": 8
+      },
+      "basal_dose": "Full dose basal.",
+      "basal_dose_mr": "बेसल.",
+      "top_dressing": "Rhizobium seed treatment essential.",
+      "top_dressing_mr": "रायझोबियम.",
+      "micronutrients": "Mo and Zn if deficient.",
+      "source": "IIPR PoP"
+    },
+    {
+      "crop_en": "Groundnut",
+      "crop_mr": "भुईमूग",
+      "recommended_npk_kg_per_acre": {
+        "N": 10,
+        "P": 20,
+        "K": 16
+      },
+      "basal_dose": "Full NPK + gypsum at pegging.",
+      "basal_dose_mr": "बेसल+जिप्सम.",
+      "top_dressing": "Gypsum 200 kg/acre at pegging.",
+      "top_dressing_mr": "पेगिंगवेळी जिप्सम.",
+      "micronutrients": "Calcium critical for pods.",
+      "source": "DGR PoP"
+    },
+    {
+      "crop_en": "Grapes",
+      "crop_mr": "द्राक्ष",
+      "recommended_npk_kg_per_acre": {
+        "N": 40,
+        "P": 20,
+        "K": 40
+      },
+      "basal_dose": "Organic manure + fertigation plan after pruning.",
+      "basal_dose_mr": "छाटणीनंतर.",
+      "top_dressing": "Split fertigation through season.",
+      "top_dressing_mr": "हंगामभर.",
+      "micronutrients": "Mg, B, Zn foliar common.",
+      "source": "NRCG PoP"
+    },
+    {
+      "crop_en": "Tomato",
+      "crop_mr": "टोमॅटो",
+      "recommended_npk_kg_per_acre": {
+        "N": 50,
+        "P": 25,
+        "K": 25
+      },
+      "basal_dose": "Organic + basal NPK at transplant.",
+      "basal_dose_mr": "लागवड.",
+      "top_dressing": "Weekly fertigation preferred.",
+      "top_dressing_mr": "साप्ताहिक.",
+      "micronutrients": "Ca to reduce blossom end rot.",
+      "source": "IIVR PoP"
+    },
+    {
+      "crop_en": "Banana",
+      "crop_mr": "केळी",
+      "recommended_npk_kg_per_acre": {
+        "N": 80,
+        "P": 30,
+        "K": 100
+      },
+      "basal_dose": "High K demand; split monthly.",
+      "basal_dose_mr": "जास्त पालाश.",
+      "top_dressing": "Monthly N and K splits.",
+      "top_dressing_mr": "मासिक.",
+      "micronutrients": "Fe and Zn foliar.",
+      "source": "NRCB PoP"
+    },
+    {
+      "crop_en": "Chilli",
+      "crop_mr": "मिरची",
+      "recommended_npk_kg_per_acre": {
+        "N": 40,
+        "P": 20,
+        "K": 20
+      },
+      "basal_dose": "Basal at transplant.",
+      "basal_dose_mr": "लागवड.",
+      "top_dressing": "N in 3 splits; K during fruiting.",
+      "top_dressing_mr": "फळधारणेत पालाश.",
+      "micronutrients": "Zn and B for flower retention.",
+      "source": "IIVR PoP"
     }
-  ]
+  ],
+  "meta": {
+    "soils": 6,
+    "fert_recs": 15
+  }
 }

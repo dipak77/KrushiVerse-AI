@@ -1,47 +1,679 @@
 {
   "nodes": [
-    {"id": "Cotton", "label": "Crop", "properties": {"marathi": "कापूस", "season": "Kharif"}},
-    {"id": "Soybean", "label": "Crop", "properties": {"marathi": "सोयाबीन", "season": "Kharif"}},
-    {"id": "Pomegranate", "label": "Crop", "properties": {"marathi": "डाळिंब", "season": "Horticulture"}},
-    {"id": "Onion", "label": "Crop", "properties": {"marathi": "कांदा", "season": "Rabi"}},
-    {"id": "Sugarcane", "label": "Crop", "properties": {"marathi": "ऊस", "season": "Annual"}},
-
-    {"id": "Pink Bollworm", "label": "Pest", "properties": {"marathi": "गुलाबी बोंड अळी"}},
-    {"id": "Bacterial Blight", "label": "Disease", "properties": {"marathi": "तेल्या रोग"}},
-    {"id": "Yellow Mosaic Virus", "label": "Disease", "properties": {"marathi": "पिवळा मोझॅक"}},
-    {"id": "Purple Blotch", "label": "Disease", "properties": {"marathi": "जांभळा करपा"}},
-
-    {"id": "Black Cotton Soil", "label": "Soil", "properties": {"marathi": "काळी जमीन"}},
-    {"id": "Medium Black Soil", "label": "Soil", "properties": {"marathi": "मध्यम काळी जमीन"}},
-
-    {"id": "Urea", "label": "Fertilizer", "properties": {"nutrient": "Nitrogen"}},
-    {"id": "DAP", "label": "Fertilizer", "properties": {"nutrient": "Phosphorus & Nitrogen"}},
-    {"id": "MOP", "label": "Fertilizer", "properties": {"nutrient": "Potassium"}},
-
-    {"id": "PM-KISAN", "label": "Scheme", "properties": {"marathi": "पीएम-किसान"}},
-    {"id": "PMFBY", "label": "Scheme", "properties": {"marathi": "पीक विमा"}},
-    {"id": "Magel Tyala Shettale", "label": "Scheme", "properties": {"marathi": "शेततळे योजना"}},
-
-    {"id": "High Humidity (>80%)", "label": "WeatherCondition", "properties": {"type": "Humidity"}},
-    {"id": "Monsoon Rain", "label": "WeatherCondition", "properties": {"type": "Rainfall"}}
+    {
+      "id": "Cotton",
+      "label": "Crop",
+      "properties": {
+        "marathi": "कापूस"
+      }
+    },
+    {
+      "id": "Soybean",
+      "label": "Crop",
+      "properties": {
+        "marathi": "सोयाबीन"
+      }
+    },
+    {
+      "id": "Sugarcane",
+      "label": "Crop",
+      "properties": {
+        "marathi": "ऊस"
+      }
+    },
+    {
+      "id": "Pomegranate",
+      "label": "Crop",
+      "properties": {
+        "marathi": "डाळिंब"
+      }
+    },
+    {
+      "id": "Onion",
+      "label": "Crop",
+      "properties": {
+        "marathi": "कांदा"
+      }
+    },
+    {
+      "id": "Rice",
+      "label": "Crop",
+      "properties": {
+        "marathi": "भात"
+      }
+    },
+    {
+      "id": "Wheat",
+      "label": "Crop",
+      "properties": {
+        "marathi": "गहू"
+      }
+    },
+    {
+      "id": "Maize",
+      "label": "Crop",
+      "properties": {
+        "marathi": "मका"
+      }
+    },
+    {
+      "id": "Tur (Pigeon Pea)",
+      "label": "Crop",
+      "properties": {
+        "marathi": "तूर"
+      }
+    },
+    {
+      "id": "Gram (Chickpea)",
+      "label": "Crop",
+      "properties": {
+        "marathi": "हरभरा"
+      }
+    },
+    {
+      "id": "Groundnut",
+      "label": "Crop",
+      "properties": {
+        "marathi": "भुईमूग"
+      }
+    },
+    {
+      "id": "Turmeric",
+      "label": "Crop",
+      "properties": {
+        "marathi": "हळद"
+      }
+    },
+    {
+      "id": "Grapes",
+      "label": "Crop",
+      "properties": {
+        "marathi": "द्राक्ष"
+      }
+    },
+    {
+      "id": "Banana",
+      "label": "Crop",
+      "properties": {
+        "marathi": "केळी"
+      }
+    },
+    {
+      "id": "Mango",
+      "label": "Crop",
+      "properties": {
+        "marathi": "आंबा"
+      }
+    },
+    {
+      "id": "Tomato",
+      "label": "Crop",
+      "properties": {
+        "marathi": "टोमॅटो"
+      }
+    },
+    {
+      "id": "Chilli",
+      "label": "Crop",
+      "properties": {
+        "marathi": "मिरची"
+      }
+    },
+    {
+      "id": "Sorghum (Jowar)",
+      "label": "Crop",
+      "properties": {
+        "marathi": "ज्वारी"
+      }
+    },
+    {
+      "id": "Bajra (Pearl Millet)",
+      "label": "Crop",
+      "properties": {
+        "marathi": "बाजरी"
+      }
+    },
+    {
+      "id": "Mustard",
+      "label": "Crop",
+      "properties": {
+        "marathi": "मोहरी"
+      }
+    },
+    {
+      "id": "Potato",
+      "label": "Crop",
+      "properties": {
+        "marathi": "बटाटा"
+      }
+    },
+    {
+      "id": "Orange (Nagpur Santra)",
+      "label": "Crop",
+      "properties": {
+        "marathi": "संत्रा"
+      }
+    },
+    {
+      "id": "Pink Bollworm",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Bacterial Blight",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Yellow Mosaic Virus",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Purple Blotch",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Rice Blast",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Wheat Rust",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Fall Armyworm",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Pod Borer (Helicoverpa)",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Grape Downy Mildew",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Tomato Leaf Curl Virus",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Citrus Greening (HLB)",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Sugarcane Red Rot",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Potato Late Blight",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Chilli Thrips",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Mango Hopper",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Banana Sigatoka",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Mustard Aphid",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Groundnut Leaf Spot (Tikra)",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Turmeric Rhizome Rot",
+      "label": "Disease",
+      "properties": {}
+    },
+    {
+      "id": "Sorghum Shoot Fly",
+      "label": "Pest",
+      "properties": {}
+    },
+    {
+      "id": "Black Cotton Soil",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Medium Black Soil",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Alluvial Soil",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Sandy Loam",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Red & Laterite Soil",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Clay Loam",
+      "label": "Soil",
+      "properties": {}
+    },
+    {
+      "id": "Urea",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "DAP",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "MOP",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "SSP",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "Gypsum",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "Vermicompost",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "FYM",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "19:19:19",
+      "label": "Fertilizer",
+      "properties": {}
+    },
+    {
+      "id": "PM-KISAN",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "PMFBY",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "Magel Tyala Shettale",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "PMKSY Micro-Irrigation",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "PoCRA",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "Soil Health Card",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "KCC",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "MIDH/NHM",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "PM-KUSUM",
+      "label": "Scheme",
+      "properties": {}
+    },
+    {
+      "id": "High Humidity (>80%)",
+      "label": "WeatherCondition",
+      "properties": {}
+    },
+    {
+      "id": "Monsoon Rain",
+      "label": "WeatherCondition",
+      "properties": {}
+    },
+    {
+      "id": "Drought Stress",
+      "label": "WeatherCondition",
+      "properties": {}
+    },
+    {
+      "id": "Heat Wave (>38C)",
+      "label": "WeatherCondition",
+      "properties": {}
+    },
+    {
+      "id": "Frost Risk",
+      "label": "WeatherCondition",
+      "properties": {}
+    }
   ],
   "edges": [
-    {"source": "Cotton", "target": "Pink Bollworm", "relation": "AFFECTED_BY"},
-    {"source": "Cotton", "target": "Black Cotton Soil", "relation": "GROWS_IN"},
-    {"source": "Cotton", "target": "Urea", "relation": "REQUIRES_FERTILIZER"},
-    {"source": "Cotton", "target": "PMFBY", "relation": "COVERED_BY"},
-
-    {"source": "Pomegranate", "target": "Bacterial Blight", "relation": "AFFECTED_BY"},
-    {"source": "Pomegranate", "target": "Medium Black Soil", "relation": "GROWS_IN"},
-    {"source": "Pomegranate", "target": "Magel Tyala Shettale", "relation": "BENEFITS_FROM"},
-    {"source": "Bacterial Blight", "target": "High Humidity (>80%)", "relation": "TRIGGERED_BY"},
-
-    {"source": "Soybean", "target": "Yellow Mosaic Virus", "relation": "AFFECTED_BY"},
-    {"source": "Soybean", "target": "DAP", "relation": "REQUIRES_FERTILIZER"},
-    {"source": "Soybean", "target": "PMFBY", "relation": "COVERED_BY"},
-
-    {"source": "Onion", "target": "Purple Blotch", "relation": "AFFECTED_BY"},
-    {"source": "Purple Blotch", "target": "High Humidity (>80%)", "relation": "TRIGGERED_BY"},
-    {"source": "Onion", "target": "MOP", "relation": "REQUIRES_FERTILIZER"}
-  ]
+    {
+      "source": "Cotton",
+      "target": "Pink Bollworm",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Pomegranate",
+      "target": "Bacterial Blight",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Soybean",
+      "target": "Yellow Mosaic Virus",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Onion",
+      "target": "Purple Blotch",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Rice",
+      "target": "Rice Blast",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Wheat",
+      "target": "Wheat Rust",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Maize",
+      "target": "Fall Armyworm",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Tur (Pigeon Pea)",
+      "target": "Pod Borer (Helicoverpa)",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Grapes",
+      "target": "Grape Downy Mildew",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Tomato",
+      "target": "Tomato Leaf Curl Virus",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Orange (Nagpur Santra)",
+      "target": "Citrus Greening (HLB)",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Sugarcane",
+      "target": "Sugarcane Red Rot",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Potato",
+      "target": "Potato Late Blight",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Chilli",
+      "target": "Chilli Thrips",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Mango",
+      "target": "Mango Hopper",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Banana",
+      "target": "Banana Sigatoka",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Mustard",
+      "target": "Mustard Aphid",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Groundnut",
+      "target": "Groundnut Leaf Spot (Tikra)",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Turmeric",
+      "target": "Turmeric Rhizome Rot",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Sorghum (Jowar)",
+      "target": "Sorghum Shoot Fly",
+      "relation": "AFFECTED_BY"
+    },
+    {
+      "source": "Cotton",
+      "target": "Black Cotton Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Soybean",
+      "target": "Black Cotton Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Pomegranate",
+      "target": "Medium Black Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Rice",
+      "target": "Alluvial Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Wheat",
+      "target": "Alluvial Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Groundnut",
+      "target": "Sandy Loam",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Grapes",
+      "target": "Sandy Loam",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Onion",
+      "target": "Sandy Loam",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Turmeric",
+      "target": "Red & Laterite Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Sugarcane",
+      "target": "Clay Loam",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Banana",
+      "target": "Alluvial Soil",
+      "relation": "GROWS_IN"
+    },
+    {
+      "source": "Cotton",
+      "target": "Urea",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Cotton",
+      "target": "DAP",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Soybean",
+      "target": "DAP",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Pomegranate",
+      "target": "MOP",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Groundnut",
+      "target": "Gypsum",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Banana",
+      "target": "MOP",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Wheat",
+      "target": "Urea",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Rice",
+      "target": "Urea",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Grapes",
+      "target": "19:19:19",
+      "relation": "REQUIRES_FERTILIZER"
+    },
+    {
+      "source": "Cotton",
+      "target": "PMFBY",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Soybean",
+      "target": "PMFBY",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Pomegranate",
+      "target": "Magel Tyala Shettale",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Pomegranate",
+      "target": "MIDH/NHM",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Grapes",
+      "target": "MIDH/NHM",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Onion",
+      "target": "PMFBY",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Rice",
+      "target": "PMFBY",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Wheat",
+      "target": "PMFBY",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Cotton",
+      "target": "KCC",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Banana",
+      "target": "PMKSY Micro-Irrigation",
+      "relation": "COVERED_BY"
+    },
+    {
+      "source": "Bacterial Blight",
+      "target": "High Humidity (>80%)",
+      "relation": "TRIGGERED_BY"
+    },
+    {
+      "source": "Grape Downy Mildew",
+      "target": "High Humidity (>80%)",
+      "relation": "TRIGGERED_BY"
+    },
+    {
+      "source": "Potato Late Blight",
+      "target": "High Humidity (>80%)",
+      "relation": "TRIGGERED_BY"
+    },
+    {
+      "source": "Rice Blast",
+      "target": "Monsoon Rain",
+      "relation": "TRIGGERED_BY"
+    },
+    {
+      "source": "Onion",
+      "target": "Drought Stress",
+      "relation": "STRESSED_BY"
+    }
+  ],
+  "meta": {
+    "nodes": 70,
+    "edges": 55
+  }
 }

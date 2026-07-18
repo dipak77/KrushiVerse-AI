@@ -5,11 +5,14 @@ from app.knowledge.graph_rag import graph_rag
 
 def test_kb_loader_docs():
     docs = kb_loader.get_all_documents()
-    assert len(docs) > 0
+    assert len(docs) >= 100
     categories = {d["category"] for d in docs}
     assert "Crop" in categories
     assert "Disease" in categories
     assert "Government Scheme" in categories
+    assert "Advisory" in categories
+    assert "Market" in categories
+    assert "Irrigation" in categories
 
 def test_vector_store():
     store = SimpleVectorStore()

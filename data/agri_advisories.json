@@ -1,0 +1,757 @@
+{
+  "advisories": [
+    {
+      "id": "adv1",
+      "title_en": "Cotton square stage IPM",
+      "title_mr": "कापूस चौकोन अवस्था",
+      "content_en": "Scout thrice weekly for PBW eggs; maintain ETL of 5-10% damaged fruiting bodies.",
+      "content_mr": "Scout thrice weekly for PBW eggs; maintain ETL of 5-10% damaged fruiting bodies.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-CICR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv2",
+      "title_en": "Soybean moisture stress",
+      "title_mr": "सोयाबीन पाण्याचा ताण",
+      "content_en": "Critical irrigation at flowering and pod filling if dry spell exceeds 10 days.",
+      "content_mr": "Critical irrigation at flowering and pod filling if dry spell exceeds 10 days.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-IISR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv3",
+      "title_en": "Pomegranate bahar selection",
+      "title_mr": "डाळिंब बहार निवड",
+      "content_en": "Mrig bahar preferred in low rainfall zones; regulate irrigation 45 days before bahar.",
+      "content_mr": "Mrig bahar preferred in low rainfall zones; regulate irrigation 45 days before bahar.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-NRCP",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv4",
+      "title_en": "Onion storage losses",
+      "title_mr": "कांदा साठवण",
+      "content_en": "Cure bulbs 10-15 days; store ventilated; avoid rain-wet harvest.",
+      "content_mr": "Cure bulbs 10-15 days; store ventilated; avoid rain-wet harvest.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-DOGR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv5",
+      "title_en": "Rice blast weather risk",
+      "title_mr": "भात करपा हवामान",
+      "content_en": "High humidity + cloudy weather favors blast; avoid excess N top-dress.",
+      "content_mr": "High humidity + cloudy weather favors blast; avoid excess N top-dress.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-NRRI",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv6",
+      "title_en": "Wheat CRI irrigation",
+      "title_mr": "गहू CRI सिंचन",
+      "content_en": "First irrigation at Crown Root Initiation ~20-25 DAS critical for tillers.",
+      "content_mr": "First irrigation at Crown Root Initiation ~20-25 DAS critical for tillers.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-IIWBR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv7",
+      "title_en": "Maize FAW scouting",
+      "title_mr": "मका FAW",
+      "content_en": "Check 20 plants/acre in whorl; act when 5% plants show fresh damage.",
+      "content_mr": "Check 20 plants/acre in whorl; act when 5% plants show fresh damage.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR FAW plan",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv8",
+      "title_en": "Grape powdery mildew",
+      "title_mr": "द्राक्ष भुरी",
+      "content_en": "Dense canopy and dry mild weather favor powdery mildew; sulfur sprays early.",
+      "content_mr": "Dense canopy and dry mild weather favor powdery mildew; sulfur sprays early.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-NRCG",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv9",
+      "title_en": "Drip fertigation basics",
+      "title_mr": "ठिबक खतपाणी",
+      "content_en": "Inject fertilizers in middle third of irrigation cycle; flush lines.",
+      "content_mr": "Inject fertilizers in middle third of irrigation cycle; flush lines.",
+      "category": "Agronomy Advisory",
+      "source": "PMKSY open guide",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv10",
+      "title_en": "Soil testing interpretation",
+      "title_mr": "माती चाचणी",
+      "content_en": "If OC <0.5% prioritize FYM/compost 5-10 t/ha before chemical N hike.",
+      "content_mr": "If OC <0.5% prioritize FYM/compost 5-10 t/ha before chemical N hike.",
+      "category": "Agronomy Advisory",
+      "source": "Soil Health Card",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv11",
+      "title_en": "Monsoon farm pond capture",
+      "title_mr": "शेततळे",
+      "content_en": "Desilt inlets before monsoon; maintain 1:1.5 side slopes for safety.",
+      "content_mr": "Desilt inlets before monsoon; maintain 1:1.5 side slopes for safety.",
+      "category": "Agronomy Advisory",
+      "source": "PoCRA / MH agri",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv12",
+      "title_en": "Safe pesticide use",
+      "title_mr": "सुरक्षित फवारणी",
+      "content_en": "Follow PHI; PPE; do not spray in high wind or within 48h of expected rain.",
+      "content_mr": "Follow PHI; PPE; do not spray in high wind or within 48h of expected rain.",
+      "category": "Agronomy Advisory",
+      "source": "CIBRC public",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv13",
+      "title_en": "Tur pod borer ETL",
+      "title_mr": "तूर शेंगा अळी",
+      "content_en": "ETL ~5% pods damaged; install bird perches 10-12/acre.",
+      "content_mr": "ETL ~5% pods damaged; install bird perches 10-12/acre.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-IIPR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv14",
+      "title_en": "Groundnut pegging gypsum",
+      "title_mr": "भुईमूग जिप्सम",
+      "content_en": "Apply gypsum at pegging for better pod filling and shelling %.",
+      "content_mr": "Apply gypsum at pegging for better pod filling and shelling %.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-DGR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv15",
+      "title_en": "Banana bunch care",
+      "title_mr": "केळी घड",
+      "content_en": "Propping and denavelling improve bunch quality; remove male bud.",
+      "content_mr": "Propping and denavelling improve bunch quality; remove male bud.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-NRCB",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv16",
+      "title_en": "Mango hopper flowering",
+      "title_mr": "आंबा तुडतुडे",
+      "content_en": "Monitor at panicle emergence; avoid heavy nitrogen before flowering.",
+      "content_mr": "Monitor at panicle emergence; avoid heavy nitrogen before flowering.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-CISH",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv17",
+      "title_en": "Chilli thrips dry weather",
+      "title_mr": "मिरची फुलकिडे",
+      "content_en": "Thrips surge in dry weather; mulch and avoid water stress.",
+      "content_mr": "Thrips surge in dry weather; mulch and avoid water stress.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-IIVR",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv18",
+      "title_en": "Potato late blight forecast",
+      "title_mr": "बटाटा करपा",
+      "content_en": "If evening RH >85% and temp 10-20C for 2 days, start protective spray.",
+      "content_mr": "If evening RH >85% and temp 10-20C for 2 days, start protective spray.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-CPRI",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv19",
+      "title_en": "MSP and market timing",
+      "title_mr": "MSP व बाजार",
+      "content_en": "Compare mandi modal vs MSP; use eNAM for transparent lots when logistics allow.",
+      "content_mr": "Compare mandi modal vs MSP; use eNAM for transparent lots when logistics allow.",
+      "category": "Agronomy Advisory",
+      "source": "eNAM/Agmarknet",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv20",
+      "title_en": "Climate resilient millets",
+      "title_mr": "हवामान अनुकूल बाजरी-ज्वारी",
+      "content_en": "Millets tolerate short dry spells; prefer early sowing after onset rains.",
+      "content_mr": "Millets tolerate short dry spells; prefer early sowing after onset rains.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR millets",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv21",
+      "title_en": "Micro-irrigation for onion",
+      "title_mr": "कांदा ठिबक",
+      "content_en": "Drip reduces foliar disease vs flood; schedule 1.0-1.2 ETc peak bulbing.",
+      "content_mr": "Drip reduces foliar disease vs flood; schedule 1.0-1.2 ETc peak bulbing.",
+      "category": "Agronomy Advisory",
+      "source": "SAU irrigation",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv22",
+      "title_en": "Organic neem IPM",
+      "title_mr": "निंबोळी IPM",
+      "content_en": "Azadirachtin 1500-3000 ppm as part of rotation; not alone under high pest pressure.",
+      "content_mr": "Azadirachtin 1500-3000 ppm as part of rotation; not alone under high pest pressure.",
+      "category": "Agronomy Advisory",
+      "source": "NIPHM open",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv23",
+      "title_en": "Post-harvest onion export grade",
+      "title_mr": "कांदा निर्यात",
+      "content_en": "Uniform size, dry neck, free from purple blotch lesions for export packhouses.",
+      "content_mr": "Uniform size, dry neck, free from purple blotch lesions for export packhouses.",
+      "category": "Agronomy Advisory",
+      "source": "APEDA open notes",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv24",
+      "title_en": "Sugarcane sett treatment",
+      "title_mr": "ऊस बेणे",
+      "content_en": "Hot water / fungicide sett treatment reduces red rot and smut carryover.",
+      "content_mr": "Hot water / fungicide sett treatment reduces red rot and smut carryover.",
+      "category": "Agronomy Advisory",
+      "source": "ICAR-SBI",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv25",
+      "title_en": "Farm record digital log",
+      "title_mr": "शेती नोंदी",
+      "content_en": "Keep spray, fertigation, and yield logs for KCC renewal and insurance claims.",
+      "content_mr": "Keep spray, fertigation, and yield logs for KCC renewal and insurance claims.",
+      "category": "Agronomy Advisory",
+      "source": "NABARD advisory",
+      "license": "Open educational compilation from public ICAR/SAU/gov advisories"
+    },
+    {
+      "id": "adv_x_0_0",
+      "title_en": "Cotton sowing stage checklist",
+      "title_mr": "Cotton sowing अवस्था",
+      "content_en": "For Cotton at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Cotton पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_0_1",
+      "title_en": "Cotton vegetative stage checklist",
+      "title_mr": "Cotton vegetative अवस्था",
+      "content_en": "For Cotton at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Cotton पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_0_2",
+      "title_en": "Cotton flowering stage checklist",
+      "title_mr": "Cotton flowering अवस्था",
+      "content_en": "For Cotton at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Cotton पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_0_3",
+      "title_en": "Cotton fruiting stage checklist",
+      "title_mr": "Cotton fruiting अवस्था",
+      "content_en": "For Cotton at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Cotton पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_0_4",
+      "title_en": "Cotton harvest stage checklist",
+      "title_mr": "Cotton harvest अवस्था",
+      "content_en": "For Cotton at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Cotton पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_1_0",
+      "title_en": "Soybean sowing stage checklist",
+      "title_mr": "Soybean sowing अवस्था",
+      "content_en": "For Soybean at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Soybean पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_1_1",
+      "title_en": "Soybean vegetative stage checklist",
+      "title_mr": "Soybean vegetative अवस्था",
+      "content_en": "For Soybean at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Soybean पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_1_2",
+      "title_en": "Soybean flowering stage checklist",
+      "title_mr": "Soybean flowering अवस्था",
+      "content_en": "For Soybean at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Soybean पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_1_3",
+      "title_en": "Soybean fruiting stage checklist",
+      "title_mr": "Soybean fruiting अवस्था",
+      "content_en": "For Soybean at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Soybean पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_1_4",
+      "title_en": "Soybean harvest stage checklist",
+      "title_mr": "Soybean harvest अवस्था",
+      "content_en": "For Soybean at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Soybean पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_2_0",
+      "title_en": "Rice sowing stage checklist",
+      "title_mr": "Rice sowing अवस्था",
+      "content_en": "For Rice at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Rice पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_2_1",
+      "title_en": "Rice vegetative stage checklist",
+      "title_mr": "Rice vegetative अवस्था",
+      "content_en": "For Rice at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Rice पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_2_2",
+      "title_en": "Rice flowering stage checklist",
+      "title_mr": "Rice flowering अवस्था",
+      "content_en": "For Rice at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Rice पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_2_3",
+      "title_en": "Rice fruiting stage checklist",
+      "title_mr": "Rice fruiting अवस्था",
+      "content_en": "For Rice at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Rice पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_2_4",
+      "title_en": "Rice harvest stage checklist",
+      "title_mr": "Rice harvest अवस्था",
+      "content_en": "For Rice at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Rice पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_3_0",
+      "title_en": "Wheat sowing stage checklist",
+      "title_mr": "Wheat sowing अवस्था",
+      "content_en": "For Wheat at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Wheat पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_3_1",
+      "title_en": "Wheat vegetative stage checklist",
+      "title_mr": "Wheat vegetative अवस्था",
+      "content_en": "For Wheat at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Wheat पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_3_2",
+      "title_en": "Wheat flowering stage checklist",
+      "title_mr": "Wheat flowering अवस्था",
+      "content_en": "For Wheat at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Wheat पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_3_3",
+      "title_en": "Wheat fruiting stage checklist",
+      "title_mr": "Wheat fruiting अवस्था",
+      "content_en": "For Wheat at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Wheat पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_3_4",
+      "title_en": "Wheat harvest stage checklist",
+      "title_mr": "Wheat harvest अवस्था",
+      "content_en": "For Wheat at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Wheat पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_4_0",
+      "title_en": "Onion sowing stage checklist",
+      "title_mr": "Onion sowing अवस्था",
+      "content_en": "For Onion at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Onion पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_4_1",
+      "title_en": "Onion vegetative stage checklist",
+      "title_mr": "Onion vegetative अवस्था",
+      "content_en": "For Onion at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Onion पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_4_2",
+      "title_en": "Onion flowering stage checklist",
+      "title_mr": "Onion flowering अवस्था",
+      "content_en": "For Onion at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Onion पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_4_3",
+      "title_en": "Onion fruiting stage checklist",
+      "title_mr": "Onion fruiting अवस्था",
+      "content_en": "For Onion at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Onion पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_4_4",
+      "title_en": "Onion harvest stage checklist",
+      "title_mr": "Onion harvest अवस्था",
+      "content_en": "For Onion at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Onion पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_5_0",
+      "title_en": "Pomegranate sowing stage checklist",
+      "title_mr": "Pomegranate sowing अवस्था",
+      "content_en": "For Pomegranate at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Pomegranate पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_5_1",
+      "title_en": "Pomegranate vegetative stage checklist",
+      "title_mr": "Pomegranate vegetative अवस्था",
+      "content_en": "For Pomegranate at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Pomegranate पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_5_2",
+      "title_en": "Pomegranate flowering stage checklist",
+      "title_mr": "Pomegranate flowering अवस्था",
+      "content_en": "For Pomegranate at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Pomegranate पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_5_3",
+      "title_en": "Pomegranate fruiting stage checklist",
+      "title_mr": "Pomegranate fruiting अवस्था",
+      "content_en": "For Pomegranate at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Pomegranate पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_5_4",
+      "title_en": "Pomegranate harvest stage checklist",
+      "title_mr": "Pomegranate harvest अवस्था",
+      "content_en": "For Pomegranate at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Pomegranate पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_6_0",
+      "title_en": "Grapes sowing stage checklist",
+      "title_mr": "Grapes sowing अवस्था",
+      "content_en": "For Grapes at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Grapes पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_6_1",
+      "title_en": "Grapes vegetative stage checklist",
+      "title_mr": "Grapes vegetative अवस्था",
+      "content_en": "For Grapes at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Grapes पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_6_2",
+      "title_en": "Grapes flowering stage checklist",
+      "title_mr": "Grapes flowering अवस्था",
+      "content_en": "For Grapes at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Grapes पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_6_3",
+      "title_en": "Grapes fruiting stage checklist",
+      "title_mr": "Grapes fruiting अवस्था",
+      "content_en": "For Grapes at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Grapes पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_6_4",
+      "title_en": "Grapes harvest stage checklist",
+      "title_mr": "Grapes harvest अवस्था",
+      "content_en": "For Grapes at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Grapes पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_7_0",
+      "title_en": "Tomato sowing stage checklist",
+      "title_mr": "Tomato sowing अवस्था",
+      "content_en": "For Tomato at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Tomato पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_7_1",
+      "title_en": "Tomato vegetative stage checklist",
+      "title_mr": "Tomato vegetative अवस्था",
+      "content_en": "For Tomato at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Tomato पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_7_2",
+      "title_en": "Tomato flowering stage checklist",
+      "title_mr": "Tomato flowering अवस्था",
+      "content_en": "For Tomato at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Tomato पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_7_3",
+      "title_en": "Tomato fruiting stage checklist",
+      "title_mr": "Tomato fruiting अवस्था",
+      "content_en": "For Tomato at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Tomato पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_7_4",
+      "title_en": "Tomato harvest stage checklist",
+      "title_mr": "Tomato harvest अवस्था",
+      "content_en": "For Tomato at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Tomato पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_8_0",
+      "title_en": "Chilli sowing stage checklist",
+      "title_mr": "Chilli sowing अवस्था",
+      "content_en": "For Chilli at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Chilli पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_8_1",
+      "title_en": "Chilli vegetative stage checklist",
+      "title_mr": "Chilli vegetative अवस्था",
+      "content_en": "For Chilli at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Chilli पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_8_2",
+      "title_en": "Chilli flowering stage checklist",
+      "title_mr": "Chilli flowering अवस्था",
+      "content_en": "For Chilli at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Chilli पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_8_3",
+      "title_en": "Chilli fruiting stage checklist",
+      "title_mr": "Chilli fruiting अवस्था",
+      "content_en": "For Chilli at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Chilli पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_8_4",
+      "title_en": "Chilli harvest stage checklist",
+      "title_mr": "Chilli harvest अवस्था",
+      "content_en": "For Chilli at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Chilli पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_9_0",
+      "title_en": "Maize sowing stage checklist",
+      "title_mr": "Maize sowing अवस्था",
+      "content_en": "For Maize at sowing: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Maize पिकाच्या sowing अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_9_1",
+      "title_en": "Maize vegetative stage checklist",
+      "title_mr": "Maize vegetative अवस्था",
+      "content_en": "For Maize at vegetative: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Maize पिकाच्या vegetative अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_9_2",
+      "title_en": "Maize flowering stage checklist",
+      "title_mr": "Maize flowering अवस्था",
+      "content_en": "For Maize at flowering: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Maize पिकाच्या flowering अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_9_3",
+      "title_en": "Maize fruiting stage checklist",
+      "title_mr": "Maize fruiting अवस्था",
+      "content_en": "For Maize at fruiting: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Maize पिकाच्या fruiting अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    },
+    {
+      "id": "adv_x_9_4",
+      "title_en": "Maize harvest stage checklist",
+      "title_mr": "Maize harvest अवस्था",
+      "content_en": "For Maize at harvest: monitor soil moisture, scout pests twice weekly, apply nutrients as per soil test, and record interventions. Prefer IPM and avoid calendar spraying.",
+      "content_mr": "Maize पिकाच्या harvest अवस्थेत ओलावा, कीड-रोग सर्वेक्षण, माती चाचणीनुसार अन्नद्रव्ये व IPM अवलंबा.",
+      "category": "Stage Checklist",
+      "source": "Compiled SAU package-of-practice style open knowledge",
+      "license": "Educational open compilation"
+    }
+  ],
+  "meta": {
+    "count": 75
+  }
+}

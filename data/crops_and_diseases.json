@@ -4,66 +4,824 @@
       "crop_id": "c1",
       "name_en": "Cotton",
       "name_mr": "कापूस",
+      "scientific_name": "Gossypium hirsutum",
       "season": "Kharif",
-      "ideal_soil": ["Black Cotton Soil", "Deep Clay Loam"],
-      "ideal_temp_c": {"min": 21, "max": 35},
-      "ideal_rainfall_mm": {"min": 500, "max": 1000},
+      "ideal_soil": [
+        "Black Cotton Soil",
+        "Deep Clay Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 21,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 1000
+      },
       "duration_days": 160,
-      "growth_stages": ["Sowing", "Vegetative", "Squaring", "Flowering", "Boll Formation", "Harvesting"],
-      "major_pests": ["Pink Bollworm", "Aphids", "Whitefly"],
-      "major_diseases": ["Bacterial Blight", "Fungous Wilt", "Leaf Curl"]
+      "growth_stages": [
+        "Sowing",
+        "Vegetative",
+        "Squaring",
+        "Flowering",
+        "Boll Formation",
+        "Harvesting"
+      ],
+      "major_pests": [
+        "Pink Bollworm",
+        "Aphids",
+        "Whitefly",
+        "Jassids"
+      ],
+      "major_diseases": [
+        "Bacterial Blight",
+        "Fungous Wilt",
+        "Leaf Curl"
+      ],
+      "source": "ICAR-CICR open advisory"
     },
     {
       "crop_id": "c2",
       "name_en": "Soybean",
       "name_mr": "सोयाबीन",
+      "scientific_name": "Glycine max",
       "season": "Kharif",
-      "ideal_soil": ["Well-drained Loam", "Black Soil"],
-      "ideal_temp_c": {"min": 18, "max": 32},
-      "ideal_rainfall_mm": {"min": 600, "max": 800},
+      "ideal_soil": [
+        "Well-drained Loam",
+        "Black Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 18,
+        "max": 32
+      },
+      "ideal_rainfall_mm": {
+        "min": 600,
+        "max": 800
+      },
       "duration_days": 100,
-      "growth_stages": ["Germination", "Vegetative", "Flowering", "Pod Initiation", "Pod Filling", "Maturity"],
-      "major_pests": ["Girdle Beetle", "Stem Fly", "Tobacco Caterpiller"],
-      "major_diseases": ["Yellow Mosaic Virus", "Rust", "Collar Rot"]
+      "growth_stages": [
+        "Germination",
+        "Vegetative",
+        "Flowering",
+        "Pod Initiation",
+        "Pod Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Girdle Beetle",
+        "Stem Fly",
+        "Tobacco Caterpillar"
+      ],
+      "major_diseases": [
+        "Yellow Mosaic Virus",
+        "Rust",
+        "Collar Rot"
+      ],
+      "source": "ICAR-IISR open advisory"
     },
     {
       "crop_id": "c3",
       "name_en": "Sugarcane",
       "name_mr": "ऊस",
+      "scientific_name": "Saccharum officinarum",
       "season": "Perennial",
-      "ideal_soil": ["Deep Loamy Soil", "Heavy Black Soil"],
-      "ideal_temp_c": {"min": 20, "max": 38},
-      "ideal_rainfall_mm": {"min": 1200, "max": 1500},
+      "ideal_soil": [
+        "Deep Loamy Soil",
+        "Heavy Black Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 38
+      },
+      "ideal_rainfall_mm": {
+        "min": 1200,
+        "max": 1500
+      },
       "duration_days": 365,
-      "growth_stages": ["Germination", "Formative", "Grand Growth", "Maturity"],
-      "major_pests": ["Early Shoot Borer", "Woolly Aphid", "White Grub"],
-      "major_diseases": ["Red Rot", "Smut", "Wilt"]
+      "growth_stages": [
+        "Germination",
+        "Formative",
+        "Grand Growth",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Early Shoot Borer",
+        "Woolly Aphid",
+        "White Grub"
+      ],
+      "major_diseases": [
+        "Red Rot",
+        "Smut",
+        "Wilt"
+      ],
+      "source": "ICAR-SBI open advisory"
     },
     {
       "crop_id": "c4",
       "name_en": "Pomegranate",
       "name_mr": "डाळिंब",
+      "scientific_name": "Punica granatum",
       "season": "Bahar (Ambe, Mrig, Hasta)",
-      "ideal_soil": ["Light Loamy Soil", "Medium Black Soil"],
-      "ideal_temp_c": {"min": 15, "max": 38},
-      "ideal_rainfall_mm": {"min": 500, "max": 750},
+      "ideal_soil": [
+        "Light Loamy Soil",
+        "Medium Black Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 38
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 750
+      },
       "duration_days": 180,
-      "growth_stages": ["Bahar Treatment", "Flowering", "Fruit Set", "Fruit Development", "Harvest"],
-      "major_pests": ["Thrips", "Fruit Borer", "Mealy Bug"],
-      "major_diseases": ["Bacterial Blight (Telyat)", "Wilt", "Anthracnose"]
+      "growth_stages": [
+        "Bahar Treatment",
+        "Flowering",
+        "Fruit Set",
+        "Fruit Development",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Thrips",
+        "Fruit Borer",
+        "Mealy Bug"
+      ],
+      "major_diseases": [
+        "Bacterial Blight (Telyat)",
+        "Wilt",
+        "Anthracnose"
+      ],
+      "source": "ICAR-NRCP open advisory"
     },
     {
       "crop_id": "c5",
       "name_en": "Onion",
       "name_mr": "कांदा",
+      "scientific_name": "Allium cepa",
       "season": "Rabi / Late Kharif",
-      "ideal_soil": ["Friable Sandy Loam", "Well Drained Clay Loam"],
-      "ideal_temp_c": {"min": 13, "max": 28},
-      "ideal_rainfall_mm": {"min": 350, "max": 500},
+      "ideal_soil": [
+        "Friable Sandy Loam",
+        "Well Drained Clay Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 13,
+        "max": 28
+      },
+      "ideal_rainfall_mm": {
+        "min": 350,
+        "max": 500
+      },
       "duration_days": 120,
-      "growth_stages": ["Nursery", "Transplanting", "Vegetative", "Bulb Initiation", "Bulb Development", "Harvest"],
-      "major_pests": ["Thrips", "Onion Fly"],
-      "major_diseases": ["Purple Blotch", "Stemphylium Blight", "Downy Mildew"]
+      "growth_stages": [
+        "Nursery",
+        "Transplanting",
+        "Vegetative",
+        "Bulb Initiation",
+        "Bulb Development",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Thrips",
+        "Onion Fly"
+      ],
+      "major_diseases": [
+        "Purple Blotch",
+        "Stemphylium Blight",
+        "Downy Mildew"
+      ],
+      "source": "ICAR-DOGR open advisory"
+    },
+    {
+      "crop_id": "c6",
+      "name_en": "Rice",
+      "name_mr": "तांदूळ / भात",
+      "scientific_name": "Oryza sativa",
+      "season": "Kharif / Rabi",
+      "ideal_soil": [
+        "Clay Loam",
+        "Alluvial"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 1000,
+        "max": 2000
+      },
+      "duration_days": 130,
+      "growth_stages": [
+        "Nursery",
+        "Transplanting",
+        "Tillering",
+        "Panicle Initiation",
+        "Flowering",
+        "Grain Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Brown Plant Hopper",
+        "Stem Borer",
+        "Leaf Folder"
+      ],
+      "major_diseases": [
+        "Blast",
+        "Bacterial Leaf Blight",
+        "Sheath Blight"
+      ],
+      "source": "ICAR-NRRI open advisory"
+    },
+    {
+      "crop_id": "c7",
+      "name_en": "Wheat",
+      "name_mr": "गहू",
+      "scientific_name": "Triticum aestivum",
+      "season": "Rabi",
+      "ideal_soil": [
+        "Loam",
+        "Clay Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 10,
+        "max": 25
+      },
+      "ideal_rainfall_mm": {
+        "min": 400,
+        "max": 700
+      },
+      "duration_days": 120,
+      "growth_stages": [
+        "Germination",
+        "Crown Root",
+        "Tillering",
+        "Jointing",
+        "Heading",
+        "Grain Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Aphids",
+        "Termites"
+      ],
+      "major_diseases": [
+        "Rust",
+        "Karnal Bunt",
+        "Powdery Mildew"
+      ],
+      "source": "ICAR-IIWBR open advisory"
+    },
+    {
+      "crop_id": "c8",
+      "name_en": "Maize",
+      "name_mr": "मका",
+      "scientific_name": "Zea mays",
+      "season": "Kharif / Rabi",
+      "ideal_soil": [
+        "Well-drained Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 18,
+        "max": 32
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 800
+      },
+      "duration_days": 100,
+      "growth_stages": [
+        "Emergence",
+        "Vegetative",
+        "Tasseling",
+        "Silking",
+        "Grain Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Fall Armyworm",
+        "Stem Borer"
+      ],
+      "major_diseases": [
+        "Turcicum Leaf Blight",
+        "Downy Mildew"
+      ],
+      "source": "ICAR-IIMR open advisory"
+    },
+    {
+      "crop_id": "c9",
+      "name_en": "Tur (Pigeon Pea)",
+      "name_mr": "तूर",
+      "scientific_name": "Cajanus cajan",
+      "season": "Kharif",
+      "ideal_soil": [
+        "Medium Black Soil",
+        "Red Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 600,
+        "max": 1000
+      },
+      "duration_days": 160,
+      "growth_stages": [
+        "Germination",
+        "Vegetative",
+        "Flowering",
+        "Pod Formation",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Pod Borer",
+        "Pod Fly"
+      ],
+      "major_diseases": [
+        "Wilt",
+        "Sterility Mosaic"
+      ],
+      "source": "ICAR-IIPR open advisory"
+    },
+    {
+      "crop_id": "c10",
+      "name_en": "Gram (Chickpea)",
+      "name_mr": "हरभरा",
+      "scientific_name": "Cicer arietinum",
+      "season": "Rabi",
+      "ideal_soil": [
+        "Well-drained Loam",
+        "Black Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 30
+      },
+      "ideal_rainfall_mm": {
+        "min": 300,
+        "max": 500
+      },
+      "duration_days": 110,
+      "growth_stages": [
+        "Germination",
+        "Vegetative",
+        "Flowering",
+        "Podding",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Pod Borer"
+      ],
+      "major_diseases": [
+        "Wilt",
+        "Ascochyta Blight"
+      ],
+      "source": "ICAR-IIPR open advisory"
+    },
+    {
+      "crop_id": "c11",
+      "name_en": "Groundnut",
+      "name_mr": "भुईमूग",
+      "scientific_name": "Arachis hypogaea",
+      "season": "Kharif / Summer",
+      "ideal_soil": [
+        "Sandy Loam",
+        "Red Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 750
+      },
+      "duration_days": 115,
+      "growth_stages": [
+        "Germination",
+        "Vegetative",
+        "Flowering",
+        "Pegging",
+        "Pod Development",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Leaf Miner",
+        "Aphids"
+      ],
+      "major_diseases": [
+        "Tikra Leaf Spot",
+        "Rust",
+        "Collar Rot"
+      ],
+      "source": "ICAR-DGR open advisory"
+    },
+    {
+      "crop_id": "c12",
+      "name_en": "Turmeric",
+      "name_mr": "हळद",
+      "scientific_name": "Curcuma longa",
+      "season": "Kharif",
+      "ideal_soil": [
+        "Well-drained Loam",
+        "Red Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 1000,
+        "max": 1500
+      },
+      "duration_days": 240,
+      "growth_stages": [
+        "Sprouting",
+        "Vegetative",
+        "Rhizome Development",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Shoot Borer",
+        "Rhizome Scale"
+      ],
+      "major_diseases": [
+        "Rhizome Rot",
+        "Leaf Blotch"
+      ],
+      "source": "ICAR-IISR open advisory"
+    },
+    {
+      "crop_id": "c13",
+      "name_en": "Grapes",
+      "name_mr": "द्राक्ष",
+      "scientific_name": "Vitis vinifera",
+      "season": "Horticulture",
+      "ideal_soil": [
+        "Well-drained Sandy Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 800
+      },
+      "duration_days": 150,
+      "growth_stages": [
+        "Pruning",
+        "Bud Burst",
+        "Flowering",
+        "Berry Set",
+        "Veraison",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Mealy Bug",
+        "Thrips",
+        "Mites"
+      ],
+      "major_diseases": [
+        "Downy Mildew",
+        "Powdery Mildew",
+        "Anthracnose"
+      ],
+      "source": "ICAR-NRCG open advisory"
+    },
+    {
+      "crop_id": "c14",
+      "name_en": "Banana",
+      "name_mr": "केळी",
+      "scientific_name": "Musa spp.",
+      "season": "Year-round",
+      "ideal_soil": [
+        "Deep Loam",
+        "Alluvial"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 1000,
+        "max": 2000
+      },
+      "duration_days": 365,
+      "growth_stages": [
+        "Planting",
+        "Vegetative",
+        "Shooting",
+        "Bunch Development",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Nematodes",
+        "Aphids"
+      ],
+      "major_diseases": [
+        "Panama Wilt",
+        "Sigatoka",
+        "Bunchy Top"
+      ],
+      "source": "ICAR-NRCB open advisory"
+    },
+    {
+      "crop_id": "c15",
+      "name_en": "Mango",
+      "name_mr": "आंबा",
+      "scientific_name": "Mangifera indica",
+      "season": "Perennial",
+      "ideal_soil": [
+        "Well-drained Loam",
+        "Red Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 38
+      },
+      "ideal_rainfall_mm": {
+        "min": 750,
+        "max": 1500
+      },
+      "duration_days": 120,
+      "growth_stages": [
+        "Vegetative",
+        "Flowering",
+        "Fruit Set",
+        "Fruit Development",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Hopper",
+        "Fruit Fly",
+        "Mealy Bug"
+      ],
+      "major_diseases": [
+        "Powdery Mildew",
+        "Anthracnose",
+        "Sooty Mould"
+      ],
+      "source": "ICAR-CISH open advisory"
+    },
+    {
+      "crop_id": "c16",
+      "name_en": "Tomato",
+      "name_mr": "टोमॅटो",
+      "scientific_name": "Solanum lycopersicum",
+      "season": "Rabi / Summer",
+      "ideal_soil": [
+        "Sandy Loam",
+        "Well-drained Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 30
+      },
+      "ideal_rainfall_mm": {
+        "min": 400,
+        "max": 600
+      },
+      "duration_days": 120,
+      "growth_stages": [
+        "Nursery",
+        "Transplanting",
+        "Vegetative",
+        "Flowering",
+        "Fruiting",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Fruit Borer",
+        "Whitefly",
+        "Leaf Miner"
+      ],
+      "major_diseases": [
+        "Early Blight",
+        "Late Blight",
+        "Leaf Curl Virus"
+      ],
+      "source": "ICAR-IIVR open advisory"
+    },
+    {
+      "crop_id": "c17",
+      "name_en": "Chilli",
+      "name_mr": "मिरची",
+      "scientific_name": "Capsicum annuum",
+      "season": "Kharif / Rabi",
+      "ideal_soil": [
+        "Well-drained Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 18,
+        "max": 32
+      },
+      "ideal_rainfall_mm": {
+        "min": 500,
+        "max": 800
+      },
+      "duration_days": 150,
+      "growth_stages": [
+        "Nursery",
+        "Transplanting",
+        "Vegetative",
+        "Flowering",
+        "Fruiting",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Thrips",
+        "Mites",
+        "Aphids"
+      ],
+      "major_diseases": [
+        "Dieback",
+        "Leaf Curl",
+        "Anthracnose"
+      ],
+      "source": "ICAR-IIVR open advisory"
+    },
+    {
+      "crop_id": "c18",
+      "name_en": "Sorghum (Jowar)",
+      "name_mr": "ज्वारी",
+      "scientific_name": "Sorghum bicolor",
+      "season": "Kharif / Rabi",
+      "ideal_soil": [
+        "Black Soil",
+        "Light Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 400,
+        "max": 700
+      },
+      "duration_days": 110,
+      "growth_stages": [
+        "Germination",
+        "Vegetative",
+        "Flowering",
+        "Grain Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Shoot Fly",
+        "Stem Borer"
+      ],
+      "major_diseases": [
+        "Grain Mould",
+        "Downy Mildew"
+      ],
+      "source": "ICAR-IIMR open advisory"
+    },
+    {
+      "crop_id": "c19",
+      "name_en": "Bajra (Pearl Millet)",
+      "name_mr": "बाजरी",
+      "scientific_name": "Pennisetum glaucum",
+      "season": "Kharif",
+      "ideal_soil": [
+        "Sandy Loam",
+        "Light Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 20,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 300,
+        "max": 600
+      },
+      "duration_days": 85,
+      "growth_stages": [
+        "Germination",
+        "Tillering",
+        "Flowering",
+        "Grain Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Shoot Fly",
+        "White Grub"
+      ],
+      "major_diseases": [
+        "Downy Mildew",
+        "Ergot"
+      ],
+      "source": "ICAR-AICRP Millet open advisory"
+    },
+    {
+      "crop_id": "c20",
+      "name_en": "Mustard",
+      "name_mr": "मोहरी",
+      "scientific_name": "Brassica juncea",
+      "season": "Rabi",
+      "ideal_soil": [
+        "Loam",
+        "Sandy Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 10,
+        "max": 25
+      },
+      "ideal_rainfall_mm": {
+        "min": 300,
+        "max": 500
+      },
+      "duration_days": 110,
+      "growth_stages": [
+        "Germination",
+        "Rosette",
+        "Flowering",
+        "Pod Filling",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Aphids",
+        "Sawfly"
+      ],
+      "major_diseases": [
+        "White Rust",
+        "Alternaria Blight"
+      ],
+      "source": "ICAR-DRMR open advisory"
+    },
+    {
+      "crop_id": "c21",
+      "name_en": "Potato",
+      "name_mr": "बटाटा",
+      "scientific_name": "Solanum tuberosum",
+      "season": "Rabi",
+      "ideal_soil": [
+        "Sandy Loam",
+        "Well-drained Loam"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 25
+      },
+      "ideal_rainfall_mm": {
+        "min": 400,
+        "max": 600
+      },
+      "duration_days": 100,
+      "growth_stages": [
+        "Planting",
+        "Sprouting",
+        "Tuber Initiation",
+        "Tuber Bulking",
+        "Maturity"
+      ],
+      "major_pests": [
+        "Aphids",
+        "Cutworm"
+      ],
+      "major_diseases": [
+        "Late Blight",
+        "Early Blight",
+        "Black Scurf"
+      ],
+      "source": "ICAR-CPRI open advisory"
+    },
+    {
+      "crop_id": "c22",
+      "name_en": "Orange (Nagpur Santra)",
+      "name_mr": "संत्रा",
+      "scientific_name": "Citrus reticulata",
+      "season": "Perennial",
+      "ideal_soil": [
+        "Well-drained Loam",
+        "Medium Black Soil"
+      ],
+      "ideal_temp_c": {
+        "min": 15,
+        "max": 35
+      },
+      "ideal_rainfall_mm": {
+        "min": 600,
+        "max": 1200
+      },
+      "duration_days": 240,
+      "growth_stages": [
+        "Vegetative",
+        "Flowering",
+        "Fruit Set",
+        "Fruit Development",
+        "Harvest"
+      ],
+      "major_pests": [
+        "Citrus Psylla",
+        "Leaf Miner"
+      ],
+      "major_diseases": [
+        "Citrus Canker",
+        "Greening",
+        "Phytophthora"
+      ],
+      "source": "ICAR-CCRI open advisory"
     }
   ],
   "diseases_and_pests": [
@@ -72,65 +830,285 @@
       "name_en": "Pink Bollworm",
       "name_mr": "गुलाबी बोंड अळी",
       "crop_en": "Cotton",
-      "symptoms_en": "Rosetted flowers, lint staining, entry holes sealed with frass in cotton bolls.",
-      "symptoms_mr": "गुलाबसारखी कळी (Rosetted flower), बोन्डात छिद्र आणि कापूस खराब होणे.",
-      "favorable_weather": {"temp_c": [22, 30], "humidity_pct": [70, 90]},
-      "organic_control_en": "Install Pheromone traps (5 traps/acre) and spray Neem oil (5000 ppm) at 5 ml/liter.",
-      "organic_control_mr": "कामगंध सापळे (प्रति एकर ५) लावा व ५ मिली/लिटर कडुनिंब तेल (५००० पीपीएम) फवारावे.",
-      "chemical_control_en": "Spray Chlorantraniliprole 18.5 SC @ 0.3 ml/L or Profenofos 50 EC @ 2 ml/L.",
-      "chemical_control_mr": "क्लोरॅन्ट्रानिलीप्रोल १८.५ SC (०.३ मिली/लिटर) किंवा प्रोफेनोफॉस ५० EC (२ मिली/लिटर) फवारावे."
+      "crop_mr": "कापूस",
+      "symptoms_en": "Larvae bore into bolls; stained lint; premature boll opening.",
+      "symptoms_mr": "अळी बोंडांत शिरते; कापूस डागाळतो; बोंडे लवकर फुटतात.",
+      "organic_control_en": "Pheromone traps (5/acre), neem oil 5ml/L, destroy rosette flowers.",
+      "organic_control_mr": "फेरोमोन सापळे (५/एकर), निंबोळी तेल ५ मि.ली/लिटर, गुलाबी फुले नष्ट करा.",
+      "chemical_control_en": "Emamectin benzoate 5% SG @ 0.5g/L or Spinosad as per label.",
+      "chemical_control_mr": "इमामेक्टिन बेंझोएट ५% SG ०.५ ग्रॅम/लिटर किंवा स्पिनोसॅड लेबलनुसार.",
+      "source": "ICAR-CICR IPM package"
     },
     {
       "id": "d2",
       "name_en": "Bacterial Blight (Telyat)",
-      "name_mr": "डाळिंबावरील तेल्या रोग",
+      "name_mr": "तेल्या रोग",
       "crop_en": "Pomegranate",
-      "symptoms_en": "Water-soaked dark brown spots on leaves, stems, and fruits forming 'L' shaped cracks.",
-      "symptoms_mr": "पानांवर आणि फळांवर तेलकट काळे ठिपके, फळांना चिरा पडणे.",
-      "favorable_weather": {"temp_c": [25, 35], "humidity_pct": [60, 85]},
-      "organic_control_en": "Spray Streptocycline mixed with Copper Oxychloride (2g/L) during humid clear spells.",
-      "organic_control_mr": "स्ट्रिप्टोसायक्लीन सोबत कॉपर ऑक्सिक्लोराईड (२ ग्रॅम/लिटर) फवारावे.",
-      "chemical_control_en": "Apply Copper Hydroxide @ 2.5 g/L + Streptocycline @ 0.5 g/10L at initial appearance.",
-      "chemical_control_mr": "कॉपर हायड्रॉक्साइड २.५ ग्रॅम/लिटर + स्ट्रेप्टोसायक्लीन ०.५ ग्रॅम/१० लिटर फवारावे."
+      "crop_mr": "डाळिंब",
+      "symptoms_en": "Oily dark spots on leaves and fruits; fruit cracking; twig dieback.",
+      "symptoms_mr": "पाने व फळांवर तेलकट काळे डाग; फळे फुटणे; फांद्या सुकणे.",
+      "organic_control_en": "Streptocycline 0.5g + Copper oxychloride 2g/L preventive sprays; remove infected plant parts.",
+      "organic_control_mr": "स्ट्रेप्टोसायक्लीन ०.५ ग्रॅम + कॉपर ऑक्सिक्लोराईड २ ग्रॅम/लिटर; बाधित भाग काढा.",
+      "chemical_control_en": "Copper hydroxide / Bordeaux mixture rotations under expert advice.",
+      "chemical_control_mr": "कॉपर हायड्रॉक्साईड / बोर्डो मिश्रण तज्ञ सल्ल्यानुसार.",
+      "source": "ICAR-NRCP package of practices"
     },
     {
       "id": "d3",
       "name_en": "Yellow Mosaic Virus",
-      "name_mr": "पिवळा मोझॅक रोग",
+      "name_mr": "पिवळा मोझॅक",
       "crop_en": "Soybean",
-      "symptoms_en": "Alternating yellow and green patches on leaves transmitted by whiteflies.",
-      "symptoms_mr": "पानांवर पिवळे आणि हिरवे चट्टे पडणे, पांढऱ्या माशीद्वारे प्रसार.",
-      "favorable_weather": {"temp_c": [25, 33], "humidity_pct": [50, 75]},
-      "organic_control_en": "Use Yellow Sticky Traps (10/acre) to control vector whiteflies.",
-      "organic_control_mr": "पांढरी माशी नियंत्रणासाठी पिवळे चिकट सापळे (प्रति एकर १०) लावा.",
-      "chemical_control_en": "Spray Thiamethoxam 25 WG @ 0.2g/L or Beta-cyfluthrin + Imidacloprid @ 0.75 ml/L.",
-      "chemical_control_mr": "थायमेथॉक्सम २५ WG (०.२ ग्रॅम/लिटर) फवारावे."
+      "crop_mr": "सोयाबीन",
+      "symptoms_en": "Yellow mosaic patterns on leaves; stunting; reduced pod set.",
+      "symptoms_mr": "पानांवर पिवळे चित्ते; वाढ खुंटणे; शेंगा कमी.",
+      "organic_control_en": "Resistant varieties; whitefly control with yellow sticky traps; neem oil.",
+      "organic_control_mr": "प्रतिकारक जाती; पांढरी माशी नियंत्रण; निंबोळी तेल.",
+      "chemical_control_en": "Manage whitefly vectors with recommended insecticides early.",
+      "chemical_control_mr": "पांढरी माशी वाहकांचे शिफारसकृत कीटकनाशकांनी नियंत्रण.",
+      "source": "ICAR-IISR YMV advisory"
     },
     {
       "id": "d4",
       "name_en": "Purple Blotch",
       "name_mr": "जांभळा करपा",
       "crop_en": "Onion",
-      "symptoms_en": "Purplish-brown elliptical spots on leaves with yellow halo.",
-      "symptoms_mr": "पानांवर जांभळट तपकिरी लांबट ठिपके पडणे.",
-      "favorable_weather": {"temp_c": [20, 28], "humidity_pct": [80, 95]},
-      "organic_control_en": "Spray Trichoderma viride @ 5g/L and avoid overhead irrigation.",
-      "organic_control_mr": "ट्रायकोडेर्मा व्हिरिडी (५ ग्रॅम/लिटर) फवारावे.",
-      "chemical_control_en": "Spray Mancozeb 75 WP @ 2.5 g/L or Tebuconazole @ 1 ml/L.",
-      "chemical_control_mr": "मँकोझेब ७५ WP (२.५ ग्रॅम/लिटर) किंवा टेब्युकोनॅझोल (१ मिली/लिटर) फवारावे."
+      "crop_mr": "कांदा",
+      "symptoms_en": "Purple oval lesions on leaves; tip dieback under humidity.",
+      "symptoms_mr": "पानांवर जांभळे डाग; आर्द्रतेत टोके सुकणे.",
+      "organic_control_en": "Avoid overhead irrigation; copper fungicides; good spacing.",
+      "organic_control_mr": "वरून पाणी टाळा; कॉपर बुरशीनाशके; योग्य अंतर.",
+      "chemical_control_en": "Mancozeb 2.5g/L or Propiconazole as per label.",
+      "chemical_control_mr": "मॅन्कोझेब २.५ ग्रॅम/लिटर किंवा प्रोपिकोनाझोल.",
+      "source": "ICAR-DOGR disease guide"
     },
     {
       "id": "d5",
-      "name_en": "Early Shoot Borer",
-      "name_mr": "खोड कीड (ऊस)",
+      "name_en": "Rice Blast",
+      "name_mr": "भात करपा",
+      "crop_en": "Rice",
+      "crop_mr": "भात",
+      "symptoms_en": "Diamond-shaped lesions on leaves; neck rot at panicle base.",
+      "symptoms_mr": "पानांवर हिऱ्याकृती डाग; कणसाच्या बुडाशी कुजणे.",
+      "organic_control_en": "Resistant varieties; balanced N; silicon amendments.",
+      "organic_control_mr": "प्रतिकारक जाती; संतुलित नत्र; सिलिकॉन.",
+      "chemical_control_en": "Tricyclazole 0.6g/L or Isoprothiolane per recommendation.",
+      "chemical_control_mr": "ट्रायसायक्लाझोल ०.६ ग्रॅम/लिटर.",
+      "source": "ICAR-NRRI blast IPM"
+    },
+    {
+      "id": "d6",
+      "name_en": "Wheat Rust",
+      "name_mr": "गहू तांबेरा",
+      "crop_en": "Wheat",
+      "crop_mr": "गहू",
+      "symptoms_en": "Orange-brown pustules on leaves and stems.",
+      "symptoms_mr": "पाने व खोडांवर नारंगी-तपकिरी फोड.",
+      "organic_control_en": "Resistant cultivars; early sowing where advised.",
+      "organic_control_mr": "प्रतिकारक जाती; वेळेवर पेरणी.",
+      "chemical_control_en": "Propiconazole 1ml/L at first pustules.",
+      "chemical_control_mr": "प्रोपिकोनाझोल १ मि.ली/लिटर.",
+      "source": "ICAR-IIWBR rust alert"
+    },
+    {
+      "id": "d7",
+      "name_en": "Fall Armyworm",
+      "name_mr": "अमेरिकी लष्करी अळी",
+      "crop_en": "Maize",
+      "crop_mr": "मका",
+      "symptoms_en": "Windowing on leaves; frass in whorl; damaged cobs.",
+      "symptoms_mr": "पानांवर खिडक्या; गाभ्यात विष्ठा; कणसे खराब.",
+      "organic_control_en": "Hand picking early; pheromone traps; neem; Trichogramma.",
+      "organic_control_mr": "हाताने अळ्या; फेरोमोन; निंबोळी; ट्रायकोग्रामा.",
+      "chemical_control_en": "Emamectin benzoate or Spinetoram in whorl as per advisory.",
+      "chemical_control_mr": "इमामेक्टिन/स्पिनेटोरॅम गाभ्यात.",
+      "source": "ICAR FAW contingency plan"
+    },
+    {
+      "id": "d8",
+      "name_en": "Pod Borer (Helicoverpa)",
+      "name_mr": "शेंगा पोखरणारी अळी",
+      "crop_en": "Tur (Pigeon Pea)",
+      "crop_mr": "तूर",
+      "symptoms_en": "Holes in pods; larvae feed on developing seeds.",
+      "symptoms_mr": "शेंगांत छिद्रे; दाणे खाणे.",
+      "organic_control_en": "NPV, HaNPV; bird perches; pheromone traps.",
+      "organic_control_mr": "NPV; पक्षी बसाव; फेरोमोन.",
+      "chemical_control_en": "Indoxacarb or Emamectin as per ETL.",
+      "chemical_control_mr": "इंडोक्साकार्ब/इमामेक्टिन ETL नुसार.",
+      "source": "ICAR-IIPR IPM"
+    },
+    {
+      "id": "d9",
+      "name_en": "Grape Downy Mildew",
+      "name_mr": "द्राक्ष करपा",
+      "crop_en": "Grapes",
+      "crop_mr": "द्राक्ष",
+      "symptoms_en": "Oil spots upper leaf; white down under leaf; berry rot.",
+      "symptoms_mr": "पानावर तेलकट डाग; खालून पांढरी बुरशी.",
+      "organic_control_en": "Canopy management; copper sprays preventive.",
+      "organic_control_mr": "पाने व्यवस्थापन; कॉपर प्रतिबंधक.",
+      "chemical_control_en": "Metalaxyl+Mancozeb or Dimethomorph rotations.",
+      "chemical_control_mr": "मेटालॅक्सिल+मॅन्कोझेब.",
+      "source": "ICAR-NRCG spray schedule"
+    },
+    {
+      "id": "d10",
+      "name_en": "Tomato Leaf Curl Virus",
+      "name_mr": "टोमॅटो पान गुंडाळणे",
+      "crop_en": "Tomato",
+      "crop_mr": "टोमॅटो",
+      "symptoms_en": "Upward leaf curling; yellowing; stunting; poor fruiting.",
+      "symptoms_mr": "पाने वर गुंडाळणे; पिवळेपणा; फळे कमी.",
+      "organic_control_en": "Virus-free seedlings; whitefly nets; reflective mulch.",
+      "organic_control_mr": "निरोगी रोपे; पांढरी माशी जाळी.",
+      "chemical_control_en": "Vector management with imidacloprid/spiromesifen carefully.",
+      "chemical_control_mr": "पांढरी माशी वाहक नियंत्रण.",
+      "source": "ICAR-IIVR virus management"
+    },
+    {
+      "id": "d11",
+      "name_en": "Citrus Greening (HLB)",
+      "name_mr": "संत्रा हिरवेपणा",
+      "crop_en": "Orange (Nagpur Santra)",
+      "crop_mr": "संत्रा",
+      "symptoms_en": "Asymmetric leaf yellowing; small lopsided fruit; decline.",
+      "symptoms_mr": "असमान पिवळेपणा; लहान फळे; झाड क्षीण.",
+      "organic_control_en": "Healthy nursery stock; remove infected trees; psylla control.",
+      "organic_control_mr": "निरोगी रोपे; बाधित झाडे काढा.",
+      "chemical_control_en": "Psylla vector sprays as per citrus schedule.",
+      "chemical_control_mr": "सायला वाहक फवारणी.",
+      "source": "ICAR-CCRI HLB guide"
+    },
+    {
+      "id": "d12",
+      "name_en": "Sugarcane Red Rot",
+      "name_mr": "ऊस तांबडा कुजव्या",
       "crop_en": "Sugarcane",
-      "symptoms_en": "Dead hearts in young sugarcane plants; foul smell when dead heart is pulled out.",
-      "symptoms_mr": "उसाच्या रोपांमध्ये पोंग मरणे (Dead heart) आणि दुर्गंधी येणे.",
-      "favorable_weather": {"temp_c": [28, 38], "humidity_pct": [40, 65]},
-      "organic_control_en": "Release Trichogramma chilonis parasitoids @ 20,000/acre at 10-day intervals.",
-      "organic_control_mr": "ट्रायकोग्राम कार्ड्स (२०,००० अंडी प्रति एकर) शेतात वापरावे.",
-      "chemical_control_en": "Apply Chlorantraniliprole 0.4% GR @ 7.5 kg/acre in soil at planting.",
-      "chemical_control_mr": "क्लोरॅन्ट्रानिलीप्रोल ०.४% GR (७.५ किलोग्रॅम/एकरास) मातीत द्यावे."
+      "crop_mr": "ऊस",
+      "symptoms_en": "Internal red tissue with white patches; sour smell; drying tops.",
+      "symptoms_mr": "खोड आतून तांबडे; आंबट वास; शेंडे वाळणे.",
+      "organic_control_en": "Disease-free setts; resistant varieties; field sanitation.",
+      "organic_control_mr": "निरोगी बेणे; प्रतिकारक जाती.",
+      "chemical_control_en": "Sett treatment with fungicide before planting.",
+      "chemical_control_mr": "लागवडीपूर्वी बेणे प्रक्रिया.",
+      "source": "ICAR-SBI red rot package"
+    },
+    {
+      "id": "d13",
+      "name_en": "Potato Late Blight",
+      "name_mr": "बटाटा उशिरा करपा",
+      "crop_en": "Potato",
+      "crop_mr": "बटाटा",
+      "symptoms_en": "Water-soaked lesions; white sporulation; tuber rot.",
+      "symptoms_mr": "पाणथळ डाग; पांढरी बीजाणू; कंद कुजणे.",
+      "organic_control_en": "Resistant varieties; avoid overhead irrigation; destroy haulms.",
+      "organic_control_mr": "प्रतिकारक जाती; वरून पाणी टाळा.",
+      "chemical_control_en": "Mancozeb preventive; Cymoxanil+Mancozeb curative.",
+      "chemical_control_mr": "मॅन्कोझेब / सायमोक्सॅनिल.",
+      "source": "ICAR-CPRI late blight alert"
+    },
+    {
+      "id": "d14",
+      "name_en": "Chilli Thrips",
+      "name_mr": "मिरची फुलकिडे",
+      "crop_en": "Chilli",
+      "crop_mr": "मिरची",
+      "symptoms_en": "Upward curling; silvering of leaves; flower drop.",
+      "symptoms_mr": "पाने वर वळणे; चांदीसारखा रंग; फुले गळणे.",
+      "organic_control_en": "Blue sticky traps; neem oil; intercrop with marigold.",
+      "organic_control_mr": "निळे सापळे; निंबोळी तेल.",
+      "chemical_control_en": "Spinosad or Fipronil as per ETL and label.",
+      "chemical_control_mr": "स्पिनोसॅड/फिप्रोनील ETL नुसार.",
+      "source": "ICAR-IIVR chilli IPM"
+    },
+    {
+      "id": "d15",
+      "name_en": "Mango Hopper",
+      "name_mr": "आंबा तुडतुडे",
+      "crop_en": "Mango",
+      "crop_mr": "आंबा",
+      "symptoms_en": "Hoppers on panicles; honeydew; sooty mould; flower drop.",
+      "symptoms_mr": "मंजरीवर तुडतुडे; मधमाशी; काजळी; फुले गळणे.",
+      "organic_control_en": "Avoid excess nitrogen; prune dense canopy; neem.",
+      "organic_control_mr": "जास्त नत्र टाळा; छाटणी; निंबोळी.",
+      "chemical_control_en": "Imidacloprid or Lambda-cyhalothrin at panicle stage carefully.",
+      "chemical_control_mr": "मंजरी अवस्थेत शिफारसकृत कीटकनाशक.",
+      "source": "ICAR-CISH mango package"
+    },
+    {
+      "id": "d16",
+      "name_en": "Banana Sigatoka",
+      "name_mr": "केळी सिगाटोका",
+      "crop_en": "Banana",
+      "crop_mr": "केळी",
+      "symptoms_en": "Yellow-brown streaks on leaves progressing to necrosis.",
+      "symptoms_mr": "पानांवर पिवळे-तपकिरी रेघ; पाने मरतात.",
+      "organic_control_en": "Remove old leaves; proper spacing; drainage.",
+      "organic_control_mr": "जुनी पाने काढा; अंतर; निचरा.",
+      "chemical_control_en": "Propiconazole / Mancozeb rotations.",
+      "chemical_control_mr": "प्रोपिकोनाझोल/मॅन्कोझेब.",
+      "source": "ICAR-NRCB leaf spot guide"
+    },
+    {
+      "id": "d17",
+      "name_en": "Mustard Aphid",
+      "name_mr": "मोहरी मावा",
+      "crop_en": "Mustard",
+      "crop_mr": "मोहरी",
+      "symptoms_en": "Colonies on flowering shoots; curling; honeydew.",
+      "symptoms_mr": "फुलोऱ्यावर मावा; वळणे; चिकट द्रव.",
+      "organic_control_en": "Early sowing; ladybird conservation; neem.",
+      "organic_control_mr": "लवकर पेरणी; लेडीबर्ड; निंबोळी.",
+      "chemical_control_en": "Dimethoate or Imidacloprid at ETL.",
+      "chemical_control_mr": "डायमेथोएट/इमिडाक्लोप्रिड ETL.",
+      "source": "ICAR-DRMR IPM"
+    },
+    {
+      "id": "d18",
+      "name_en": "Groundnut Leaf Spot (Tikra)",
+      "name_mr": "भुईमूग ठिपके",
+      "crop_en": "Groundnut",
+      "crop_mr": "भुईमूग",
+      "symptoms_en": "Dark circular spots on leaves; defoliation.",
+      "symptoms_mr": "पानांवर गोल काळे ठिपके; पाने गळणे.",
+      "organic_control_en": "Crop rotation; resistant varieties.",
+      "organic_control_mr": "पीक फेरपालट; प्रतिकारक जाती.",
+      "chemical_control_en": "Carbendazim+Mancozeb 2g/L.",
+      "chemical_control_mr": "कार्बेन्डाझिम+मॅन्कोझेब २ ग्रॅम/लिटर.",
+      "source": "ICAR-DGR package"
+    },
+    {
+      "id": "d19",
+      "name_en": "Turmeric Rhizome Rot",
+      "name_mr": "हळद कंद कुजव्या",
+      "crop_en": "Turmeric",
+      "crop_mr": "हळद",
+      "symptoms_en": "Soft rotting rhizomes; yellowing pseudostem collapse.",
+      "symptoms_mr": "कंद मऊ कुजणे; खोड पिवळे पडणे.",
+      "organic_control_en": "Well-drained beds; Trichoderma sett treatment.",
+      "organic_control_mr": "चांगला निचरा; ट्रायकोडर्मा बेणे प्रक्रिया.",
+      "chemical_control_en": "Metalaxyl sett dip before planting.",
+      "chemical_control_mr": "मेटालॅक्सिल बेणे बुडवा.",
+      "source": "ICAR-IISR turmeric PoP"
+    },
+    {
+      "id": "d20",
+      "name_en": "Sorghum Shoot Fly",
+      "name_mr": "ज्वारी खोडमाशी",
+      "crop_en": "Sorghum (Jowar)",
+      "crop_mr": "ज्वारी",
+      "symptoms_en": "Dead heart in seedlings; central shoot dries.",
+      "symptoms_mr": "रोपांत डेडहार्ट; मध्य शूट सुकणे.",
+      "organic_control_en": "Early sowing; seed treatment; fish-meal traps.",
+      "organic_control_mr": "लवकर पेरणी; बीजप्रक्रिया.",
+      "chemical_control_en": "Imidacloprid seed treatment as recommended.",
+      "chemical_control_mr": "इमिडाक्लोप्रिड बीजप्रक्रिया.",
+      "source": "ICAR sorghum IPM"
     }
-  ]
+  ],
+  "meta": {
+    "license": "Compiled from public ICAR/SAU package-of-practices summaries for educational use",
+    "count_crops": 22,
+    "count_diseases": 20
+  }
 }

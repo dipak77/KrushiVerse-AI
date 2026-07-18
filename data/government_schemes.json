@@ -3,52 +3,245 @@
     {
       "scheme_id": "gov1",
       "name_en": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
-      "name_mr": "पीएम-किसान (प्रधानमंत्री शेतकरी सन्मान निधी)",
-      "benefits_en": "Financial benefit of ₹6,000 per year in three equal installments of ₹2,000 directly into bank accounts.",
-      "benefits_mr": "वार्षिक ६,००० रुपये ३ समान हप्त्यांमध्ये (दर ४ महिन्यांनी २,००० रुपये) थेट बँक खात्यात जमा.",
-      "eligibility_en": "Land-holding farmer families having cultivable landholding in their names.",
-      "eligibility_mr": "स्वतःच्या नावावर शेती जमीन असलेले सर्व शेतकरी कुटुंब.",
-      "documents_required": ["Aadhaar Card", "7/12 Land Extract (satbara)", "Bank Account Details"]
+      "name_mr": "पीएम-किसान",
+      "benefits_en": "Financial benefit of ₹6,000 per year in three installments of ₹2,000 DBT.",
+      "benefits_mr": "वार्षिक ₹६,००० तीन हप्त्यांत थेट बँक खात्यात.",
+      "eligibility_en": "Land-holding farmer families with cultivable land.",
+      "eligibility_mr": "जमीन धारक शेतकरी कुटुंबे.",
+      "documents_required": [
+        "Aadhaar",
+        "7/12 Extract",
+        "Bank Account"
+      ],
+      "portal": "https://pmkisan.gov.in",
+      "source": "Govt of India open scheme info"
     },
     {
       "scheme_id": "gov2",
       "name_en": "PMFBY (Pradhan Mantri Fasal Bima Yojana)",
-      "name_mr": "प्रधानमंत्री पीक विमा योजना (१ रुपयात पीक विमा)",
-      "benefits_en": "Comprehensive risk insurance for crops against yield losses due to non-preventable risks. In Maharashtra, enrolled at nominal fee of ₹1.",
-      "benefits_mr": "नैसर्गिक आपत्तीमुळे होणाऱ्या पिकांच्या नुकसानीसाठी व्यापक विमा संरक्षण (महाराष्ट्रात फक्त १ रुपया नोंदणी शुल्क).",
-      "eligibility_en": "All farmers including sharecroppers and tenant farmers growing notified crops.",
-      "eligibility_mr": "अधिसूचित पिके घेणारे सर्व शेतकरी, कुळ शेतकरी आणि पीक कर्जदार.",
-      "documents_required": ["7/12 Extract", "8-A Extract", "Sowing Certificate", "Aadhaar Card", "Bank Passbook"]
+      "name_mr": "प्रधानमंत्री पीक विमा योजना",
+      "benefits_en": "Crop insurance against non-preventable risks; MH farmers often at ₹1 premium for select crops.",
+      "benefits_mr": "नैसर्गिक नुकसानीसाठी पीक विमा; महाराष्ट्रात अनेकदा ₹१ प्रीमियम.",
+      "eligibility_en": "All farmers growing notified crops including tenants.",
+      "eligibility_mr": "अधिसूचित पिके घेणारे सर्व शेतकरी.",
+      "documents_required": [
+        "7/12",
+        "8-A",
+        "Sowing Certificate",
+        "Aadhaar",
+        "Bank Passbook"
+      ],
+      "portal": "https://pmfby.gov.in",
+      "source": "MoA&FW open scheme info"
     },
     {
       "scheme_id": "gov3",
       "name_en": "Magel Tyala Shettale (Farm Pond Scheme)",
-      "name_mr": "मागेल त्याला शेततळे योजना",
-      "benefits_en": "Subsidy up to ₹75,000 for constructing lined farm ponds to harvest rainwater.",
-      "benefits_mr": "पावसाचे पाणी साठवण्यासाठी शेततळे खोदण्यासाठी रु. ७५,००० पर्यंत अनुदान.",
-      "eligibility_en": "Farmers possessing at least 0.60 hectares of land.",
-      "eligibility_mr": "किमान ०.६० हेक्टर जमीन असणारे शेतकरी.",
-      "documents_required": ["7/12 Extract", "Consent letter of co-owners", "Aadhaar Card"]
+      "name_mr": "मागेल त्याला शेततळे",
+      "benefits_en": "Subsidy up to ~₹75,000 for lined farm ponds.",
+      "benefits_mr": "शेततळ्यासाठी सुमारे ₹७५,००० पर्यंत अनुदान.",
+      "eligibility_en": "Farmers with minimum land as per state norms (~0.60 ha).",
+      "eligibility_mr": "राज्य निकषानुसार किमान जमीन.",
+      "documents_required": [
+        "7/12",
+        "Co-owner consent",
+        "Aadhaar"
+      ],
+      "portal": "https://mahadbt.maharashtra.gov.in",
+      "source": "Maharashtra agri dept open info"
     },
     {
       "scheme_id": "gov4",
-      "name_en": "Drip and Sprinkler Irrigation Subsidy (PMKSY)",
-      "name_mr": "ठिबक व तुषार सिंचन अनुदान योजना",
-      "benefits_en": "80% subsidy for small/marginal farmers and 75% for other farmers on micro-irrigation systems.",
-      "benefits_mr": "लहान व अल्पभूधारक शेतकऱ्यांना ८०% आणि इतर शेतकऱ्यांना ७५% अनुदान.",
-      "eligibility_en": "Farmers having valid land title and assured water source.",
-      "eligibility_mr": "जमीन मालकी हक्क आणि शाश्वत पाणी साठा असलेले शेतकरी.",
-      "documents_required": ["7/12 Extract", "8-A Extract", "Water source proof", "Quotation from registered dealer"]
+      "name_en": "PMKSY Micro-Irrigation Subsidy",
+      "name_mr": "ठिबक व तुषार सिंचन अनुदान",
+      "benefits_en": "Up to 55-80% subsidy on drip/sprinkler depending on farmer category and state top-up.",
+      "benefits_mr": "ठिबक/तुषार वर ५५-८०% पर्यंत अनुदान.",
+      "eligibility_en": "Land title + assured water source.",
+      "eligibility_mr": "जमीन मालकी + पाणीसाठा.",
+      "documents_required": [
+        "7/12",
+        "8-A",
+        "Water source proof",
+        "Dealer quotation"
+      ],
+      "portal": "https://pmksy.gov.in",
+      "source": "PMKSY open guidelines"
     },
     {
       "scheme_id": "gov5",
-      "name_en": "Nanaji Deshmukh Krushi Sanjivani Prakalp (PoCRA)",
-      "name_mr": "नानाजी देशमुख कृषी संजीवनी प्रकल्प (पोकरा)",
-      "benefits_en": "Financial support for climate resilient agriculture, shade net, polyhouse, micro irrigation, and organic farming.",
-      "benefits_mr": "हवामान अनुकूल शेती, शेडनेट, पॉलीहाऊस, सेंद्रिय शेतीसाठी थेट अर्थसाहाय्य.",
-      "eligibility_en": "Farmers in selected drought-prone villages of Maharashtra.",
-      "eligibility_mr": "महाराष्ट्रातील निवडक दुष्काळग्रस्त व हवामानसंवेदनशील गावांतील शेतकरी.",
-      "documents_required": ["Aadhaar", "7/12", "PoCRA Registration"]
+      "name_en": "PoCRA (Project on Climate Resilient Agriculture)",
+      "name_mr": "पोकरा योजना",
+      "benefits_en": "Climate-resilient practices, orchards, water structures, agri-business support in MH project villages.",
+      "benefits_mr": "हवामान अनुकूल शेती, बागा, पाणी संरचना.",
+      "eligibility_en": "Farmers in PoCRA project clusters in Maharashtra.",
+      "eligibility_mr": "पोकरा प्रकल्प गावांतील शेतकरी.",
+      "documents_required": [
+        "Aadhaar",
+        "7/12",
+        "Project registration"
+      ],
+      "portal": "https://pocra.maharashtra.gov.in",
+      "source": "PoCRA open project docs"
+    },
+    {
+      "scheme_id": "gov6",
+      "name_en": "Soil Health Card Scheme",
+      "name_mr": "माती आरोग्य कार्ड",
+      "benefits_en": "Free soil testing and crop-wise nutrient recommendations.",
+      "benefits_mr": "मोफत माती चाचणी व खत शिफारस.",
+      "eligibility_en": "All farmers.",
+      "eligibility_mr": "सर्व शेतकरी.",
+      "documents_required": [
+        "Aadhaar",
+        "Land details"
+      ],
+      "portal": "https://soilhealth.dac.gov.in",
+      "source": "DAC&FW open scheme"
+    },
+    {
+      "scheme_id": "gov7",
+      "name_en": "Kisan Credit Card (KCC)",
+      "name_mr": "किसान क्रेडिट कार्ड",
+      "benefits_en": "Short-term crop loan at concessional interest with interest subvention.",
+      "benefits_mr": "अल्पमुदती कर्ज सवलतीच्या व्याजदराने.",
+      "eligibility_en": "Farmers, tenant farmers, SHGs with agri activity.",
+      "eligibility_mr": "शेतकरी, कुळ, शेती SHG.",
+      "documents_required": [
+        "Aadhaar",
+        "Land docs / lease",
+        "Bank KYC"
+      ],
+      "portal": "https://www.nabard.org",
+      "source": "NABARD/RBI open KCC guidelines"
+    },
+    {
+      "scheme_id": "gov8",
+      "name_en": "National Food Security Mission (NFSM)",
+      "name_mr": "राष्ट्रीय अन्न सुरक्षा अभियान",
+      "benefits_en": "Support for seed, demo, machinery for pulses, rice, wheat, nutri-cereals.",
+      "benefits_mr": "डाळी, भात, गहू, पौष्टिक तृणधान्ये साठी बियाणे/यंत्र अनुदान.",
+      "eligibility_en": "Farmers in NFSM districts.",
+      "eligibility_mr": "NFSM जिल्ह्यांतील शेतकरी.",
+      "documents_required": [
+        "Aadhaar",
+        "7/12"
+      ],
+      "portal": "https://www.nfsm.gov.in",
+      "source": "NFSM open guidelines"
+    },
+    {
+      "scheme_id": "gov9",
+      "name_en": "eNAM (National Agriculture Market)",
+      "name_mr": "ई-नाम",
+      "benefits_en": "Online inter-mandi trade transparency and better price discovery.",
+      "benefits_mr": "ऑनलाइन मंडी व्यापार व भाव पारदर्शकता.",
+      "eligibility_en": "Farmers/traders registered with eNAM mandis.",
+      "eligibility_mr": "ई-नाम नोंदणीकृत मंडी.",
+      "documents_required": [
+        "Aadhaar",
+        "Mandi registration"
+      ],
+      "portal": "https://enam.gov.in",
+      "source": "eNAM open portal"
+    },
+    {
+      "scheme_id": "gov10",
+      "name_en": "MIDH / NHM Horticulture Mission",
+      "name_mr": "राष्ट्रीय फलोत्पादन अभियान",
+      "benefits_en": "Subsidy for orchards, nurseries, post-harvest, protected cultivation.",
+      "benefits_mr": "बागा, रोपवाटिका, संरक्षित शेती अनुदान.",
+      "eligibility_en": "Horticulture farmers as per state MIDH norms.",
+      "eligibility_mr": "फलोत्पादन शेतकरी.",
+      "documents_required": [
+        "7/12",
+        "Project estimate",
+        "Aadhaar"
+      ],
+      "portal": "https://midh.gov.in",
+      "source": "MIDH open guidelines"
+    },
+    {
+      "scheme_id": "gov11",
+      "name_en": "PM-KUSUM (Solar Agriculture Pumps)",
+      "name_mr": "पीएम-कुसुम",
+      "benefits_en": "Subsidy for solar pumps and grid-connected solar on farm land.",
+      "benefits_mr": "सौर पंप व शेतावरील सौर प्रकल्प अनुदान.",
+      "eligibility_en": "Farmers/cooperatives as per state DISCOM list.",
+      "eligibility_mr": "राज्य यादीनुसार शेतकरी.",
+      "documents_required": [
+        "Land proof",
+        "Electricity connection details",
+        "Aadhaar"
+      ],
+      "portal": "https://pmkusum.mnre.gov.in",
+      "source": "MNRE PM-KUSUM open info"
+    },
+    {
+      "scheme_id": "gov12",
+      "name_en": "Mahatma Jyotirao Phule Shetkari Karjamukti Yojana (reference)",
+      "name_mr": "शेतकरी कर्जमुक्ती संदर्भ",
+      "benefits_en": "State-level crop loan waiver/relief schemes as periodically notified by Maharashtra.",
+      "benefits_mr": "महाराष्ट्र राज्य वेळोवेळी अधिसूचित कर्जसवलत.",
+      "eligibility_en": "As per latest GR for eligible outstanding loans.",
+      "eligibility_mr": "नवीनतम शासन निर्णयानुसार.",
+      "documents_required": [
+        "Loan account",
+        "Aadhaar",
+        "7/12"
+      ],
+      "portal": "https://maharashtra.gov.in",
+      "source": "State GR public notices"
+    },
+    {
+      "scheme_id": "gov13",
+      "name_en": "Organic Farming / PKVY",
+      "name_mr": "परंपरागत कृषी विकास योजना",
+      "benefits_en": "Cluster-based organic farming support, certification facilitation, inputs.",
+      "benefits_mr": "सेंद्रिय शेती क्लस्टर, प्रमाणीकरण मदत.",
+      "eligibility_en": "Farmer groups/clusters under PKVY.",
+      "eligibility_mr": "PKVY क्लस्टर शेतकरी.",
+      "documents_required": [
+        "Group registration",
+        "Aadhaar",
+        "Land docs"
+      ],
+      "portal": "https://pgsindia-ncof.gov.in",
+      "source": "PKVY open guidelines"
+    },
+    {
+      "scheme_id": "gov14",
+      "name_en": "Agri Infrastructure Fund (AIF)",
+      "name_mr": "कृषी पायाभूत सुविधा निधी",
+      "benefits_en": "Interest subvention for warehouses, cold stores, processing units.",
+      "benefits_mr": "गोदाम, कोल्ड स्टोरेज, प्रक्रिया युनिट व्याज सवलत.",
+      "eligibility_en": "FPOs, entrepreneurs, agri-entrepreneurs, cooperatives.",
+      "eligibility_mr": "FPO, उद्योजक, सहकारी.",
+      "documents_required": [
+        "DPR",
+        "KYC",
+        "Land/lease"
+      ],
+      "portal": "https://agriinfra.dac.gov.in",
+      "source": "AIF open portal"
+    },
+    {
+      "scheme_id": "gov15",
+      "name_en": "RKVY-RAFTAAR",
+      "name_mr": "राष्ट्रीय कृषी विकास योजना",
+      "benefits_en": "State-led agri projects including value chain and innovation.",
+      "benefits_mr": "राज्य कृषी प्रकल्प व मूल्य साखळी.",
+      "eligibility_en": "As selected under state RKVY projects.",
+      "eligibility_mr": "राज्य RKVY प्रकल्पानुसार.",
+      "documents_required": [
+        "Project docs",
+        "Aadhaar"
+      ],
+      "portal": "https://rkvy.nic.in",
+      "source": "RKVY open guidelines"
     }
-  ]
+  ],
+  "meta": {
+    "count": 15,
+    "license": "Public government scheme summaries"
+  }
 }

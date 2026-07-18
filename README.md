@@ -47,11 +47,18 @@ Designed specifically to deliver actionable agricultural solutions in **Marathi 
 - **Planner Agent:** Central coordinator that deconstructs complex farmer questions and delegates sub-tasks to specialized agents.
 - **9 Specialized Agents:** Weather, Crop, Disease, Market, Soil, Fertilizer, Government, Vision, and Finance Agents.
 
-### 2. Multi-Tiered RAG Knowledge Layer
+### 2. Multi-Tiered Advanced RAG Knowledge Layer (v10.1)
 - **Hybrid Search RAG:** Lexical BM25 search + Cosine Vector Semantic search fused via Reciprocal Rank Fusion (RRF).
 - **GraphRAG Engine:** Knowledge Graph mapping relationships between Crops, Diseases, Soil, Weather, Fertilizers, and Government Schemes.
+- **Expanded open-source KB:** 20+ crops, 20 pests/diseases, 15 schemes, 20 mandis, 75+ advisories, seed varieties, irrigation practices, climate zones (ICAR/SAU/gov-style open compilations).
+- **Dense embeddings + Qdrant:** Hash / MiniLM / OpenAI-compatible embeddings; Qdrant when `QDRANT_URL` is set, otherwise local numpy dense index (disk-cached under `.cache/`).
+- **data.gov.in / Agmarknet:** Live commodity prices with API key; automatic local market KB fallback.
+- **Web RAG:** DuckDuckGo Instant Answers + Wikipedia (+ offline open-catalog fallbacks) for latest public knowledge.
+- **Tool-augmented RAG:** Open-Meteo weather, mandi + Agmarknet tools, scheme lookup, crop PoP tools, open-source catalog — fused with local docs via cross-source RRF.
+- **Streamlit “Advanced RAG & Sources” tab:** Fused docs, citations, web hits, tools, Agmarknet explorer.
+- **Query understanding:** Crop entity extraction (EN/MR), intent tags, multi-query expansion.
 - **Memory RAG:** Stores personalized farmer profiles, past crop rotation, soil test history, and previous interventions.
-- **Live RAG:** Streams real-time IMD weather warnings, Agmarknet mandi price feeds, IoT sensor telemetry, and Sentinel-2 satellite NDVI canopy metrics.
+- **Live RAG:** Weather (Open-Meteo + regional feed), Agmarknet-style mandi prices, IoT sensor telemetry, and Sentinel-2 style NDVI metrics.
 
 ### 3. Computer Vision & OCR
 - **Plant Leaf Disease Diagnostic Classifier:** Identifies crop diseases and provides instant organic/chemical treatment plans.
@@ -93,6 +100,33 @@ cd KrushiVerse-AI
 ```bash
 ./run.sh ui
 # Dashboard opens at http://localhost:8501
+```
+
+#### Advanced RAG API (multi-source)
+```bash
+# Knowledge base stats
+curl http://localhost:8000/api/knowledge/stats
+
+# Advanced retrieval: local + tools + web
+curl -X POST http://localhost:8000/api/rag/advanced \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"latest cotton pest advisory Maharashtra\",\"force_web\":true,\"top_k\":8}"
+```
+
+Environment flags (see `.env.example`):
+- `ENABLE_WEB_RAG=true|false` (default true)
+- `ENABLE_TOOL_RAG=true|false` (default true)
+- `ENABLE_DENSE_RAG=true|false` (default true)
+- `EMBEDDING_BACKEND=auto|hash|minilm|openai`
+- `QDRANT_URL=http://127.0.0.1:6333` (optional; local dense index if unset)
+- `DATA_GOV_IN_API_KEY=` free key from https://data.gov.in for live Agmarknet
+- `WEB_CACHE_TTL_SEC=300`
+- `RAG_TOP_K=8`
+
+#### Open data + embeddings endpoints
+```bash
+curl http://localhost:8000/api/rag/backends
+curl "http://localhost:8000/api/opendata/agmarknet?commodity=Cotton&state=Maharashtra"
 ```
 
 ---
@@ -144,3 +178,22 @@ Released under the MIT License.
 ## 📐 Production architecture
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the complete 2026 nine-layer Agentic GraphRAG blueprint, multilingual voice flow, safety/governance requirements, evaluation plan, observability, and staged production roadmap. Its latency, accuracy, scale, and cost figures are explicitly treated as targets until validated by benchmark and production evidence.
+
+## 🧠 KrushiVerseAI Mini (1M) — Sprint plan
+
+End-to-end implementation roadmap for the ~1M-parameter agriculture Mini LLM, data lake, automated workers, training/eval, and RAG-coupled inference:
+
+→ **[`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md)**  
+→ Factory package: [`mini/README.md`](mini/README.md)  
+→ Sprint 0 notes: [`docs/sprint-notes/S00.md`](docs/sprint-notes/S00.md)
+
+Summary: **6 epics · 18 two-week sprints · automated worker DAG** (ingest → clean → QA → KG → tokenizer → train → eval → deploy), reusing the existing v10.2 multi-source RAG platform. The Mini model is one worker component, not the only intelligence.
+
+### Sprint 0 (FP-0) — done
+
+```bash
+python -m mini.orchestrator list-workers
+python -m mini.orchestrator init-lake
+python -m mini.orchestrator run bootstrap --execute
+python -m mini.orchestrator run dry-factory
+```

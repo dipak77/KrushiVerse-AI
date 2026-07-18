@@ -3,3 +3,13 @@ venv/
 __pycache__/
 *.pyc
 .DS_Store
+.env
+.cache/
+*.npz
+mini/runs/
+mini/orchestrator/events.jsonl
+# Keep lake structure in git; ignore generated content except markers
+data/lake/**
+!data/lake/**/
+!data/lake/**/.gitkeep
+!data/lake/BOOTSTRAP.json

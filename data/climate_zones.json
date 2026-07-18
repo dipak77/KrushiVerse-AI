@@ -1,0 +1,118 @@
+{
+  "zones": [
+    {
+      "zone": "Western Maharashtra Scarcity",
+      "districts": [
+        "Solapur",
+        "Ahmednagar",
+        "parts of Pune",
+        "Satara east"
+      ],
+      "rainfall_mm": "400-700",
+      "recommended_crops": [
+        "Pomegranate",
+        "Grapes",
+        "Onion",
+        "Jowar",
+        "Bajra"
+      ],
+      "notes": "Prioritize micro-irrigation and farm ponds."
+    },
+    {
+      "zone": "Marathwada",
+      "districts": [
+        "Aurangabad",
+        "Beed",
+        "Latur",
+        "Nanded",
+        "Parbhani",
+        "Hingoli",
+        "Jalna",
+        "Osmanabad"
+      ],
+      "rainfall_mm": "600-900",
+      "recommended_crops": [
+        "Soybean",
+        "Cotton",
+        "Tur",
+        "Sorghum",
+        "Gram"
+      ],
+      "notes": "Climate resilient packages under PoCRA relevant."
+    },
+    {
+      "zone": "Vidarbha",
+      "districts": [
+        "Nagpur",
+        "Amravati",
+        "Akola",
+        "Yavatmal",
+        "Wardha",
+        "Buldhana"
+      ],
+      "rainfall_mm": "700-1200",
+      "recommended_crops": [
+        "Cotton",
+        "Soybean",
+        "Orange",
+        "Tur",
+        "Wheat"
+      ],
+      "notes": "Cotton-soy systems dominant; watch dry spells."
+    },
+    {
+      "zone": "Konkan",
+      "districts": [
+        "Thane",
+        "Raigad",
+        "Ratnagiri",
+        "Sindhudurg",
+        "Palghar"
+      ],
+      "rainfall_mm": "2500-4000",
+      "recommended_crops": [
+        "Rice",
+        "Mango",
+        "Cashew",
+        "Coconut"
+      ],
+      "notes": "High rainfall; drainage and blast management critical for rice."
+    },
+    {
+      "zone": "Western Ghat / Transition",
+      "districts": [
+        "Kolhapur",
+        "Sangli west",
+        "Satara west",
+        "Nashik west"
+      ],
+      "rainfall_mm": "1000-3000",
+      "recommended_crops": [
+        "Sugarcane",
+        "Rice",
+        "Turmeric",
+        "Grapes (rain shadow edge)"
+      ],
+      "notes": "High productivity sugarcane-turmeric belts."
+    },
+    {
+      "zone": "Central India Plains",
+      "districts": [
+        "Indore belt ref",
+        "Nashik plateau"
+      ],
+      "rainfall_mm": "700-1000",
+      "recommended_crops": [
+        "Wheat",
+        "Soybean",
+        "Gram",
+        "Maize"
+      ],
+      "notes": "Rabi wheat after soybean common."
+    }
+  ],
+  "meta": {
+    "count": 6,
+    "source": "IMD/agri-climate zone public summaries"
+  }
+}
