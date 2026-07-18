@@ -35,6 +35,21 @@ def cmd_status(_: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_taxonomy_validate(_: argparse.Namespace) -> int:
+    from mini.taxonomy.service import taxonomy_service
+
+    report = taxonomy_service.validate()
+    print(json.dumps(report, indent=2, ensure_ascii=False))
+    return 0 if report.get("ok") else 1
+
+
+def cmd_taxonomy_summary(_: argparse.Namespace) -> int:
+    from mini.taxonomy.service import taxonomy_service
+
+    print(json.dumps(taxonomy_service.summary(), indent=2, ensure_ascii=False))
+    return 0
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -74,6 +89,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     s = sub.add_parser("init-lake", help="Create data lake directory layout")
     s.set_defaults(func=cmd_init_lake)
+
+    s = sub.add_parser("taxonomy-validate", help="Validate frozen taxonomy + KB coverage")
+    s.set_defaults(func=cmd_taxonomy_validate)
+
+    s = sub.add_parser("taxonomy-summary", help="Print taxonomy summary counts")
+    s.set_defaults(func=cmd_taxonomy_summary)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

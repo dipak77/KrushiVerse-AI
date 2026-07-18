@@ -152,6 +152,40 @@ def rag_backends():
         "collection": settings.QDRANT_COLLECTION,
     }
 
+@app.get("/api/taxonomy")
+def taxonomy_summary_api():
+    """Frozen agriculture domain taxonomy (Sprint 1)."""
+    from mini.taxonomy.service import taxonomy_service
+
+    return {
+        "summary": taxonomy_service.summary(),
+        "categories": taxonomy_service.category_details(),
+        "crops": taxonomy_service.crops(),
+        "stages": taxonomy_service.stages(),
+        "languages": ["en", "mr", "hi"],
+    }
+
+@app.get("/api/taxonomy/validate")
+def taxonomy_validate_api():
+    from mini.taxonomy.service import taxonomy_service
+
+    report = taxonomy_service.validate()
+    if not report.get("ok"):
+        # still 200 with ok=false so clients can display errors; use 422 if preferred
+        return report
+    return report
+
+@app.get("/api/taxonomy/resolve")
+def taxonomy_resolve(crop: Optional[str] = None, district: Optional[str] = None, text: Optional[str] = None):
+    from mini.taxonomy.service import taxonomy_service
+
+    return {
+        "crop": taxonomy_service.resolve_crop(crop or text or "") if (crop or text) else None,
+        "crops_in_text": taxonomy_service.extract_crops(text or crop or ""),
+        "region": taxonomy_service.resolve_region(district=district) if district else None,
+        "categories": taxonomy_service.detect_category(text or crop or "") if (text or crop) else [],
+    }
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

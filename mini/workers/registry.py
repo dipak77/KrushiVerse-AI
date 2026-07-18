@@ -86,10 +86,64 @@ class NormalizeWorker(BaseWorker):
     name = "Normalize"
     description = "Canonical crop/region/units via taxonomy"
     epic = "E1"
-    status = "stub"
+    status = "partial"  # taxonomy service ready (S1); full batch normalize in S4
 
     def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: normalize Sprint 4")
+        from mini.taxonomy.service import taxonomy_service
+
+        sample = kwargs.get("text") or kwargs.get("crop") or "Cotton pink bollworm"
+        crop = taxonomy_service.resolve_crop(str(sample))
+        cats = taxonomy_service.detect_category(str(sample))
+        return WorkerResult(
+            worker_id=self.worker_id,
+            ok=True,
+            dry_run=dry_run,
+            message="Taxonomy-backed normalize partial (Sprint 1); batch pipeline Sprint 4",
+            metrics={
+                "taxonomy_version": taxonomy_service.version,
+                "resolved_crop": crop,
+                "categories": cats,
+                "sample": sample,
+            },
+        )
+
+
+@register_worker
+class TaxonomyWorker(BaseWorker):
+    worker_id = "W-TAXONOMY"
+    name = "Taxonomy Validate"
+    description = "Validate frozen taxonomy integrity and platform KB coverage"
+    epic = "E0"
+    status = "ready"
+
+    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
+        from mini.taxonomy.service import taxonomy_service
+        import json
+        from mini.paths import TAXONOMY_DIR, relative_to_repo
+
+        report = taxonomy_service.validate()
+        artifacts: list[str] = []
+        if not dry_run:
+            TAXONOMY_DIR.mkdir(parents=True, exist_ok=True)
+            out = TAXONOMY_DIR / "validation_report.json"
+            out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+            artifacts.append(relative_to_repo(out))
+        return WorkerResult(
+            worker_id=self.worker_id,
+            ok=bool(report.get("ok")),
+            dry_run=dry_run,
+            message="Taxonomy validation " + ("passed" if report.get("ok") else "FAILED"),
+            artifacts=artifacts,
+            metrics={
+                "version": report.get("taxonomy_version"),
+                "integrity_ok": report.get("integrity", {}).get("ok"),
+                "coverage_ok": report.get("platform_coverage", {}).get("ok"),
+                "errors": (report.get("integrity", {}).get("errors") or [])
+                + (report.get("platform_coverage", {}).get("errors") or []),
+            },
+            errors=(report.get("integrity", {}).get("errors") or [])
+            + (report.get("platform_coverage", {}).get("errors") or []),
+        )
 
 
 @register_worker

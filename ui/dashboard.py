@@ -25,6 +25,7 @@ from app.knowledge.embeddings import embedding_provider
 from app.memory.farm_memory import farm_memory_store
 from app.workflows.automation import workflow_engine
 from app.knowledge.tools.registry import tool_registry
+from mini.taxonomy.service import taxonomy_service
 
 st.set_page_config(
     page_title="AI Krushi Mitra — KrushiVerse-AI Platform",
@@ -34,8 +35,8 @@ st.set_page_config(
 
 st.title("🌾 AI Krushi Mitra — Autonomous AI Agriculture Platform")
 st.caption(
-    "Gen 10.2 — Advanced Multi-Source RAG (dense embeddings / Qdrant, data.gov.in Agmarknet, "
-    "web tools, GraphRAG, agents, vision, predictive models)"
+    "Gen 10.2 + Mini Sprint 1 — Frozen domain taxonomy · multi-source RAG · "
+    "GraphRAG · open data · agents · predictive models"
 )
 
 # Sidebar - Farm Profile
@@ -65,9 +66,27 @@ st.sidebar.caption(
     "Agmarknet live: " + ("✅ key set" if _od.get("configured") else "⚠️ local fallback (set DATA_GOV_IN_API_KEY)")
 )
 
+# Sidebar taxonomy browser (read-only) — Sprint 1 demo
+st.sidebar.markdown("---")
+st.sidebar.subheader("🗂️ Taxonomy (S1 frozen)")
+_tax = taxonomy_service.summary()
+st.sidebar.caption(f"v{_tax['version']} · {_tax['status']} · {_tax['crops']} crops")
+_tax_cat = st.sidebar.selectbox("Category", taxonomy_service.categories())
+_tax_crop = st.sidebar.selectbox("Crop", taxonomy_service.crop_names())
+_crop_rec = taxonomy_service.get_crop_record(_tax_crop)
+if _crop_rec:
+    st.sidebar.markdown(
+        f"**{_crop_rec['name_en']}** / {_crop_rec.get('name_mr')} / {_crop_rec.get('name_hi')}"
+    )
+    st.sidebar.caption(f"Group: {_crop_rec.get('group')} · {_crop_rec.get('scientific', '')}")
+_aliases = taxonomy_service.crop_aliases().get(_tax_crop, [])
+if _aliases:
+    st.sidebar.caption("Aliases: " + ", ".join(_aliases[:8]) + ("…" if len(_aliases) > 8 else ""))
+
 tabs = st.tabs([
     "🤖 AI Krushi Assistant",
     "📚 Advanced RAG & Sources",
+    "🗂️ Domain Taxonomy",
     "📸 Vision Disease Diagnostic",
     "📡 Live RAG (Weather, Market, IoT, Satellite)",
     "🧪 Soil & Fertilizer Planner",
@@ -235,8 +254,56 @@ with tabs[1]:
     st.subheader("Registered tools")
     st.dataframe(pd.DataFrame(tool_registry.list_tools()), use_container_width=True)
 
-# TAB 3: Vision
+# TAB 3: Domain Taxonomy browser (Sprint 1)
 with tabs[2]:
+    st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")
+    st.write(
+        "Single source of truth for categories, crops (EN/MR/HI), stages, regions, and units. "
+        "Used by normalize workers and query understanding."
+    )
+    s1, s2, s3, s4 = st.columns(4)
+    summ = taxonomy_service.summary()
+    s1.metric("Version", summ["version"])
+    s2.metric("Crops", summ["crops"])
+    s3.metric("Categories", summ["categories"])
+    s4.metric("MH districts", summ["mh_districts"])
+
+    col_t1, col_t2 = st.columns(2)
+    with col_t1:
+        st.subheader("Categories")
+        st.dataframe(pd.DataFrame(taxonomy_service.category_details()), use_container_width=True)
+        st.subheader("Crop stages")
+        st.dataframe(pd.DataFrame(taxonomy_service.stages()), use_container_width=True)
+    with col_t2:
+        st.subheader("Crops (EN / MR / HI)")
+        st.dataframe(pd.DataFrame(taxonomy_service.crops()), use_container_width=True)
+        st.subheader("Resolve demo")
+        demo_q = st.text_input("Text to resolve", value="कापूस खत किती द्यावे Pune")
+        st.json(
+            {
+                "crops": taxonomy_service.extract_crops(demo_q),
+                "categories": taxonomy_service.detect_category(demo_q),
+                "region": taxonomy_service.resolve_district("Pune"),
+            }
+        )
+
+    st.subheader("Validation report")
+    if st.button("Run taxonomy validation"):
+        report = taxonomy_service.validate()
+        if report.get("ok"):
+            st.success("Taxonomy integrity + platform KB coverage OK")
+        else:
+            st.error("Validation failed — see report")
+        st.json(report)
+
+    with st.expander("Unit dimensions"):
+        from mini.taxonomy.units import UNITS
+
+        st.json(UNITS["preferred_display"])
+        st.caption("Dimensions: " + ", ".join(UNITS["dimensions"].keys()))
+
+# TAB 4: Vision
+with tabs[3]:
     st.header("🔬 Computer Vision Plant Disease Classifier")
     st.write("Upload a crop leaf photo or select sample leaf image to perform diagnostic analysis.")
 
@@ -262,8 +329,8 @@ with tabs[2]:
             st.markdown(f"**🌿 Organic Control:** {result['organic_treatment']['mr']}")
             st.markdown(f"**🧪 Chemical Control:** {result['chemical_treatment']['mr']}")
 
-# TAB 4: Live RAG
-with tabs[3]:
+# TAB 5: Live RAG
+with tabs[4]:
     st.header("📡 Live RAG Intelligence Center")
 
     m1, m2, m3, m4 = st.columns(4)
@@ -284,8 +351,8 @@ with tabs[3]:
     st.dataframe(pd.DataFrame(market_feed.get_market_prices()), use_container_width=True)
     st.caption(f"Open data status: {opendata_client.status()}")
 
-# TAB 5: Soil & Fertilizer
-with tabs[4]:
+# TAB 6: Soil & Fertilizer
+with tabs[5]:
     st.header("🧪 Soil Health Card OCR & Fertilizer Planner")
 
     col_s1, col_s2 = st.columns([1, 1])
@@ -325,8 +392,8 @@ with tabs[4]:
 
             st.info(f"**मराठी संदेश:** {p_res['application_schedule_mr']}")
 
-# TAB 6: GraphRAG
-with tabs[5]:
+# TAB 7: GraphRAG
+with tabs[6]:
     st.header("🕸️ GraphRAG Agricultural Knowledge Graph")
     st.write("Explore graph relations between crops, pests, diseases, fertilizers, and government schemes.")
 
@@ -337,8 +404,8 @@ with tabs[5]:
     ecosystem = graph_rag.get_crop_ecosystem(selected_graph_crop)
     st.json(ecosystem)
 
-# TAB 7: Predictive
-with tabs[6]:
+# TAB 8: Predictive
+with tabs[7]:
     st.header("📊 Predictive AI Models & Automated Workflows")
 
     p1, p2 = st.columns(2)

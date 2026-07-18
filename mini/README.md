@@ -4,9 +4,10 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S0 — Bootstrap (FP-0)** |
+| Sprint | **S1 — Taxonomy freeze** (S0 bootstrap complete) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
+| Taxonomy | **v1.0.0 frozen** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -51,15 +52,21 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0 acceptance
+## Sprint 0–1 acceptance
 
 - [x] `python -m mini.orchestrator list-workers` works  
 - [x] Lake dirs creatable via CLI  
 - [x] Schema v1 `StandardRecord` defined  
-- [x] Worker stubs registered for full roadmap  
-- [x] Dry-run pipeline `dry-factory` succeeds  
-- [x] Tests under `tests/test_mini_sprint0.py`  
+- [x] Taxonomy **v1.0.0 frozen** + platform KB coverage  
+- [x] `taxonomy-validate` / `taxonomy-summary` CLI  
+- [x] Dry-run pipeline `dry-factory` / `sprint1` succeeds  
+- [x] Tests: `tests/test_mini_sprint0.py`, `tests/test_mini_sprint1.py`  
+
+```bash
+python -m mini.orchestrator taxonomy-validate
+python -m mini.orchestrator run sprint1 --execute
+```
 
 ## Next
 
-Sprint 1 — Taxonomy freeze · Sprint 2 — Real ingest worker.
+Sprint 2 — Real ingest worker + source registry + lake seed manifests.

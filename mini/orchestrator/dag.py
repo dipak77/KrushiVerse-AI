@@ -14,8 +14,11 @@ from mini.workers.base import get_worker, list_workers
 # Named pipelines: ordered worker IDs
 PIPELINES: dict[str, list[str]] = {
     "bootstrap": ["W-BOOTSTRAP"],
+    "taxonomy": ["W-TAXONOMY"],
+    "sprint1": ["W-BOOTSTRAP", "W-TAXONOMY", "W-NORMALIZE"],
     "dry-factory": [
         "W-BOOTSTRAP",
+        "W-TAXONOMY",
         "W-INGEST",
         "W-VALIDATE",
         "W-CLEAN",
@@ -41,6 +44,7 @@ PIPELINES: dict[str, list[str]] = {
     "eval": ["W-EVAL"],
     "full": [
         "W-BOOTSTRAP",
+        "W-TAXONOMY",
         "W-INGEST",
         "W-VALIDATE",
         "W-CLEAN",
