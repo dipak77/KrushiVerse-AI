@@ -324,6 +324,29 @@ def lake_kg_run(execute: bool = False, write_seed: bool = False):
     )
     return result.model_dump()
 
+@app.get("/api/lake/tokenizer")
+def lake_tokenizer_status():
+    """Latest domain tokenizer report (W-TOKEN)."""
+    from mini.paths import TOKENIZER_DIR
+    import json
+
+    latest = TOKENIZER_DIR / "TOKENIZER_LATEST.json"
+    if not latest.exists():
+        return {"ok": False, "message": "No tokenizer yet. POST /api/lake/tokenizer?execute=true"}
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/tokenizer")
+def lake_tokenizer_run(execute: bool = False, vocab_size: int = 32000, version: str = "v0.1"):
+    """Run W-TOKEN agriculture SentencePiece training (S9 default 32k vocab)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-TOKEN").run(
+        dry_run=not execute,
+        vocab_size=vocab_size,
+        version=version,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

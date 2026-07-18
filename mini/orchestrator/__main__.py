@@ -127,6 +127,20 @@ def cmd_kgbuild(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_token(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-TOKEN").run(
+        dry_run=not args.execute,
+        vocab_size=args.vocab_size,
+        version=args.version,
+        train_baseline=not args.no_baseline,
+        max_qa_lines=args.max_qa,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -213,6 +227,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s.add_argument("--no-districts", action="store_true", help="Skip district GROWN_IN expansion")
     s.set_defaults(func=cmd_kgbuild)
+
+    s = sub.add_parser("token", help="Train domain SentencePiece tokenizer (W-TOKEN, S9 30–50k)")
+    s.add_argument("--execute", action="store_true", help="Write tokenizer/v0.1 artifacts")
+    s.add_argument("--vocab-size", type=int, default=32000, help="Vocab size (30k–50k)")
+    s.add_argument("--version", default="v0.1", help="Tokenizer version tag")
+    s.add_argument("--no-baseline", action="store_true", help="Skip generic baseline fertility model")
+    s.add_argument("--max-qa", type=int, default=80000, help="Max QA lines for corpus")
+    s.set_defaults(func=cmd_token)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

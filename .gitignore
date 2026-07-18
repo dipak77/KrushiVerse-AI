@@ -41,3 +41,11 @@ mini/datasets/kg/**
 !mini/datasets/kg/neo4j_loader_stub.cypher
 !mini/datasets/kg/latest.graphml
 !mini/datasets/KG_LATEST.json
+# Tokenizer: keep models/manifest; skip regenerable corpus
+mini/tokenizer/**/corpus.txt
+mini/tokenizer/**/*.model
+mini/tokenizer/**/*.vocab
+!mini/tokenizer/TOKENIZER_LATEST.json
+!mini/tokenizer/v0.1/manifest.json
+!mini/tokenizer/v0.1/sp_agri.model
+!mini/tokenizer/v0.1/sp_agri.vocab

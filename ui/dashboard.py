@@ -35,7 +35,7 @@ st.set_page_config(
 
 st.title("🌾 AI Krushi Mitra — Autonomous AI Agriculture Platform")
 st.caption(
-    "Gen 10.2 + Mini Sprint 8 — KG builder · multi-source RAG · "
+    "Gen 10.2 + Mini Sprint 9 — domain tokenizer · multi-source RAG · "
     "GraphRAG · open data · agents · predictive models"
 )
 

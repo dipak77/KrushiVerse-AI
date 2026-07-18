@@ -22,7 +22,7 @@ client = TestClient(app)
 
 
 def test_sprint3_markers():
-    assert __sprint__ in {"S3", "S4", "S5", "S6", "S7", "S8"}
+    assert __sprint__ in {"S3", "S4", "S5", "S6", "S7", "S8", "S9"}
     assert __feature_phase__.startswith("FP-")
 
 

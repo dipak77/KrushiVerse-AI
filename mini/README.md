@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S8 — Knowledge graph builder** (≥200 nodes / ≥400 edges) |
+| Sprint | **S9 — Domain tokenizer v0.1** (SentencePiece 30–50k) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-4** |
+| Feature phase | **FP-5** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -29,6 +29,7 @@ python -m mini.orchestrator standardize --execute
 python -m mini.orchestrator analyze --execute
 python -m mini.orchestrator qasynth --execute --target 62500
 python -m mini.orchestrator kgbuild --execute
+python -m mini.orchestrator token --execute --vocab-size 32000
 python -m mini.orchestrator lake-status
 ```
 
@@ -61,18 +62,19 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–8 acceptance
+## Sprint 0–9 acceptance
 
 - [x] Factory through QA synth  
 - [x] **W-QASYNTH v2** ≥50k train, ≥8 domains, ≥20% non-EN  
-- [x] **W-KGBUILD** ≥200 nodes / ≥400 edges, GraphML + triples + Neo4j stub  
-- [x] Tests: `test_mini_sprint0`–`8`  
+- [x] **W-KGBUILD** ≥200 nodes / ≥400 edges  
+- [x] **W-TOKEN** SentencePiece 30–50k + agri fertility  
+- [x] Tests: `test_mini_sprint0`–`9`  
 
 ```bash
-python -m mini.orchestrator kgbuild --execute
-python -m mini.orchestrator run sprint8 --execute
+python -m mini.orchestrator token --execute --vocab-size 32000
+python -m mini.orchestrator run sprint9 --execute
 ```
 
 ## Next
 
-Sprint 9 — `W-TOKEN` agriculture-aware SentencePiece tokenizer.
+Sprint 10 — Mini ~1M architecture + train harness.

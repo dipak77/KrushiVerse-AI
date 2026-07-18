@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "version": "v0.1",
+  "sprint": "S9",
+  "actual_vocab_size": 32000,
+  "requested_vocab_size": 32000,
+  "domain_mean_fertility": 1.6787,
+  "baseline_mean_fertility": 1.395,
+  "fertility_improved": true,
+  "manifest": "mini\\tokenizer\\v0.1\\manifest.json",
+  "model": "mini\\tokenizer\\v0.1\\sp_agri.model"
+}
