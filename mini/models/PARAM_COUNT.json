@@ -1,0 +1,31 @@
+{
+  "sprint": "S10",
+  "created_at": "2026-07-18T16:53:24Z",
+  "config": {
+    "vocab_size": 4096,
+    "n_embd": 128,
+    "n_layer": 6,
+    "n_head": 4,
+    "n_hidden": 192,
+    "block_size": 512,
+    "tie_weights": true
+  },
+  "parameters": {
+    "total_tensors_sum": 1361536,
+    "trainable_tensors_sum": 1361536,
+    "unique_params": 1361536,
+    "millions": 1.3615
+  },
+  "target_range": {
+    "min": 800000,
+    "max": 1500000
+  },
+  "in_range": true,
+  "features": [
+    "RoPE",
+    "RMSNorm",
+    "SwiGLU",
+    "weight_tying",
+    "causal_sdpa"
+  ]
+}

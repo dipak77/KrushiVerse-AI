@@ -6,46 +6,43 @@ __pycache__/
 .env
 .cache/
 *.npz
+
+# --- Local-only: data lake + Mini generated artifacts (do not push) ---
+# Full data lake (training dumps, reports, manifests)
+data/lake/
+
+# Mini generated datasets / KG exports
+mini/datasets/**
+!mini/datasets/
+!mini/datasets/.gitkeep
+
+# Mini model checkpoints (code + PARAM_COUNT report committed; *.pt local)
+mini/models/**
+!mini/models/
+!mini/models/.gitkeep
+!mini/models/__init__.py
+!mini/models/config.py
+!mini/models/model.py
+!mini/models/train.py
+!mini/models/PARAM_COUNT.json
+mini/models/checkpoints/
+mini/models/*.pt
+mini/models/PRETRAIN_LATEST.json
+
+mini/eval/**
+!mini/eval/
+!mini/eval/.gitkeep
+
+mini/inference/**
+!mini/inference/
+!mini/inference/.gitkeep
+
 mini/runs/
 mini/orchestrator/events.jsonl
-# Keep lake structure in git; ignore bulk raw blobs except markers/reports
-data/lake/**
-!data/lake/**/
-!data/lake/**/.gitkeep
-!data/lake/BOOTSTRAP.json
-!data/lake/INGEST_LATEST.json
-!data/lake/QUALITY_LATEST.json
-!data/lake/manifests/
-!data/lake/manifests/**
-!data/lake/reports/
-!data/lake/reports/**
-!data/lake/STANDARD_LATEST.json
-!data/lake/ANALYZE_LATEST.json
-!data/lake/ANALYZE_LATEST.html
-!data/lake/QASYNTH_LATEST.json
-!mini/datasets/ANALYZE_LATEST.json
-!mini/datasets/QASYNTH_LATEST.json
-!data/lake/training/
-!data/lake/training/**
-!data/lake/validation/
-!data/lake/validation/**
-!data/lake/test/
-!data/lake/test/**
-mini/datasets/versions/**
-!mini/datasets/versions/
-!mini/datasets/LATEST_VERSION.json
-# KG versioned dumps (keep latest marker + small stubs)
-mini/datasets/kg/**
-!mini/datasets/kg/
-!mini/datasets/kg/graph_triples.jsonl
-!mini/datasets/kg/neo4j_loader_stub.cypher
-!mini/datasets/kg/latest.graphml
-!mini/datasets/KG_LATEST.json
-# Tokenizer: keep models/manifest; skip regenerable corpus
-mini/tokenizer/**/corpus.txt
-mini/tokenizer/**/*.model
-mini/tokenizer/**/*.vocab
-!mini/tokenizer/TOKENIZER_LATEST.json
-!mini/tokenizer/v0.1/manifest.json
-!mini/tokenizer/v0.1/sp_agri.model
-!mini/tokenizer/v0.1/sp_agri.vocab
+
+# Tokenizer: keep train.py code only; models/vocab/corpus local
+mini/tokenizer/**
+!mini/tokenizer/
+!mini/tokenizer/.gitkeep
+!mini/tokenizer/__init__.py
+!mini/tokenizer/train.py

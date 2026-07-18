@@ -9,5 +9,6 @@ from mini.workers import analyze  # noqa: F401
 from mini.workers import qa_synth  # noqa: F401
 from mini.workers import kg_build  # noqa: F401
 from mini.workers import token  # noqa: F401
+from mini.workers import pretrain  # noqa: F401
 
 __all__ = ["BaseWorker", "WORKER_REGISTRY", "get_worker", "list_workers"]

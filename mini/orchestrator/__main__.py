@@ -141,6 +141,19 @@ def cmd_token(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_pretrain(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-PRETRAIN").run(
+        dry_run=not args.execute,
+        overfit_steps=args.steps,
+        batch_size=args.batch_size,
+        seq_len=args.seq_len,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -235,6 +248,13 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--no-baseline", action="store_true", help="Skip generic baseline fertility model")
     s.add_argument("--max-qa", type=int, default=80000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_token)
+
+    s = sub.add_parser("pretrain", help="Mini ~1M arch + overfit smoke (W-PRETRAIN, S10)")
+    s.add_argument("--execute", action="store_true", help="Write PARAM_COUNT + smoke checkpoint")
+    s.add_argument("--steps", type=int, default=50, help="Overfit smoke steps")
+    s.add_argument("--batch-size", type=int, default=8, help="Smoke batch size")
+    s.add_argument("--seq-len", type=int, default=64, help="Smoke sequence length")
+    s.set_defaults(func=cmd_pretrain)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

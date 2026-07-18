@@ -347,6 +347,28 @@ def lake_tokenizer_run(execute: bool = False, vocab_size: int = 32000, version: 
     )
     return result.model_dump()
 
+@app.get("/api/lake/pretrain")
+def lake_pretrain_status():
+    """Latest Mini pretrain/smoke report (W-PRETRAIN)."""
+    from mini.paths import MODELS_DIR
+    import json
+
+    latest = MODELS_DIR / "PRETRAIN_LATEST.json"
+    param = MODELS_DIR / "PARAM_COUNT.json"
+    if latest.exists():
+        return json.loads(latest.read_text(encoding="utf-8"))
+    if param.exists():
+        return {"ok": True, "param_count": json.loads(param.read_text(encoding="utf-8"))}
+    return {"ok": False, "message": "No pretrain run yet. POST /api/lake/pretrain?execute=true"}
+
+@app.post("/api/lake/pretrain")
+def lake_pretrain_run(execute: bool = False, steps: int = 50):
+    """Run W-PRETRAIN skeleton: param count + overfit smoke (S10)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-PRETRAIN").run(dry_run=not execute, overfit_steps=steps)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

@@ -24,8 +24,8 @@ def _prep():
 
 
 def test_sprint7_markers():
-    assert __sprint__ in {"S7", "S8", "S9"}
-    assert __feature_phase__ in {"FP-3", "FP-4", "FP-5"}
+    assert __sprint__ in {"S7", "S8", "S9", "S10"}
+    assert __feature_phase__ in {"FP-3", "FP-4", "FP-5", "FP-5b"}
 
 
 def test_qasynth_still_ready():

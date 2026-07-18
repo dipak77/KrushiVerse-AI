@@ -80,16 +80,7 @@ class TaxonomyWorker(BaseWorker):
 # W-TOKEN → mini.workers.token
 
 
-@register_worker
-class PretrainWorker(BaseWorker):
-    worker_id = "W-PRETRAIN"
-    name = "Pretrain"
-    description = "Domain pretraining of ~1M Mini base model"
-    epic = "E4"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: pretrain Sprint 11")
+# W-PRETRAIN → mini.workers.pretrain
 
 
 @register_worker
@@ -204,6 +195,7 @@ from mini.workers.analyze import AnalyzeWorker  # noqa: E402,F401
 from mini.workers.qa_synth import QASynthWorker  # noqa: E402,F401
 from mini.workers.kg_build import KGBuildWorker  # noqa: E402,F401
 from mini.workers.token import TokenizerWorker  # noqa: E402,F401
+from mini.workers.pretrain import PretrainWorker  # noqa: E402,F401
 
 
 @register_worker

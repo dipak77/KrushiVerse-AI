@@ -1,8 +1,0 @@
-{
-  "version": "v20260718T150935Z",
-  "manifest": "mini\\datasets\\versions\\v20260718T150935Z\\manifest.json",
-  "total": 565,
-  "train": 446,
-  "val": 68,
-  "test": 51
-}
