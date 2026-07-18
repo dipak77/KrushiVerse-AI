@@ -389,11 +389,23 @@ def lake_pretrain_status():
     return {"ok": False, "message": "No pretrain run yet. POST /api/lake/pretrain?execute=true"}
 
 @app.post("/api/lake/pretrain")
-def lake_pretrain_run(execute: bool = False, steps: int = 50):
-    """Run W-PRETRAIN skeleton: param count + overfit smoke (S10)."""
+def lake_pretrain_run(
+    execute: bool = False,
+    steps: int = 200,
+    mode: str = "domain",
+    seed: int = 42,
+    batch_size: int = 8,
+):
+    """Run W-PRETRAIN domain pretrain (S11 v0.2-base) or smoke."""
     from mini.workers.base import get_worker
 
-    result = get_worker("W-PRETRAIN").run(dry_run=not execute, overfit_steps=steps)
+    result = get_worker("W-PRETRAIN").run(
+        dry_run=not execute,
+        mode=mode,
+        steps=steps,
+        seed=seed,
+        batch_size=batch_size,
+    )
     return result.model_dump()
 
 @app.get("/api/tools")

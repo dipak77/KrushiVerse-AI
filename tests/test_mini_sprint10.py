@@ -19,7 +19,7 @@ client = TestClient(app)
 
 
 def test_sprint10_markers():
-    assert __sprint__ == "S10"
+    assert __sprint__ in {"S10", "S11"}
     assert __feature_phase__ in {"FP-5b", "FP-6"}
 
 

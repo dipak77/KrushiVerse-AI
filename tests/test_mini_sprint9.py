@@ -23,8 +23,8 @@ client = TestClient(app)
 
 
 def test_sprint9_markers():
-    assert __sprint__ in {"S9", "S10"}
-    assert __feature_phase__ in {"FP-5", "FP-5b"}
+    assert __sprint__ in {"S9", "S10", "S11"}
+    assert __feature_phase__ in {"FP-5", "FP-5b", "FP-6"}
 
 
 def test_token_worker_ready():

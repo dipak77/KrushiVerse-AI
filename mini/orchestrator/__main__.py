@@ -146,9 +146,13 @@ def cmd_pretrain(args: argparse.Namespace) -> int:
 
     result = get_worker("W-PRETRAIN").run(
         dry_run=not args.execute,
-        overfit_steps=args.steps,
+        mode=args.mode,
+        steps=args.steps,
         batch_size=args.batch_size,
-        seq_len=args.seq_len,
+        block_size=args.block_size,
+        seed=args.seed,
+        vocab_size=args.vocab_size,
+        max_qa=args.max_qa,
     )
     print(result.model_dump_json(indent=2))
     return 0 if result.ok else 1
@@ -249,11 +253,15 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--max-qa", type=int, default=80000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_token)
 
-    s = sub.add_parser("pretrain", help="Mini ~1M arch + overfit smoke (W-PRETRAIN, S10)")
-    s.add_argument("--execute", action="store_true", help="Write PARAM_COUNT + smoke checkpoint")
-    s.add_argument("--steps", type=int, default=50, help="Overfit smoke steps")
-    s.add_argument("--batch-size", type=int, default=8, help="Smoke batch size")
-    s.add_argument("--seq-len", type=int, default=64, help="Smoke sequence length")
+    s = sub.add_parser("pretrain", help="Domain pretrain Mini v0.2-base (W-PRETRAIN, S11)")
+    s.add_argument("--execute", action="store_true", help="Train + write local v0.2-base checkpoint")
+    s.add_argument("--mode", default="domain", choices=["domain", "smoke", "both"], help="Train mode")
+    s.add_argument("--steps", type=int, default=200, help="Domain train steps")
+    s.add_argument("--batch-size", type=int, default=8, help="Batch size")
+    s.add_argument("--block-size", type=int, default=128, help="Packed context length")
+    s.add_argument("--seed", type=int, default=42, help="RNG seed")
+    s.add_argument("--vocab-size", type=int, default=4096, help="Model vocab size")
+    s.add_argument("--max-qa", type=int, default=25000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_pretrain)
 
     s = sub.add_parser("run-worker", help="Run a single worker")

@@ -30,6 +30,8 @@ mini/models/**
 !mini/models/PARAM_COUNT.json
 mini/models/checkpoints/
 mini/models/*.pt
+mini/models/**/*.pt
+mini/models/v0.2-base/
 mini/models/PRETRAIN_LATEST.json
 
 mini/eval/**

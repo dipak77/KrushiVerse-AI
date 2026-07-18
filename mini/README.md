@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S10 — Mini ~1M arch + train harness** |
+| Sprint | **S11 — Domain pretrain Mini v0.2-base** |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-5b** |
+| Feature phase | **FP-6** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -30,7 +30,7 @@ python -m mini.orchestrator analyze --execute
 python -m mini.orchestrator qasynth --execute --target 62500
 python -m mini.orchestrator kgbuild --execute
 python -m mini.orchestrator token --execute --vocab-size 32000
-python -m mini.orchestrator pretrain --execute --steps 50
+python -m mini.orchestrator pretrain --execute --mode domain --steps 200 --seed 42
 python -m mini.orchestrator lake-status
 ```
 
@@ -63,19 +63,19 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–10 acceptance
+## Sprint 0–11 acceptance
 
 - [x] Factory through QA synth + KG + tokenizer  
-- [x] **W-PRETRAIN** Mini ~1.36M arch (RoPE/RMSNorm/SwiGLU) + overfit smoke  
-- [x] Tests: `test_mini_sprint0`–`10`  
+- [x] Mini ~1.36M arch + **domain pretrain v0.2-base** (val PPL + seed)  
+- [x] Tests: `test_mini_sprint0`–`11`  
 
-**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, model checkpoints.
+**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, `mini/models/v0.2-base/**`.
 
 ```bash
-python -m mini.orchestrator pretrain --execute --steps 50
-python -m mini.orchestrator run sprint10 --execute
+python -m mini.orchestrator pretrain --execute --mode domain --steps 200 --seed 42
+python -m mini.orchestrator run sprint11 --execute
 ```
 
 ## Next
 
-Sprint 11 — full domain pretraining on agri corpus.
+Sprint 12 — `W-SFT` instruction + agri-QA fine-tune.
