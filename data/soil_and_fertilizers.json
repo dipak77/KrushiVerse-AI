@@ -1,0 +1,77 @@
+{
+  "soil_types": [
+    {
+      "type": "Black Cotton Soil (Vertisol)",
+      "type_mr": "काळी कसदार माती",
+      "characteristics_en": "High clay content, high water holding capacity, rich in Calcium, Potassium, and Magnesium; deficient in Nitrogen and Phosphorus.",
+      "characteristics_mr": "जमीन जास्त पाणी धरून ठेवते. कॅल्शियम, पोटॅशियम मुबलक, नत्र व स्फुरद कमी.",
+      "suitable_crops": ["Cotton", "Sugarcane", "Soybean", "Gram", "Wheat"]
+    },
+    {
+      "type": "Red & Laterite Soil",
+      "type_mr": "तांबडी व जांभी जमीन",
+      "characteristics_en": "Porous, acidic to neutral, high iron oxide content, low organic matter, moderate drainage.",
+      "characteristics_mr": "पाण्याचा निचरा चांगला, सेंद्रिय कर्ब कमी, आम्लयुक्त माती.",
+      "suitable_crops": ["Groundnut", "Cashew", "Rice", "Pulses", "Millets"]
+    },
+    {
+      "type": "Medium Black Soil",
+      "type_mr": "मध्यम काळी जमीन",
+      "characteristics_en": "Balanced texture, versatile fertility, suited for horticulture and field crops.",
+      "characteristics_mr": "सर्व पिकांसाठी उत्तम मध्यम काळी जमीन.",
+      "suitable_crops": ["Pomegranate", "Onion", "Vegetables", "Soybean", "Turmeric"]
+    }
+  ],
+  "fertilizer_recommendations": [
+    {
+      "crop_en": "Cotton",
+      "crop_mr": "कापूस",
+      "recommended_npk_kg_per_acre": {"N": 40, "P": 20, "K": 20},
+      "basal_dose": "50% N + 100% P + 100% K at time of sowing.",
+      "basal_dose_mr": "पेरणीवेळी ५०% नत्र, १००% स्फुरद व १००% पालाश द्यावे.",
+      "top_dressing": "25% N at 30 days and 25% N at 60 days post sowing.",
+      "top_dressing_mr": "उरलेले ५०% नत्र ३० आणि ६० दिवसांनी दोन समान हप्त्यात द्यावे.",
+      "micronutrients": "Zinc Sulphate @ 10 kg/acre if Zn deficient."
+    },
+    {
+      "crop_en": "Soybean",
+      "crop_mr": "सोयाबीन",
+      "recommended_npk_kg_per_acre": {"N": 12, "P": 24, "K": 16},
+      "basal_dose": "100% N, P, K at sowing as basal application.",
+      "basal_dose_mr": "पेरणीच्या वेळी संपूर्ण खताचा हप्ता द्यावा.",
+      "top_dressing": "Foliar spray of 19:19:19 @ 10g/L at flowering.",
+      "top_dressing_mr": "फुलोरा अवस्थेत १९:१९:१९ विद्राव्य खत (१० ग्रॅम/लिटर) फवारावे.",
+      "micronutrients": "Sulphur @ 8 kg/acre for higher oil content."
+    },
+    {
+      "crop_en": "Sugarcane",
+      "crop_mr": "ऊस",
+      "recommended_npk_kg_per_acre": {"N": 100, "P": 45, "K": 45},
+      "basal_dose": "10% N + 50% P + 50% K at planting.",
+      "basal_dose_mr": "लागवडीवेळी १०% नत्र, ५०% स्फुरद व ५०% पालाश.",
+      "top_dressing": "Splits at 6, 12, and 16 weeks (big earthing up).",
+      "top_dressing_mr": "उरलेले नत्र, स्फुरद व पालाश ६, १२ आणि १६ व्या आठवड्यात बांधणीच्या वेळी द्यावे.",
+      "micronutrients": "Ferrous Sulphate @ 10 kg/acre and Zinc Sulphate @ 8 kg/acre."
+    },
+    {
+      "crop_en": "Pomegranate",
+      "crop_mr": "डाळिंब",
+      "recommended_npk_kg_per_acre": {"N": 60, "P": 25, "K": 50},
+      "basal_dose": "FYM 25 kg/tree + 50% N, P, K at stress release.",
+      "basal_dose_mr": "ताण सोडताना २५ किलो शेणखत + ५०% रासायनिक खते.",
+      "top_dressing": "Fertigation via drip at weekly intervals during fruit growth.",
+      "top_dressing_mr": "ठिबकद्वारे दर आठवड्याला विद्राव्य खते (0:52:34, 0:0:50) द्यावीत.",
+      "micronutrients": "Boron @ 1g/L and Calcium Nitrate @ 5g/L during fruit setting."
+    },
+    {
+      "crop_en": "Onion",
+      "crop_mr": "कांदा",
+      "recommended_npk_kg_per_acre": {"N": 40, "P": 20, "K": 20},
+      "basal_dose": "50% N + 100% P + 100% K at transplanting.",
+      "basal_dose_mr": "पुनर्लागवडीच्या वेळी ५०% नत्र, १००% स्फुरद व १००% पालाश.",
+      "top_dressing": "Remaining 50% N applied 30 days after transplanting.",
+      "top_dressing_mr": "उरलेले ५०% नत्र लागवडीनंतर ३० दिवसांनी द्यावे.",
+      "micronutrients": "Sulphur @ 15 kg/acre."
+    }
+  ]
+}

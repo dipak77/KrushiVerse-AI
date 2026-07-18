@@ -1,0 +1,54 @@
+{
+  "schemes": [
+    {
+      "scheme_id": "gov1",
+      "name_en": "PM-KISAN (Pradhan Mantri Kisan Samman Nidhi)",
+      "name_mr": "पीएम-किसान (प्रधानमंत्री शेतकरी सन्मान निधी)",
+      "benefits_en": "Financial benefit of ₹6,000 per year in three equal installments of ₹2,000 directly into bank accounts.",
+      "benefits_mr": "वार्षिक ६,००० रुपये ३ समान हप्त्यांमध्ये (दर ४ महिन्यांनी २,००० रुपये) थेट बँक खात्यात जमा.",
+      "eligibility_en": "Land-holding farmer families having cultivable landholding in their names.",
+      "eligibility_mr": "स्वतःच्या नावावर शेती जमीन असलेले सर्व शेतकरी कुटुंब.",
+      "documents_required": ["Aadhaar Card", "7/12 Land Extract (satbara)", "Bank Account Details"]
+    },
+    {
+      "scheme_id": "gov2",
+      "name_en": "PMFBY (Pradhan Mantri Fasal Bima Yojana)",
+      "name_mr": "प्रधानमंत्री पीक विमा योजना (१ रुपयात पीक विमा)",
+      "benefits_en": "Comprehensive risk insurance for crops against yield losses due to non-preventable risks. In Maharashtra, enrolled at nominal fee of ₹1.",
+      "benefits_mr": "नैसर्गिक आपत्तीमुळे होणाऱ्या पिकांच्या नुकसानीसाठी व्यापक विमा संरक्षण (महाराष्ट्रात फक्त १ रुपया नोंदणी शुल्क).",
+      "eligibility_en": "All farmers including sharecroppers and tenant farmers growing notified crops.",
+      "eligibility_mr": "अधिसूचित पिके घेणारे सर्व शेतकरी, कुळ शेतकरी आणि पीक कर्जदार.",
+      "documents_required": ["7/12 Extract", "8-A Extract", "Sowing Certificate", "Aadhaar Card", "Bank Passbook"]
+    },
+    {
+      "scheme_id": "gov3",
+      "name_en": "Magel Tyala Shettale (Farm Pond Scheme)",
+      "name_mr": "मागेल त्याला शेततळे योजना",
+      "benefits_en": "Subsidy up to ₹75,000 for constructing lined farm ponds to harvest rainwater.",
+      "benefits_mr": "पावसाचे पाणी साठवण्यासाठी शेततळे खोदण्यासाठी रु. ७५,००० पर्यंत अनुदान.",
+      "eligibility_en": "Farmers possessing at least 0.60 hectares of land.",
+      "eligibility_mr": "किमान ०.६० हेक्टर जमीन असणारे शेतकरी.",
+      "documents_required": ["7/12 Extract", "Consent letter of co-owners", "Aadhaar Card"]
+    },
+    {
+      "scheme_id": "gov4",
+      "name_en": "Drip and Sprinkler Irrigation Subsidy (PMKSY)",
+      "name_mr": "ठिबक व तुषार सिंचन अनुदान योजना",
+      "benefits_en": "80% subsidy for small/marginal farmers and 75% for other farmers on micro-irrigation systems.",
+      "benefits_mr": "लहान व अल्पभूधारक शेतकऱ्यांना ८०% आणि इतर शेतकऱ्यांना ७५% अनुदान.",
+      "eligibility_en": "Farmers having valid land title and assured water source.",
+      "eligibility_mr": "जमीन मालकी हक्क आणि शाश्वत पाणी साठा असलेले शेतकरी.",
+      "documents_required": ["7/12 Extract", "8-A Extract", "Water source proof", "Quotation from registered dealer"]
+    },
+    {
+      "scheme_id": "gov5",
+      "name_en": "Nanaji Deshmukh Krushi Sanjivani Prakalp (PoCRA)",
+      "name_mr": "नानाजी देशमुख कृषी संजीवनी प्रकल्प (पोकरा)",
+      "benefits_en": "Financial support for climate resilient agriculture, shade net, polyhouse, micro irrigation, and organic farming.",
+      "benefits_mr": "हवामान अनुकूल शेती, शेडनेट, पॉलीहाऊस, सेंद्रिय शेतीसाठी थेट अर्थसाहाय्य.",
+      "eligibility_en": "Farmers in selected drought-prone villages of Maharashtra.",
+      "eligibility_mr": "महाराष्ट्रातील निवडक दुष्काळग्रस्त व हवामानसंवेदनशील गावांतील शेतकरी.",
+      "documents_required": ["Aadhaar", "7/12", "PoCRA Registration"]
+    }
+  ]
+}
