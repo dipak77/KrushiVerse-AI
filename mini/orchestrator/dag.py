@@ -36,6 +36,8 @@ PIPELINES: dict[str, list[str]] = {
     "sprint9": ["W-TOKEN"],
     "sprint10": ["W-PRETRAIN"],
     "sprint11": ["W-PRETRAIN"],
+    "sprint12": ["W-SFT"],
+    "sft": ["W-SFT"],
     "pretrain": ["W-PRETRAIN"],
     "token": ["W-TOKEN"],
     "kgbuild": ["W-KGBUILD"],

@@ -29,12 +29,17 @@ mini/models/**
 !mini/models/train.py
 !mini/models/corpus.py
 !mini/models/pretrain.py
+!mini/models/sft_data.py
+!mini/models/sft.py
 !mini/models/PARAM_COUNT.json
 mini/models/checkpoints/
 mini/models/*.pt
 mini/models/**/*.pt
 mini/models/v0.2-base/
+mini/models/v0.3-instruct/
+mini/models/v0.4-agri-qa/
 mini/models/PRETRAIN_LATEST.json
+mini/models/SFT_LATEST.json
 
 mini/eval/**
 !mini/eval/

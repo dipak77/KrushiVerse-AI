@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S11 — Domain pretrain Mini v0.2-base** |
+| Sprint | **S12 — Instruction + agri-QA SFT (v0.3 / v0.4)** |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-6** |
+| Feature phase | **FP-7** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -31,6 +31,7 @@ python -m mini.orchestrator qasynth --execute --target 62500
 python -m mini.orchestrator kgbuild --execute
 python -m mini.orchestrator token --execute --vocab-size 32000
 python -m mini.orchestrator pretrain --execute --mode domain --steps 200 --seed 42
+python -m mini.orchestrator sft --execute --steps-v03 120 --steps-v04 120 --seed 42
 python -m mini.orchestrator lake-status
 ```
 
@@ -43,7 +44,7 @@ mini/
   taxonomy/         # Domain taxonomy draft
   workers/          # Automated worker modules
   orchestrator/     # DAG + CLI
-  models/           # future checkpoints
+  models/           # train + SFT code; checkpoints local-only
   datasets/         # future manifests
   eval/             # future gold sets
   inference/        # future serve chain
@@ -63,19 +64,20 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–11 acceptance
+## Sprint 0–12 acceptance
 
 - [x] Factory through QA synth + KG + tokenizer  
-- [x] Mini ~1.36M arch + **domain pretrain v0.2-base** (val PPL + seed)  
-- [x] Tests: `test_mini_sprint0`–`11`  
+- [x] Mini ~1.36M arch + domain pretrain v0.2-base  
+- [x] **SFT v0.3-instruct + v0.4-agri-qa** (F1/loss beats base)  
+- [x] Tests: `test_mini_sprint0`–`12`  
 
-**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, `mini/models/v0.2-base/**`.
+**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, `mini/models/v0.2-base/**`, `mini/models/v0.3-instruct/**`, `mini/models/v0.4-agri-qa/**`.
 
 ```bash
-python -m mini.orchestrator pretrain --execute --mode domain --steps 200 --seed 42
-python -m mini.orchestrator run sprint11 --execute
+python -m mini.orchestrator sft --execute --steps-v03 120 --steps-v04 120 --seed 42
+python -m mini.orchestrator run sprint12 --execute
 ```
 
 ## Next
 
-Sprint 12 — `W-SFT` instruction + agri-QA fine-tune.
+Sprint 13 — `W-EVAL` gold sets, gates, hallucination probes.

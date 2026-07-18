@@ -158,6 +158,23 @@ def cmd_pretrain(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_sft(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-SFT").run(
+        dry_run=not args.execute,
+        steps_v03=args.steps_v03,
+        steps_v04=args.steps_v04,
+        batch_size=args.batch_size,
+        seed=args.seed,
+        max_train=args.max_train,
+        max_val=args.max_val,
+        lr=args.lr,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -263,6 +280,17 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--vocab-size", type=int, default=4096, help="Model vocab size")
     s.add_argument("--max-qa", type=int, default=25000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_pretrain)
+
+    s = sub.add_parser("sft", help="Instruction + agri-QA SFT (W-SFT, S12 v0.3/v0.4)")
+    s.add_argument("--execute", action="store_true", help="Train + write local v0.3-instruct / v0.4-agri-qa")
+    s.add_argument("--steps-v03", type=int, default=120, help="v0.3 instruct steps")
+    s.add_argument("--steps-v04", type=int, default=120, help="v0.4 agri-QA steps")
+    s.add_argument("--batch-size", type=int, default=4, help="Batch size")
+    s.add_argument("--seed", type=int, default=42, help="RNG seed")
+    s.add_argument("--max-train", type=int, default=4000, help="Max train SFT examples")
+    s.add_argument("--max-val", type=int, default=400, help="Max val SFT examples")
+    s.add_argument("--lr", type=float, default=2e-3, help="Learning rate")
+    s.set_defaults(func=cmd_sft)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

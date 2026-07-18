@@ -408,6 +408,41 @@ def lake_pretrain_run(
     )
     return result.model_dump()
 
+@app.get("/api/lake/sft")
+def lake_sft_status():
+    """Latest Mini SFT report (W-SFT v0.3/v0.4)."""
+    from mini.paths import MODELS_DIR
+    import json
+
+    latest = MODELS_DIR / "SFT_LATEST.json"
+    if latest.exists():
+        return json.loads(latest.read_text(encoding="utf-8"))
+    return {"ok": False, "message": "No SFT run yet. POST /api/lake/sft?execute=true"}
+
+@app.post("/api/lake/sft")
+def lake_sft_run(
+    execute: bool = False,
+    steps_v03: int = 120,
+    steps_v04: int = 120,
+    seed: int = 42,
+    batch_size: int = 4,
+    max_train: int = 4000,
+    max_val: int = 400,
+):
+    """Run W-SFT instruction + agri-QA fine-tune (S12 v0.3-instruct → v0.4-agri-qa)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-SFT").run(
+        dry_run=not execute,
+        steps_v03=steps_v03,
+        steps_v04=steps_v04,
+        seed=seed,
+        batch_size=batch_size,
+        max_train=max_train,
+        max_val=max_val,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

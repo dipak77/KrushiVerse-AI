@@ -521,6 +521,7 @@ def factory_status() -> dict[str, Any]:
             {"id": "W-KGBUILD", "desc": "Knowledge graph builder", "eta": "15s", "status": "ready"},
             {"id": "W-TOKEN", "desc": "Domain tokenizer", "eta": "120s", "status": "ready"},
             {"id": "W-PRETRAIN", "desc": "Mini ~1M harness", "eta": "30s", "status": "ready"},
+            {"id": "W-SFT", "desc": "Instruction + agri-QA SFT", "eta": "90s", "status": "ready"},
         ],
         "reports": {},
     }
@@ -535,6 +536,7 @@ def factory_status() -> dict[str, Any]:
             ("kg", DATASETS_DIR / "KG_LATEST.json"),
             ("tokenizer", TOKENIZER_DIR / "TOKENIZER_LATEST.json"),
             ("pretrain", MODELS_DIR / "PRETRAIN_LATEST.json"),
+            ("sft", MODELS_DIR / "SFT_LATEST.json"),
             ("param_count", MODELS_DIR / "PARAM_COUNT.json"),
         ]:
             if path.exists():
