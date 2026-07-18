@@ -1,7 +1,7 @@
 {
-  "run_id": "20260718T140038Z-91d9be02",
-  "started_at": "2026-07-18T14:00:38Z",
-  "finished_at": "2026-07-18T14:00:39Z",
+  "run_id": "20260718T140028Z-07f42c61",
+  "started_at": "2026-07-18T14:00:28Z",
+  "finished_at": "2026-07-18T14:00:29Z",
   "dry_run": false,
   "ok": true,
   "validation": {
@@ -10,7 +10,7 @@
     "valid": 15,
     "invalid": 1,
     "quarantined": [
-      "data\\lake\\quarantine\\general\\broken__q23.json"
+      "data\\lake\\quarantine\\general\\broken__q17.json"
     ],
     "results": [
       {
@@ -238,21 +238,21 @@
   "dedup": {
     "ok": true,
     "files": 15,
-    "files_updated": 2,
+    "files_updated": 3,
     "records_input": 522,
-    "records_kept": 450,
+    "records_kept": 427,
     "exact_removed": 0,
-    "near_removed": 72,
-    "near_threshold": 0.92,
+    "near_removed": 95,
+    "near_threshold": 0.85,
     "details": [
       {
         "path": "data\\lake\\processed\\crop\\platform_agri_advisories\\agri_advisories.json",
         "stats": {
           "advisories": {
             "input": 75,
-            "kept": 39,
+            "kept": 28,
             "exact_removed": 0,
-            "near_removed": 36
+            "near_removed": 47
           }
         },
         "changed": true
@@ -316,9 +316,9 @@
         "stats": {
           "advisories": {
             "input": 75,
-            "kept": 39,
+            "kept": 28,
             "exact_removed": 0,
-            "near_removed": 36
+            "near_removed": 47
           }
         },
         "changed": true
@@ -358,12 +358,12 @@
         "stats": {
           "advisories": {
             "input": 4,
-            "kept": 4,
+            "kept": 3,
             "exact_removed": 0,
-            "near_removed": 0
+            "near_removed": 1
           }
         },
-        "changed": false
+        "changed": true
       },
       {
         "path": "data\\lake\\processed\\government\\platform_government_schemes\\government_schemes.json",

@@ -29,32 +29,7 @@ def _stub_result(worker_id: str, dry_run: bool, message: str, **metrics: Any) ->
 # W-VALIDATE / W-CLEAN / W-DEDUP / W-QUALITY → mini.workers.quality
 
 
-@register_worker
-class NormalizeWorker(BaseWorker):
-    worker_id = "W-NORMALIZE"
-    name = "Normalize"
-    description = "Canonical crop/region/units via taxonomy"
-    epic = "E1"
-    status = "partial"  # taxonomy service ready (S1); full batch normalize in S4
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        from mini.taxonomy.service import taxonomy_service
-
-        sample = kwargs.get("text") or kwargs.get("crop") or "Cotton pink bollworm"
-        crop = taxonomy_service.resolve_crop(str(sample))
-        cats = taxonomy_service.detect_category(str(sample))
-        return WorkerResult(
-            worker_id=self.worker_id,
-            ok=True,
-            dry_run=dry_run,
-            message="Taxonomy-backed normalize partial (Sprint 1); batch pipeline Sprint 4",
-            metrics={
-                "taxonomy_version": taxonomy_service.version,
-                "resolved_crop": crop,
-                "categories": cats,
-                "sample": sample,
-            },
-        )
+# W-NORMALIZE / W-LANGDETECT / W-STANDARD / W-STANDARDIZE → mini.workers.standardize
 
 
 @register_worker
@@ -92,36 +67,6 @@ class TaxonomyWorker(BaseWorker):
             },
             errors=(report.get("integrity", {}).get("errors") or [])
             + (report.get("platform_coverage", {}).get("errors") or []),
-        )
-
-
-@register_worker
-class LangDetectWorker(BaseWorker):
-    worker_id = "W-LANGDETECT"
-    name = "Language Detect"
-    description = "Tag language mr/hi/en/mixed"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: language detect Sprint 4")
-
-
-@register_worker
-class StandardWorker(BaseWorker):
-    worker_id = "W-STANDARD"
-    name = "Standardize"
-    description = "Emit Schema v1 StandardRecord parquet/JSONL"
-    epic = "E2"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Sprint 0 stub: StandardRecord contract locked; emit in Sprint 4",
-            schema_version="1.0",
-            training_root=relative_to_repo(LAKE_TRAINING),
         )
 
 
@@ -286,6 +231,12 @@ from mini.workers.quality import (  # noqa: E402,F401
     DedupWorker,
     QualityPipelineWorker,
     ValidateWorker,
+)
+from mini.workers.standardize import (  # noqa: E402,F401
+    LangDetectWorker,
+    NormalizeWorker,
+    StandardWorker,
+    StandardizePipelineWorker,
 )
 
 

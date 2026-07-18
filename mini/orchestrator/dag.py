@@ -18,6 +18,17 @@ PIPELINES: dict[str, list[str]] = {
     "sprint1": ["W-BOOTSTRAP", "W-TAXONOMY", "W-NORMALIZE"],
     "sprint2": ["W-BOOTSTRAP", "W-TAXONOMY", "W-INGEST"],
     "sprint3": ["W-BOOTSTRAP", "W-INGEST", "W-VALIDATE", "W-CLEAN", "W-DEDUP"],
+    "sprint4": [
+        "W-BOOTSTRAP",
+        "W-INGEST",
+        "W-VALIDATE",
+        "W-CLEAN",
+        "W-DEDUP",
+        "W-NORMALIZE",
+        "W-LANGDETECT",
+        "W-STANDARD",
+    ],
+    "standardize": ["W-STANDARDIZE"],
     "quality": ["W-QUALITY"],
     "ingest": ["W-BOOTSTRAP", "W-INGEST"],
     "dry-factory": [

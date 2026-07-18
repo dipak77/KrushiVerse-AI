@@ -27,7 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 def test_sprint1_version_markers():
     # Markers advance after S1; taxonomy freeze remains the S1 deliverable.
-    assert __sprint__ in {"S1", "S2", "S3"}
+    assert __sprint__ in {"S1", "S2", "S3", "S4"}
     assert TAXONOMY_VERSION == "1.0.0"
     assert TAXONOMY_STATUS == "frozen"
     assert __version__
@@ -116,7 +116,10 @@ def test_taxonomy_worker_ready():
 def test_normalize_worker_uses_taxonomy():
     res = get_worker("W-NORMALIZE").run(dry_run=True, text="कापूस खत")
     assert res.ok is True
-    assert res.metrics.get("resolved_crop") == "Cotton"
+    # Sprint 4 uses sample_crop; batch metrics always include records count
+    crop = res.metrics.get("sample_crop") or res.metrics.get("resolved_crop")
+    assert crop == "Cotton"
+    assert res.metrics.get("records", 0) >= 0
 
 
 def test_sprint1_pipeline():

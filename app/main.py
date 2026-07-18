@@ -228,6 +228,32 @@ def lake_quality_run(execute: bool = False, near_threshold: float = 0.92):
     )
     return result.model_dump()
 
+@app.get("/api/lake/standard")
+def lake_standard_status():
+    """Latest standardized dataset export report."""
+    from pathlib import Path
+    from mini.paths import LAKE_ROOT, DATASETS_DIR
+    import json
+
+    latest = LAKE_ROOT / "STANDARD_LATEST.json"
+    ver = DATASETS_DIR / "LATEST_VERSION.json"
+    out = {"ok": latest.exists() or ver.exists()}
+    if latest.exists():
+        out["standard"] = json.loads(latest.read_text(encoding="utf-8"))
+    if ver.exists():
+        out["latest_version"] = json.loads(ver.read_text(encoding="utf-8"))
+    if not out["ok"]:
+        out["message"] = "No standard export yet. POST /api/lake/standard?execute=true"
+    return out
+
+@app.post("/api/lake/standard")
+def lake_standard_run(execute: bool = False):
+    """Extract Schema v1 StandardRecords and export train/val/test (+ parquet)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-STANDARDIZE").run(dry_run=not execute)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

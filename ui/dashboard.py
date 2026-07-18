@@ -288,6 +288,19 @@ with tabs[1]:
             }
         )
 
+    st.subheader("Standardize Schema v1 (Sprint 4)")
+    if st.button("Export train/val/test StandardRecords"):
+        with st.spinner("Standardizing..."):
+            sres = get_worker("W-STANDARDIZE").run(dry_run=False)
+        st.success(sres.message if sres.ok else "Standardize finished with issues")
+        st.json(
+            {
+                "counts": (sres.metrics or {}).get("export", {}).get("counts"),
+                "coverage": (sres.metrics or {}).get("coverage"),
+                "version": (sres.metrics or {}).get("export", {}).get("version"),
+            }
+        )
+
 # TAB 3: Domain Taxonomy browser (Sprint 1)
 with tabs[2]:
     st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")
