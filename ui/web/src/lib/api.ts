@@ -1,6 +1,6 @@
 /**
- * KrushiVerse API client — talks to FastAPI (app.main).
- * Uses relative URLs in production (same origin) and Vite proxy in dev.
+ * KrushiVerse API client — all dashboard data via backend.
+ * Prefer /api/ui/* unified endpoints; fall back only if network fails.
  */
 
 const API_BASE = (import.meta as any).env?.VITE_API_BASE ?? "";
@@ -15,117 +15,62 @@ async function request<T = any>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export const api = {
-  health: () => request("/"),
+function jsonPost<T = any>(path: string, body: Record<string, unknown>) {
+  return request<T>(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
 
+export const api = {
+  health: () => request("/api/health"),
+
+  // Unified dashboard
+  bootstrap: (farmId = "FARM_101") =>
+    request(`/api/ui/bootstrap?farm_id=${encodeURIComponent(farmId)}`),
+  live: (opts?: { farm_id?: string; location?: string; crop?: string }) => {
+    const q = new URLSearchParams({
+      farm_id: opts?.farm_id || "FARM_101",
+      location: opts?.location || "Solapur",
+      crop: opts?.crop || "Pomegranate",
+    });
+    return request(`/api/ui/live?${q}`);
+  },
+  visionSamples: () => request("/api/ui/vision/samples"),
+  graph: (crop: string) => request(`/api/ui/graph/${encodeURIComponent(crop)}`),
+  soil: (body: { crop?: string; acreage?: number; soil_text?: string; farm_id?: string }) =>
+    jsonPost("/api/ui/soil", body),
+  predict: (body: {
+    crop?: string;
+    acreage?: number;
+    temperature_c?: number;
+    humidity_pct?: number;
+    farm_id?: string;
+  }) => jsonPost("/api/ui/predict", body),
+  taxonomy: () => request("/api/ui/taxonomy"),
+  factory: () => request("/api/ui/factory"),
+  rag: (body: {
+    query: string;
+    crop?: string;
+    top_k?: number;
+    enable_web?: boolean;
+    enable_tools?: boolean;
+  }) => jsonPost("/api/ui/rag", body),
+
+  // Core agent / vision
   query: (body: {
     query: string;
     farm_id?: string;
     language?: string;
     enable_web?: boolean;
-  }) =>
-    request("/api/query", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
-  advancedRag: (body: {
-    query: string;
-    crop?: string;
-    location?: string;
-    top_k?: number;
-    enable_web?: boolean;
-    enable_tools?: boolean;
-    force_web?: boolean;
-  }) =>
-    request("/api/rag/advanced", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
-  knowledgeStats: () => request("/api/knowledge/stats"),
-  ragBackends: () => request("/api/rag/backends"),
-
-  weather: (location = "Solapur") =>
-    request(`/api/live/weather?location=${encodeURIComponent(location)}`),
-  market: (crop?: string, district?: string) => {
-    const q = new URLSearchParams();
-    if (crop) q.set("crop", crop);
-    if (district) q.set("district", district);
-    const s = q.toString();
-    return request(`/api/live/market${s ? `?${s}` : ""}`);
-  },
-  iot: (farmId = "FARM_101") =>
-    request(`/api/live/iot?farm_id=${encodeURIComponent(farmId)}`),
-  satellite: (farmId = "FARM_101", crop = "Pomegranate") =>
-    request(
-      `/api/live/satellite?farm_id=${encodeURIComponent(farmId)}&crop=${encodeURIComponent(crop)}`
-    ),
-
-  graph: (crop: string) =>
-    request(`/api/knowledge/graph/${encodeURIComponent(crop)}`),
+  }) => jsonPost("/api/query", body),
 
   visionDiagnose: async (file?: File, cropHint = "Pomegranate") => {
     const fd = new FormData();
     if (file) fd.append("file", file);
     fd.append("crop_hint", cropHint);
     return request("/api/vision/diagnose", { method: "POST", body: fd });
-  },
-
-  soilOcr: async (rawText: string) => {
-    const fd = new FormData();
-    fd.append("raw_ocr_text", rawText);
-    return request("/api/soil/ocr", { method: "POST", body: fd });
-  },
-
-  yieldPredict: (body: Record<string, unknown>) =>
-    request("/api/predict/yield", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
-  irrigationPredict: (body: Record<string, unknown>) =>
-    request("/api/predict/irrigation", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
-  fertilizerPredict: (body: Record<string, unknown>) =>
-    request("/api/predict/fertilizer", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    }),
-
-  memory: (farmId = "FARM_101") =>
-    request(`/api/memory/${encodeURIComponent(farmId)}`),
-
-  workflowAudit: (farmId = "FARM_101") =>
-    request(`/api/workflows/audit?farm_id=${encodeURIComponent(farmId)}`, {
-      method: "POST",
-    }),
-
-  taxonomy: () => request("/api/taxonomy"),
-  taxonomyResolve: (text: string) =>
-    request(`/api/taxonomy/resolve?text=${encodeURIComponent(text)}`),
-
-  lakeStatus: () => request("/api/lake/status"),
-  lakeAnalyze: () => request("/api/lake/analyze"),
-  lakeAnalyzeRun: (execute = false) =>
-    request(`/api/lake/analyze?execute=${execute}`, { method: "POST" }),
-  lakeQasynth: () => request("/api/lake/qasynth"),
-  lakeKg: () => request("/api/lake/kg"),
-  lakeTokenizer: () => request("/api/lake/tokenizer"),
-  lakePretrain: () => request("/api/lake/pretrain"),
-
-  agmarknet: (commodity?: string, state = "Maharashtra") => {
-    const q = new URLSearchParams({ state });
-    if (commodity) q.set("commodity", commodity);
-    return request(`/api/opendata/agmarknet?${q}`);
   },
 };
 
@@ -155,8 +100,8 @@ export function mapQueryToAsst(resp: any, lang: "mr" | "en") {
       tools: Array.isArray(tools) ? tools.length : 0,
       latencyMs: 0,
     },
-    mr: lang === "mr" ? paragraphs : paragraphs,
-    en: lang === "en" ? paragraphs : paragraphs,
+    mr: paragraphs,
+    en: paragraphs,
     citations:
       citations.length > 0
         ? citations

@@ -87,7 +87,7 @@ export default function App() {
                   KrushiVerse OS <span className="text-[var(--gold)]">/</span> {active.label}
                 </span>
                 <span className="flex-1 h-px bg-gradient-to-r from-[var(--line2)] to-transparent min-w-[60px]" />
-                <span className="chip chip-gold">farm context: FARM_101</span>
+                <span className="chip chip-gold">data: /api/ui/* · FARM_101</span>
               </div>
 
               <div key={tab}>

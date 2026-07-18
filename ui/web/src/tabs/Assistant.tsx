@@ -1,18 +1,27 @@
 import { useEffect, useRef, useState } from "react";
-import { PIPELINE_STAGES, SAMPLE_QUERIES, matchQuery, type AsstResponse } from "../data";
+import { useDashboard } from "../context/DashboardContext";
 import { api, mapQueryToAsst } from "../lib/api";
 import { Card, Reveal, SectionHead, StatusChip } from "../lib/ui";
+
+const PIPELINE_STAGES = [
+  "Taxonomy resolve — crop · category · district",
+  "Planner decomposes query → sub-tasks",
+  "Dispatch agents across expert network",
+  "Multi-source RAG fusion (KB + Graph + Web + Agmarknet)",
+  "Synthesizing advisory from backend",
+];
 
 type Phase = "idle" | "running" | "done";
 
 export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?: boolean }) {
+  const { bootstrap } = useDashboard();
+  const sampleQueries: string[] = bootstrap?.sample_queries || [];
   const [query, setQuery] = useState("");
   const [phase, setPhase] = useState<Phase>("idle");
   const [stageIdx, setStageIdx] = useState(0);
-  const [result, setResult] = useState<(AsstResponse & { raw?: any }) | null>(null);
+  const [result, setResult] = useState<any | null>(null);
   const [showJson, setShowJson] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [liveMode, setLiveMode] = useState(true);
   const timers = useRef<number[]>([]);
   const outRef = useRef<HTMLDivElement>(null);
 
@@ -35,37 +44,27 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
     });
 
     try {
-      let mapped: AsstResponse & { raw?: any };
-      if (liveMode) {
-        const resp = await api.query({
-          query: q,
-          farm_id: "FARM_101",
-          language: lang,
-          enable_web: webRag,
-        });
-        mapped = mapQueryToAsst(resp, lang);
-        mapped.metrics.latencyMs = Math.round(performance.now() - t0);
-      } else {
-        await new Promise((r) => setTimeout(r, 420 * PIPELINE_STAGES.length + 200));
-        mapped = matchQuery(q);
-        mapped.metrics.latencyMs = Math.round(performance.now() - t0);
-      }
+      const resp = await api.query({
+        query: q,
+        farm_id: "FARM_101",
+        language: lang,
+        enable_web: webRag,
+      });
+      const mapped = mapQueryToAsst(resp, lang);
+      mapped.metrics.latencyMs = Math.round(performance.now() - t0);
       setStageIdx(PIPELINE_STAGES.length);
       setResult(mapped);
       setPhase("done");
     } catch (e: any) {
-      // graceful fallback to offline demo responses
-      const fallback = matchQuery(q);
-      fallback.metrics.latencyMs = Math.round(performance.now() - t0);
-      setResult(fallback);
       setPhase("done");
-      setError(`Live API unavailable — showing demo advisory. (${e?.message || e})`);
+      setError(`Backend /api/query failed: ${e?.message || e}`);
+      setResult(null);
     }
     setTimeout(() => outRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 200);
   };
 
-  const primary = result ? (lang === "mr" ? result.mr : result.en) : [];
-  const secondary = result ? (lang === "mr" ? result.en : result.mr) : [];
+  const primary = result ? result.mr || result.en || [] : [];
+  const secondary: string[] = [];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-[1fr_330px] gap-5">
@@ -81,23 +80,16 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
           sub="Ask anything — crop management, disease treatment, market rates, schemes. Planner dispatches expert agents over the multi-source knowledge layer."
           right={
             <div className="flex gap-1.5 flex-wrap justify-end">
-              <StatusChip tone="gold">planner v4</StatusChip>
-              <StatusChip tone={liveMode ? "leaf" : "soil"}>{liveMode ? "live API" : "demo"}</StatusChip>
+              <StatusChip tone="gold">planner</StatusChip>
+              <StatusChip tone="leaf">POST /api/query</StatusChip>
             </div>
           }
         />
 
-        <Reveal delay={40}>
-          <label className="flex items-center gap-2 mb-3 text-[12.5px] text-[var(--mut)] cursor-pointer select-none">
-            <input type="checkbox" checked={liveMode} onChange={(e) => setLiveMode(e.target.checked)} />
-            Call live FastAPI <code className="font-mono2 text-[var(--gold)]">/api/query</code>
-          </label>
-        </Reveal>
-
         <Reveal delay={60}>
-          <div className="mb-3 text-[11px] font-mono2 uppercase tracking-[0.16em] text-[var(--dim)]">Sample queries · नमुना प्रश्न</div>
+          <div className="mb-3 text-[11px] font-mono2 uppercase tracking-[0.16em] text-[var(--dim)]">Sample queries · from /api/ui/bootstrap</div>
           <div className="flex flex-wrap gap-2 mb-4">
-            {SAMPLE_QUERIES.map((s) => (
+            {sampleQueries.map((s) => (
               <button
                 key={s}
                 onClick={() => setQuery(s)}

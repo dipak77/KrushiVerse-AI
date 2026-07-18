@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi import Body, FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -28,6 +28,7 @@ from app.knowledge.dataset_loader import kb_loader
 from app.knowledge.tools.registry import tool_registry
 from app.knowledge.embeddings import embedding_provider
 from app.live_feeds.opendata_client import opendata_client
+from app import ui_dashboard
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -485,6 +486,64 @@ def get_crop_graph(crop: str):
 @app.post("/api/workflows/audit")
 def audit_farm_workflows(farm_id: str = "FARM_101"):
     return workflow_engine.run_farm_health_checks(farm_id)
+
+
+# --- Unified React OS dashboard data (live when available, else managed static) ---
+@app.get("/api/ui/bootstrap")
+def ui_bootstrap(farm_id: str = "FARM_101"):
+    return ui_dashboard.bootstrap(farm_id=farm_id)
+
+@app.get("/api/ui/live")
+def ui_live_feeds(farm_id: str = "FARM_101", location: str = "Solapur", crop: str = "Pomegranate"):
+    return ui_dashboard.live_feeds(farm_id=farm_id, location=location, crop=crop)
+
+@app.get("/api/ui/vision/samples")
+def ui_vision_samples():
+    return ui_dashboard.vision_samples()
+
+@app.get("/api/ui/graph/{crop}")
+def ui_graph(crop: str):
+    return ui_dashboard.graph_for_ui(crop)
+
+@app.post("/api/ui/soil")
+def ui_soil_plan(payload: dict = Body(default={})):
+    body = payload or {}
+    return ui_dashboard.soil_plan(
+        crop=body.get("crop") or "Pomegranate",
+        acreage=float(body.get("acreage") or body.get("acres") or 2.5),
+        soil_text=body.get("soil_text"),
+        farm_id=body.get("farm_id") or "FARM_101",
+    )
+
+@app.post("/api/ui/predict")
+def ui_predict(payload: dict = Body(default={})):
+    body = payload or {}
+    return ui_dashboard.predictive(
+        crop=body.get("crop") or "Pomegranate",
+        acreage=float(body.get("acreage") or body.get("acres") or 2.5),
+        temperature_c=float(body.get("temperature_c") or 30),
+        humidity_pct=float(body.get("humidity_pct") or 75),
+        farm_id=body.get("farm_id") or "FARM_101",
+    )
+
+@app.get("/api/ui/taxonomy")
+def ui_taxonomy():
+    return ui_dashboard.taxonomy_bundle()
+
+@app.get("/api/ui/factory")
+def ui_factory():
+    return ui_dashboard.factory_status()
+
+@app.post("/api/ui/rag")
+def ui_rag(payload: dict = Body(default={})):
+    body = payload or {}
+    return ui_dashboard.rag_explorer(
+        query=body.get("query") or "",
+        crop=body.get("crop"),
+        top_k=int(body.get("top_k") or 8),
+        enable_web=bool(body.get("enable_web", True)),
+        enable_tools=bool(body.get("enable_tools", True)),
+    )
 
 
 # --- React OS UI (built assets from ui/web) ---
