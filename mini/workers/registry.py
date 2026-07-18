@@ -83,30 +83,8 @@ class TaxonomyWorker(BaseWorker):
 # W-PRETRAIN → mini.workers.pretrain
 # W-SFT → mini.workers.sft
 # W-EVAL → mini.workers.eval
-
-
-@register_worker
-class QuantizeWorker(BaseWorker):
-    worker_id = "W-QUANT"
-    name = "Quantize"
-    description = "INT8/INT4 export for deployment"
-    epic = "E5"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: quantize Sprint 14")
-
-
-@register_worker
-class DeployWorker(BaseWorker):
-    worker_id = "W-DEPLOY"
-    name = "Deploy"
-    description = "Publish model version to serving path"
-    epic = "E5"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: deploy Sprint 16")
+# W-QUANT → mini.workers.quantize
+# W-DEPLOY → mini.workers.deploy
 
 
 @register_worker
@@ -176,6 +154,8 @@ from mini.workers.token import TokenizerWorker  # noqa: E402,F401
 from mini.workers.pretrain import PretrainWorker  # noqa: E402,F401
 from mini.workers.sft import SFTWorker  # noqa: E402,F401
 from mini.workers.eval import EvalWorker  # noqa: E402,F401
+from mini.workers.quantize import QuantizeWorker  # noqa: E402,F401
+from mini.workers.deploy import DeployWorker  # noqa: E402,F401
 
 
 @register_worker

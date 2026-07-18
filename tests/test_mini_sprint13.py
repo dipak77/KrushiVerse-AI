@@ -19,8 +19,8 @@ client = TestClient(app)
 
 
 def test_sprint13_markers():
-    assert __sprint__ == "S13"
-    assert __feature_phase__ == "E5-eval"
+    assert __sprint__ in {"S13", "S14"}
+    assert __feature_phase__ in {"E5-eval", "E5-quant"}
 
 
 def test_eval_worker_ready():

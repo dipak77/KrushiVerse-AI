@@ -31,6 +31,8 @@ mini/models/**
 !mini/models/pretrain.py
 !mini/models/sft_data.py
 !mini/models/sft.py
+!mini/models/quantize.py
+!mini/models/deploy.py
 !mini/models/PARAM_COUNT.json
 mini/models/checkpoints/
 mini/models/*.pt
@@ -38,8 +40,13 @@ mini/models/**/*.pt
 mini/models/v0.2-base/
 mini/models/v0.3-instruct/
 mini/models/v0.4-agri-qa/
+mini/models/v0.5-quant/
+mini/models/serve/
 mini/models/PRETRAIN_LATEST.json
 mini/models/SFT_LATEST.json
+mini/models/QUANT_LATEST.json
+mini/models/DEPLOY_LATEST.json
+mini/models/VERSION_REGISTRY.json
 
 mini/eval/**
 !mini/eval/

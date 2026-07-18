@@ -523,6 +523,8 @@ def factory_status() -> dict[str, Any]:
             {"id": "W-PRETRAIN", "desc": "Mini ~1M harness", "eta": "30s", "status": "ready"},
             {"id": "W-SFT", "desc": "Instruction + agri-QA SFT", "eta": "90s", "status": "ready"},
             {"id": "W-EVAL", "desc": "Gold QA + gates scorecard", "eta": "45s", "status": "ready"},
+            {"id": "W-QUANT", "desc": "INT8/INT4 + size budgets", "eta": "40s", "status": "ready"},
+            {"id": "W-DEPLOY", "desc": "Package + version registry", "eta": "15s", "status": "ready"},
         ],
         "reports": {},
     }
@@ -539,6 +541,9 @@ def factory_status() -> dict[str, Any]:
             ("pretrain", MODELS_DIR / "PRETRAIN_LATEST.json"),
             ("sft", MODELS_DIR / "SFT_LATEST.json"),
             ("eval", EVAL_DIR / "EVAL_LATEST.json"),
+            ("quant", MODELS_DIR / "QUANT_LATEST.json"),
+            ("deploy", MODELS_DIR / "DEPLOY_LATEST.json"),
+            ("registry", MODELS_DIR / "VERSION_REGISTRY.json"),
             ("param_count", MODELS_DIR / "PARAM_COUNT.json"),
         ]:
             if path.exists():

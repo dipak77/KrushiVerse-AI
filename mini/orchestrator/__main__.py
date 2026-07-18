@@ -191,6 +191,35 @@ def cmd_eval(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_quant(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QUANT").run(
+        dry_run=not args.execute,
+        version=args.version,
+        include_int4=not args.no_int4,
+        seed=args.seed,
+        latency_runs=args.latency_runs,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
+def cmd_deploy(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-DEPLOY").run(
+        dry_run=not args.execute,
+        source_version=args.version,
+        tag=args.tag,
+        force=args.force,
+        include_quant=not args.no_quant,
+        reasoning_lite=not args.no_reasoning_lite,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -321,6 +350,23 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--max-new-tokens", type=int, default=28, help="Generation length")
     s.add_argument("--max-gold", type=int, default=None, help="Optional cap on gold items")
     s.set_defaults(func=cmd_eval)
+
+    s = sub.add_parser("quant", help="Quantize Mini to INT8/INT4 (W-QUANT, S14)")
+    s.add_argument("--execute", action="store_true", help="Write v0.5-quant artifacts + size report")
+    s.add_argument("--version", default="v0.4", help="Source model version")
+    s.add_argument("--no-int4", action="store_true", help="Skip INT4 pack")
+    s.add_argument("--seed", type=int, default=42, help="RNG seed")
+    s.add_argument("--latency-runs", type=int, default=6, help="CPU latency benchmark runs")
+    s.set_defaults(func=cmd_quant)
+
+    s = sub.add_parser("deploy", help="Package Mini version to serve/ + registry (W-DEPLOY, S14)")
+    s.add_argument("--execute", action="store_true", help="Write serve package + VERSION_REGISTRY")
+    s.add_argument("--version", default="v0.4", help="Source model version")
+    s.add_argument("--tag", default="v0.5-quant", help="Registry/serve tag")
+    s.add_argument("--force", action="store_true", help="Overwrite existing registry tag")
+    s.add_argument("--no-quant", action="store_true", help="Skip bundling quant artifacts")
+    s.add_argument("--no-reasoning-lite", action="store_true", help="Skip v0.5-reasoning-lite alias")
+    s.set_defaults(func=cmd_deploy)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

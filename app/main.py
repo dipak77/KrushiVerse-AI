@@ -476,6 +476,76 @@ def lake_eval_run(
     )
     return result.model_dump()
 
+@app.get("/api/lake/quant")
+def lake_quant_status():
+    """Latest Mini quantization report (W-QUANT)."""
+    from mini.paths import MODELS_DIR
+    import json
+
+    latest = MODELS_DIR / "QUANT_LATEST.json"
+    if latest.exists():
+        return json.loads(latest.read_text(encoding="utf-8"))
+    return {"ok": False, "message": "No quant run yet. POST /api/lake/quant?execute=true"}
+
+@app.post("/api/lake/quant")
+def lake_quant_run(
+    execute: bool = False,
+    version: str = "v0.4",
+    include_int4: bool = True,
+    seed: int = 42,
+    latency_runs: int = 6,
+):
+    """Run W-QUANT INT8/INT4 export + size/latency benchmarks (S14)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QUANT").run(
+        dry_run=not execute,
+        version=version,
+        include_int4=include_int4,
+        seed=seed,
+        latency_runs=latency_runs,
+    )
+    return result.model_dump()
+
+@app.get("/api/lake/deploy")
+def lake_deploy_status():
+    """Latest Mini deploy package / version registry (W-DEPLOY)."""
+    from mini.paths import MODELS_DIR
+    import json
+
+    latest = MODELS_DIR / "DEPLOY_LATEST.json"
+    reg = MODELS_DIR / "VERSION_REGISTRY.json"
+    out: dict = {}
+    if latest.exists():
+        out = json.loads(latest.read_text(encoding="utf-8"))
+    if reg.exists():
+        out["registry"] = json.loads(reg.read_text(encoding="utf-8"))
+    if out:
+        return out
+    return {"ok": False, "message": "No deploy package yet. POST /api/lake/deploy?execute=true"}
+
+@app.post("/api/lake/deploy")
+def lake_deploy_run(
+    execute: bool = False,
+    version: str = "v0.4",
+    tag: str = "v0.5-quant",
+    force: bool = True,
+    include_quant: bool = True,
+    reasoning_lite: bool = True,
+):
+    """Run W-DEPLOY package-only publish (S14)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-DEPLOY").run(
+        dry_run=not execute,
+        source_version=version,
+        tag=tag,
+        force=force,
+        include_quant=include_quant,
+        reasoning_lite=reasoning_lite,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}
