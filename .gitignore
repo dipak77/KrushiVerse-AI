@@ -22,7 +22,9 @@ data/lake/**
 !data/lake/STANDARD_LATEST.json
 !data/lake/ANALYZE_LATEST.json
 !data/lake/ANALYZE_LATEST.html
+!data/lake/QASYNTH_LATEST.json
 !mini/datasets/ANALYZE_LATEST.json
+!mini/datasets/QASYNTH_LATEST.json
 !data/lake/training/
 !data/lake/training/**
 !data/lake/validation/

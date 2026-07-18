@@ -302,6 +302,23 @@ with tabs[1]:
             }
         )
 
+    st.subheader("QA Synthesis (Sprint 6)")
+    if st.button("Run W-QASYNTH (≥10k train target)"):
+        with st.spinner("Synthesizing expert QA packs (may take a minute)..."):
+            qsyn = get_worker("W-QASYNTH").run(dry_run=False, target_min_total=12000)
+        st.session_state["factory_qasynth"] = qsyn
+        st.success(qsyn.message if qsyn.ok else "Synth finished — check targets")
+        st.json(
+            {
+                "counts": (qsyn.metrics or {}).get("counts"),
+                "targets_met": (qsyn.metrics or {}).get("targets_met"),
+                "by_category": (qsyn.metrics or {}).get("by_category"),
+                "by_language": (qsyn.metrics or {}).get("by_language"),
+                "by_pack": (qsyn.metrics or {}).get("by_pack"),
+                "version": (qsyn.metrics or {}).get("version"),
+            }
+        )
+
 # TAB 3: Domain Taxonomy browser (Sprint 1)
 with tabs[2]:
     st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")

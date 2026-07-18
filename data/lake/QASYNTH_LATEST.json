@@ -1,0 +1,74 @@
+{
+  "version": "v20260718T144254Z-synth",
+  "sprint": "S6",
+  "schema_version": "1.0",
+  "created_at": "2026-07-18T14:42:55Z",
+  "counts": {
+    "total": 12616,
+    "train": 10142,
+    "val": 1278,
+    "test": 1196
+  },
+  "by_category": {
+    "crop": 5038,
+    "disease": 324,
+    "fertilizer": 195,
+    "scheme": 195,
+    "market": 80,
+    "irrigation": 3256,
+    "weather": 2442,
+    "general": 22,
+    "finance": 88,
+    "machinery": 66,
+    "soil": 528,
+    "seed": 88,
+    "advisory": 294
+  },
+  "by_language": {
+    "en": 5672,
+    "mr": 3626,
+    "hi": 3318
+  },
+  "by_pack": {
+    "crop": 418,
+    "disease": 280,
+    "fertilizer": 195,
+    "scheme": 195,
+    "stage": 1540,
+    "market": 80,
+    "irrigation": 3256,
+    "weather": 2442,
+    "safety": 66,
+    "finance": 88,
+    "machinery": 66,
+    "paraphrase": 440,
+    "soil": 528,
+    "seed": 88,
+    "calendar": 792,
+    "advisory": 294,
+    "practice": 1848
+  },
+  "targets": {
+    "train_min": 10000,
+    "val_min": 1000
+  },
+  "targets_met": {
+    "train": true,
+    "val": true
+  },
+  "no_leakage_policy": "split assigned by fact_key hash; paraphrases share split",
+  "artifacts": [
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\train.jsonl",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\val.jsonl",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\test.jsonl",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\all.jsonl",
+    "data\\lake\\training\\synth_records.jsonl",
+    "data\\lake\\validation\\synth_records.jsonl",
+    "data\\lake\\test\\synth_records.jsonl",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\train.parquet",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\val.parquet",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\test.parquet",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\human_review_queue.csv",
+    "mini\\datasets\\versions\\v20260718T144254Z-synth\\manifest.json"
+  ]
+}

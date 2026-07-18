@@ -104,6 +104,17 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_qasynth(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QASYNTH").run(
+        dry_run=not args.execute,
+        target_min_total=args.target,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -175,6 +186,11 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("analyze", help="Coverage/quality analysis report (W-ANALYZE)")
     s.add_argument("--execute", action="store_true", help="Write ANALYZE_LATEST.json + HTML")
     s.set_defaults(func=cmd_analyze)
+
+    s = sub.add_parser("qasynth", help="Synthesize expert QA packs (W-QASYNTH)")
+    s.add_argument("--execute", action="store_true", help="Write synth dataset version + review CSV")
+    s.add_argument("--target", type=int, default=12000, help="Minimum total synth records target")
+    s.set_defaults(func=cmd_qasynth)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

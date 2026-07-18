@@ -73,16 +73,7 @@ class TaxonomyWorker(BaseWorker):
 # W-ANALYZE → mini.workers.analyze
 
 
-@register_worker
-class QASynthWorker(BaseWorker):
-    worker_id = "W-QASYNTH"
-    name = "QA Synthesis"
-    description = "Generate expert QA packs from structured facts"
-    epic = "E2"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: QA synth Sprint 6")
+# W-QASYNTH → mini.workers.qa_synth
 
 
 @register_worker
@@ -230,6 +221,7 @@ from mini.workers.standardize import (  # noqa: E402,F401
     StandardizePipelineWorker,
 )
 from mini.workers.analyze import AnalyzeWorker  # noqa: E402,F401
+from mini.workers.qa_synth import QASynthWorker  # noqa: E402,F401
 
 
 @register_worker
