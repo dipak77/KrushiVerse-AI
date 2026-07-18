@@ -1,0 +1,136 @@
+{
+  "crops": [
+    {
+      "crop_id": "c1",
+      "name_en": "Cotton",
+      "name_mr": "कापूस",
+      "season": "Kharif",
+      "ideal_soil": ["Black Cotton Soil", "Deep Clay Loam"],
+      "ideal_temp_c": {"min": 21, "max": 35},
+      "ideal_rainfall_mm": {"min": 500, "max": 1000},
+      "duration_days": 160,
+      "growth_stages": ["Sowing", "Vegetative", "Squaring", "Flowering", "Boll Formation", "Harvesting"],
+      "major_pests": ["Pink Bollworm", "Aphids", "Whitefly"],
+      "major_diseases": ["Bacterial Blight", "Fungous Wilt", "Leaf Curl"]
+    },
+    {
+      "crop_id": "c2",
+      "name_en": "Soybean",
+      "name_mr": "सोयाबीन",
+      "season": "Kharif",
+      "ideal_soil": ["Well-drained Loam", "Black Soil"],
+      "ideal_temp_c": {"min": 18, "max": 32},
+      "ideal_rainfall_mm": {"min": 600, "max": 800},
+      "duration_days": 100,
+      "growth_stages": ["Germination", "Vegetative", "Flowering", "Pod Initiation", "Pod Filling", "Maturity"],
+      "major_pests": ["Girdle Beetle", "Stem Fly", "Tobacco Caterpiller"],
+      "major_diseases": ["Yellow Mosaic Virus", "Rust", "Collar Rot"]
+    },
+    {
+      "crop_id": "c3",
+      "name_en": "Sugarcane",
+      "name_mr": "ऊस",
+      "season": "Perennial",
+      "ideal_soil": ["Deep Loamy Soil", "Heavy Black Soil"],
+      "ideal_temp_c": {"min": 20, "max": 38},
+      "ideal_rainfall_mm": {"min": 1200, "max": 1500},
+      "duration_days": 365,
+      "growth_stages": ["Germination", "Formative", "Grand Growth", "Maturity"],
+      "major_pests": ["Early Shoot Borer", "Woolly Aphid", "White Grub"],
+      "major_diseases": ["Red Rot", "Smut", "Wilt"]
+    },
+    {
+      "crop_id": "c4",
+      "name_en": "Pomegranate",
+      "name_mr": "डाळिंब",
+      "season": "Bahar (Ambe, Mrig, Hasta)",
+      "ideal_soil": ["Light Loamy Soil", "Medium Black Soil"],
+      "ideal_temp_c": {"min": 15, "max": 38},
+      "ideal_rainfall_mm": {"min": 500, "max": 750},
+      "duration_days": 180,
+      "growth_stages": ["Bahar Treatment", "Flowering", "Fruit Set", "Fruit Development", "Harvest"],
+      "major_pests": ["Thrips", "Fruit Borer", "Mealy Bug"],
+      "major_diseases": ["Bacterial Blight (Telyat)", "Wilt", "Anthracnose"]
+    },
+    {
+      "crop_id": "c5",
+      "name_en": "Onion",
+      "name_mr": "कांदा",
+      "season": "Rabi / Late Kharif",
+      "ideal_soil": ["Friable Sandy Loam", "Well Drained Clay Loam"],
+      "ideal_temp_c": {"min": 13, "max": 28},
+      "ideal_rainfall_mm": {"min": 350, "max": 500},
+      "duration_days": 120,
+      "growth_stages": ["Nursery", "Transplanting", "Vegetative", "Bulb Initiation", "Bulb Development", "Harvest"],
+      "major_pests": ["Thrips", "Onion Fly"],
+      "major_diseases": ["Purple Blotch", "Stemphylium Blight", "Downy Mildew"]
+    }
+  ],
+  "diseases_and_pests": [
+    {
+      "id": "d1",
+      "name_en": "Pink Bollworm",
+      "name_mr": "गुलाबी बोंड अळी",
+      "crop_en": "Cotton",
+      "symptoms_en": "Rosetted flowers, lint staining, entry holes sealed with frass in cotton bolls.",
+      "symptoms_mr": "गुलाबसारखी कळी (Rosetted flower), बोन्डात छिद्र आणि कापूस खराब होणे.",
+      "favorable_weather": {"temp_c": [22, 30], "humidity_pct": [70, 90]},
+      "organic_control_en": "Install Pheromone traps (5 traps/acre) and spray Neem oil (5000 ppm) at 5 ml/liter.",
+      "organic_control_mr": "कामगंध सापळे (प्रति एकर ५) लावा व ५ मिली/लिटर कडुनिंब तेल (५००० पीपीएम) फवारावे.",
+      "chemical_control_en": "Spray Chlorantraniliprole 18.5 SC @ 0.3 ml/L or Profenofos 50 EC @ 2 ml/L.",
+      "chemical_control_mr": "क्लोरॅन्ट्रानिलीप्रोल १८.५ SC (०.३ मिली/लिटर) किंवा प्रोफेनोफॉस ५० EC (२ मिली/लिटर) फवारावे."
+    },
+    {
+      "id": "d2",
+      "name_en": "Bacterial Blight (Telyat)",
+      "name_mr": "डाळिंबावरील तेल्या रोग",
+      "crop_en": "Pomegranate",
+      "symptoms_en": "Water-soaked dark brown spots on leaves, stems, and fruits forming 'L' shaped cracks.",
+      "symptoms_mr": "पानांवर आणि फळांवर तेलकट काळे ठिपके, फळांना चिरा पडणे.",
+      "favorable_weather": {"temp_c": [25, 35], "humidity_pct": [60, 85]},
+      "organic_control_en": "Spray Streptocycline mixed with Copper Oxychloride (2g/L) during humid clear spells.",
+      "organic_control_mr": "स्ट्रिप्टोसायक्लीन सोबत कॉपर ऑक्सिक्लोराईड (२ ग्रॅम/लिटर) फवारावे.",
+      "chemical_control_en": "Apply Copper Hydroxide @ 2.5 g/L + Streptocycline @ 0.5 g/10L at initial appearance.",
+      "chemical_control_mr": "कॉपर हायड्रॉक्साइड २.५ ग्रॅम/लिटर + स्ट्रेप्टोसायक्लीन ०.५ ग्रॅम/१० लिटर फवारावे."
+    },
+    {
+      "id": "d3",
+      "name_en": "Yellow Mosaic Virus",
+      "name_mr": "पिवळा मोझॅक रोग",
+      "crop_en": "Soybean",
+      "symptoms_en": "Alternating yellow and green patches on leaves transmitted by whiteflies.",
+      "symptoms_mr": "पानांवर पिवळे आणि हिरवे चट्टे पडणे, पांढऱ्या माशीद्वारे प्रसार.",
+      "favorable_weather": {"temp_c": [25, 33], "humidity_pct": [50, 75]},
+      "organic_control_en": "Use Yellow Sticky Traps (10/acre) to control vector whiteflies.",
+      "organic_control_mr": "पांढरी माशी नियंत्रणासाठी पिवळे चिकट सापळे (प्रति एकर १०) लावा.",
+      "chemical_control_en": "Spray Thiamethoxam 25 WG @ 0.2g/L or Beta-cyfluthrin + Imidacloprid @ 0.75 ml/L.",
+      "chemical_control_mr": "थायमेथॉक्सम २५ WG (०.२ ग्रॅम/लिटर) फवारावे."
+    },
+    {
+      "id": "d4",
+      "name_en": "Purple Blotch",
+      "name_mr": "जांभळा करपा",
+      "crop_en": "Onion",
+      "symptoms_en": "Purplish-brown elliptical spots on leaves with yellow halo.",
+      "symptoms_mr": "पानांवर जांभळट तपकिरी लांबट ठिपके पडणे.",
+      "favorable_weather": {"temp_c": [20, 28], "humidity_pct": [80, 95]},
+      "organic_control_en": "Spray Trichoderma viride @ 5g/L and avoid overhead irrigation.",
+      "organic_control_mr": "ट्रायकोडेर्मा व्हिरिडी (५ ग्रॅम/लिटर) फवारावे.",
+      "chemical_control_en": "Spray Mancozeb 75 WP @ 2.5 g/L or Tebuconazole @ 1 ml/L.",
+      "chemical_control_mr": "मँकोझेब ७५ WP (२.५ ग्रॅम/लिटर) किंवा टेब्युकोनॅझोल (१ मिली/लिटर) फवारावे."
+    },
+    {
+      "id": "d5",
+      "name_en": "Early Shoot Borer",
+      "name_mr": "खोड कीड (ऊस)",
+      "crop_en": "Sugarcane",
+      "symptoms_en": "Dead hearts in young sugarcane plants; foul smell when dead heart is pulled out.",
+      "symptoms_mr": "उसाच्या रोपांमध्ये पोंग मरणे (Dead heart) आणि दुर्गंधी येणे.",
+      "favorable_weather": {"temp_c": [28, 38], "humidity_pct": [40, 65]},
+      "organic_control_en": "Release Trichogramma chilonis parasitoids @ 20,000/acre at 10-day intervals.",
+      "organic_control_mr": "ट्रायकोग्राम कार्ड्स (२०,००० अंडी प्रति एकर) शेतात वापरावे.",
+      "chemical_control_en": "Apply Chlorantraniliprole 0.4% GR @ 7.5 kg/acre in soil at planting.",
+      "chemical_control_mr": "क्लोरॅन्ट्रानिलीप्रोल ०.४% GR (७.५ किलोग्रॅम/एकरास) मातीत द्यावे."
+    }
+  ]
+}

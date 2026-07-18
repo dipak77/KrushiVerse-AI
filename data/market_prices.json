@@ -1,0 +1,74 @@
+{
+  "markets": [
+    {
+      "mandi": "APMC Solapur",
+      "district": "Solapur",
+      "state": "Maharashtra",
+      "crop": "Pomegranate",
+      "crop_mr": "डाळिंब",
+      "variety": "Bhagwa",
+      "min_price_rs_quintal": 6000,
+      "max_price_rs_quintal": 14500,
+      "modal_price_rs_quintal": 10500,
+      "arrival_tonnes": 420,
+      "date": "2026-07-18",
+      "trend": "Bullish (+5%)"
+    },
+    {
+      "mandi": "APMC Latur",
+      "district": "Latur",
+      "state": "Maharashtra",
+      "crop": "Soybean",
+      "crop_mr": "सोयाबीन",
+      "variety": "Yellow",
+      "min_price_rs_quintal": 4200,
+      "max_price_rs_quintal": 4850,
+      "modal_price_rs_quintal": 4650,
+      "arrival_tonnes": 1150,
+      "date": "2026-07-18",
+      "trend": "Stable"
+    },
+    {
+      "mandi": "APMC Akola",
+      "district": "Akola",
+      "state": "Maharashtra",
+      "crop": "Cotton",
+      "crop_mr": "कापूस",
+      "variety": "Medium Staple",
+      "min_price_rs_quintal": 6800,
+      "max_price_rs_quintal": 7650,
+      "modal_price_rs_quintal": 7300,
+      "arrival_tonnes": 850,
+      "date": "2026-07-18",
+      "trend": "Slightly Bullish (+2%)"
+    },
+    {
+      "mandi": "APMC Lasalgaon",
+      "district": "Nashik",
+      "state": "Maharashtra",
+      "crop": "Onion",
+      "crop_mr": "कांदा",
+      "variety": "Red Onion",
+      "min_price_rs_quintal": 1500,
+      "max_price_rs_quintal": 2400,
+      "modal_price_rs_quintal": 1950,
+      "arrival_tonnes": 3200,
+      "date": "2026-07-18",
+      "trend": "Bearish (-3%)"
+    },
+    {
+      "mandi": "APMC Kolhapur",
+      "district": "Kolhapur",
+      "state": "Maharashtra",
+      "crop": "Sugarcane",
+      "crop_mr": "ऊस (FRP)",
+      "variety": "Co 86032",
+      "min_price_rs_quintal": 3150,
+      "max_price_rs_quintal": 3500,
+      "modal_price_rs_quintal": 3350,
+      "arrival_tonnes": 5400,
+      "date": "2026-07-18",
+      "trend": "Fixed FRP"
+    }
+  ]
+}

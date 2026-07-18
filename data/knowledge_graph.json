@@ -1,0 +1,47 @@
+{
+  "nodes": [
+    {"id": "Cotton", "label": "Crop", "properties": {"marathi": "कापूस", "season": "Kharif"}},
+    {"id": "Soybean", "label": "Crop", "properties": {"marathi": "सोयाबीन", "season": "Kharif"}},
+    {"id": "Pomegranate", "label": "Crop", "properties": {"marathi": "डाळिंब", "season": "Horticulture"}},
+    {"id": "Onion", "label": "Crop", "properties": {"marathi": "कांदा", "season": "Rabi"}},
+    {"id": "Sugarcane", "label": "Crop", "properties": {"marathi": "ऊस", "season": "Annual"}},
+
+    {"id": "Pink Bollworm", "label": "Pest", "properties": {"marathi": "गुलाबी बोंड अळी"}},
+    {"id": "Bacterial Blight", "label": "Disease", "properties": {"marathi": "तेल्या रोग"}},
+    {"id": "Yellow Mosaic Virus", "label": "Disease", "properties": {"marathi": "पिवळा मोझॅक"}},
+    {"id": "Purple Blotch", "label": "Disease", "properties": {"marathi": "जांभळा करपा"}},
+
+    {"id": "Black Cotton Soil", "label": "Soil", "properties": {"marathi": "काळी जमीन"}},
+    {"id": "Medium Black Soil", "label": "Soil", "properties": {"marathi": "मध्यम काळी जमीन"}},
+
+    {"id": "Urea", "label": "Fertilizer", "properties": {"nutrient": "Nitrogen"}},
+    {"id": "DAP", "label": "Fertilizer", "properties": {"nutrient": "Phosphorus & Nitrogen"}},
+    {"id": "MOP", "label": "Fertilizer", "properties": {"nutrient": "Potassium"}},
+
+    {"id": "PM-KISAN", "label": "Scheme", "properties": {"marathi": "पीएम-किसान"}},
+    {"id": "PMFBY", "label": "Scheme", "properties": {"marathi": "पीक विमा"}},
+    {"id": "Magel Tyala Shettale", "label": "Scheme", "properties": {"marathi": "शेततळे योजना"}},
+
+    {"id": "High Humidity (>80%)", "label": "WeatherCondition", "properties": {"type": "Humidity"}},
+    {"id": "Monsoon Rain", "label": "WeatherCondition", "properties": {"type": "Rainfall"}}
+  ],
+  "edges": [
+    {"source": "Cotton", "target": "Pink Bollworm", "relation": "AFFECTED_BY"},
+    {"source": "Cotton", "target": "Black Cotton Soil", "relation": "GROWS_IN"},
+    {"source": "Cotton", "target": "Urea", "relation": "REQUIRES_FERTILIZER"},
+    {"source": "Cotton", "target": "PMFBY", "relation": "COVERED_BY"},
+
+    {"source": "Pomegranate", "target": "Bacterial Blight", "relation": "AFFECTED_BY"},
+    {"source": "Pomegranate", "target": "Medium Black Soil", "relation": "GROWS_IN"},
+    {"source": "Pomegranate", "target": "Magel Tyala Shettale", "relation": "BENEFITS_FROM"},
+    {"source": "Bacterial Blight", "target": "High Humidity (>80%)", "relation": "TRIGGERED_BY"},
+
+    {"source": "Soybean", "target": "Yellow Mosaic Virus", "relation": "AFFECTED_BY"},
+    {"source": "Soybean", "target": "DAP", "relation": "REQUIRES_FERTILIZER"},
+    {"source": "Soybean", "target": "PMFBY", "relation": "COVERED_BY"},
+
+    {"source": "Onion", "target": "Purple Blotch", "relation": "AFFECTED_BY"},
+    {"source": "Purple Blotch", "target": "High Humidity (>80%)", "relation": "TRIGGERED_BY"},
+    {"source": "Onion", "target": "MOP", "relation": "REQUIRES_FERTILIZER"}
+  ]
+}
