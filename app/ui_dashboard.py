@@ -525,11 +525,13 @@ def factory_status() -> dict[str, Any]:
             {"id": "W-EVAL", "desc": "Gold QA + gates scorecard", "eta": "45s", "status": "ready"},
             {"id": "W-QUANT", "desc": "INT8/INT4 + size budgets", "eta": "40s", "status": "ready"},
             {"id": "W-DEPLOY", "desc": "Package + version registry", "eta": "15s", "status": "ready"},
+            {"id": "W-RAG", "desc": "Context pack + citations", "eta": "8s", "status": "ready"},
+            {"id": "W-INFER", "desc": "Intent→RAG→Mini→validate", "eta": "20s", "status": "ready"},
         ],
         "reports": {},
     }
     try:
-        from mini.paths import DATASETS_DIR, EVAL_DIR, LAKE_ROOT, MODELS_DIR, TOKENIZER_DIR
+        from mini.paths import DATASETS_DIR, EVAL_DIR, INFERENCE_DIR, LAKE_ROOT, MODELS_DIR, TOKENIZER_DIR
         import json
 
         for name, path in [
@@ -544,6 +546,7 @@ def factory_status() -> dict[str, Any]:
             ("quant", MODELS_DIR / "QUANT_LATEST.json"),
             ("deploy", MODELS_DIR / "DEPLOY_LATEST.json"),
             ("registry", MODELS_DIR / "VERSION_REGISTRY.json"),
+            ("infer", INFERENCE_DIR / "INFER_LATEST.json"),
             ("param_count", MODELS_DIR / "PARAM_COUNT.json"),
         ]:
             if path.exists():

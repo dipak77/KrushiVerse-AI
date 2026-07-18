@@ -27,7 +27,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 def test_sprint1_version_markers():
     # Markers advance after S1; taxonomy freeze remains the S1 deliverable.
-    assert __sprint__ in {"S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14"}
+    assert __sprint__ in {"S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15"}
     assert TAXONOMY_VERSION == "1.0.0"
     assert TAXONOMY_STATUS == "frozen"
     assert __version__

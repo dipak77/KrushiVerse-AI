@@ -16,8 +16,8 @@ client = TestClient(app)
 
 
 def test_sprint14_markers():
-    assert __sprint__ == "S14"
-    assert __feature_phase__ == "E5-quant"
+    assert __sprint__ in {"S14", "S15"}
+    assert __feature_phase__ in {"E5-quant", "FP-8"}
 
 
 def test_quant_deploy_workers_ready():

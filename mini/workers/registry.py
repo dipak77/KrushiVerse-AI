@@ -85,52 +85,9 @@ class TaxonomyWorker(BaseWorker):
 # W-EVAL → mini.workers.eval
 # W-QUANT → mini.workers.quantize
 # W-DEPLOY → mini.workers.deploy
-
-
-@register_worker
-class RAGWorker(BaseWorker):
-    worker_id = "W-RAG"
-    name = "RAG Retriever"
-    description = "Wrap platform advanced RAG for Mini context packs"
-    epic = "E6"
-    status = "partial"  # platform already has advanced RAG
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Partial: platform advanced_rag ready; Mini coupling Sprint 15",
-            platform_module="app.knowledge.advanced_rag",
-        )
-
-
-@register_worker
-class AgentWorker(BaseWorker):
-    worker_id = "W-AGENT"
-    name = "Agent Router"
-    description = "Wrap platform planner agents as tool workers"
-    epic = "E6"
-    status = "partial"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Partial: platform planner agents ready; Mini synthesizer Sprint 16",
-            platform_module="app.agents.planner",
-        )
-
-
-@register_worker
-class InferWorker(BaseWorker):
-    worker_id = "W-INFER"
-    name = "Inference"
-    description = "Intent → retrieve → Mini → validate → answer"
-    epic = "E6"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: inference chain Sprint 15")
+# W-RAG → mini.workers.rag
+# W-AGENT → mini.workers.agent
+# W-INFER → mini.workers.infer
 
 
 # Import real workers so they register into WORKER_REGISTRY
@@ -156,6 +113,9 @@ from mini.workers.sft import SFTWorker  # noqa: E402,F401
 from mini.workers.eval import EvalWorker  # noqa: E402,F401
 from mini.workers.quantize import QuantizeWorker  # noqa: E402,F401
 from mini.workers.deploy import DeployWorker  # noqa: E402,F401
+from mini.workers.rag import RAGWorker  # noqa: E402,F401
+from mini.workers.agent import AgentWorker  # noqa: E402,F401
+from mini.workers.infer import InferWorker  # noqa: E402,F401
 
 
 @register_worker

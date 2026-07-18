@@ -546,6 +546,47 @@ def lake_deploy_run(
     )
     return result.model_dump()
 
+@app.get("/api/lake/infer")
+def lake_infer_status():
+    """Latest Mini inference report (W-INFER)."""
+    from mini.paths import INFERENCE_DIR
+    import json
+
+    latest = INFERENCE_DIR / "INFER_LATEST.json"
+    if latest.exists():
+        return json.loads(latest.read_text(encoding="utf-8"))
+    return {"ok": False, "message": "No infer run yet. POST /api/lake/infer?execute=true"}
+
+@app.post("/api/lake/infer")
+def lake_infer_run(
+    execute: bool = False,
+    query: str = "How do I manage pink bollworm in cotton with IPM in Maharashtra?",
+    mode: str = "grounded",
+    crop: Optional[str] = None,
+    location: str = "Pune",
+    version: str = "auto",
+    enable_web: bool = False,
+    enable_agents: bool = True,
+    max_new_tokens: int = 40,
+    seed: int = 42,
+):
+    """Run W-INFER grounded chain: intent → RAG → Mini → validate (S15)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-INFER").run(
+        dry_run=not execute,
+        query=query,
+        mode=mode,
+        crop=crop,
+        location=location,
+        version=version,
+        enable_web=enable_web,
+        enable_agents=enable_agents,
+        max_new_tokens=max_new_tokens,
+        seed=seed,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

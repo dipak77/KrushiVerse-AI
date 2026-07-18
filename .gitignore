@@ -61,6 +61,14 @@ mini/eval/**
 mini/inference/**
 !mini/inference/
 !mini/inference/.gitkeep
+!mini/inference/__init__.py
+!mini/inference/context.py
+!mini/inference/validate.py
+!mini/inference/fallback.py
+!mini/inference/rag_wrap.py
+!mini/inference/agents_wrap.py
+!mini/inference/generate_mini.py
+!mini/inference/pipeline.py
 
 mini/runs/
 mini/orchestrator/events.jsonl

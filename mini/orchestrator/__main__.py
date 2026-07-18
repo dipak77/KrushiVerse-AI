@@ -220,6 +220,40 @@ def cmd_deploy(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_infer(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-INFER").run(
+        dry_run=not args.execute,
+        query=args.query,
+        mode=args.mode,
+        crop=args.crop,
+        location=args.location,
+        version=args.version,
+        enable_web=args.enable_web,
+        enable_agents=not args.no_agents,
+        max_new_tokens=args.max_new_tokens,
+        seed=args.seed,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
+def cmd_rag(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-RAG").run(
+        dry_run=not args.execute,
+        query=args.query,
+        crop=args.crop,
+        location=args.location,
+        top_k=args.top_k,
+        enable_web=args.enable_web,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -367,6 +401,36 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--no-quant", action="store_true", help="Skip bundling quant artifacts")
     s.add_argument("--no-reasoning-lite", action="store_true", help="Skip v0.5-reasoning-lite alias")
     s.set_defaults(func=cmd_deploy)
+
+    s = sub.add_parser("infer", help="Mini inference chain (W-INFER, S15 grounded RAG)")
+    s.add_argument("--execute", action="store_true", help="Run full infer + write INFER_LATEST.json")
+    s.add_argument(
+        "--query",
+        default="How do I manage pink bollworm in cotton with IPM in Maharashtra?",
+        help="Farmer question",
+    )
+    s.add_argument("--mode", default="grounded", choices=["grounded", "open"], help="Answer mode")
+    s.add_argument("--crop", default=None, help="Optional crop hint")
+    s.add_argument("--location", default="Pune", help="Location for tools/RAG")
+    s.add_argument("--version", default="auto", help="Mini checkpoint version")
+    s.add_argument("--enable-web", action="store_true", help="Enable web RAG")
+    s.add_argument("--no-agents", action="store_true", help="Skip specialist agent notes")
+    s.add_argument("--max-new-tokens", type=int, default=40, help="Mini generation length")
+    s.add_argument("--seed", type=int, default=42, help="RNG seed")
+    s.set_defaults(func=cmd_infer)
+
+    s = sub.add_parser("rag", help="Retrieve Mini context pack (W-RAG, S15)")
+    s.add_argument("--execute", action="store_true", help="Run retrieval")
+    s.add_argument(
+        "--query",
+        default="How do I manage pink bollworm in cotton with IPM in Maharashtra?",
+        help="Query",
+    )
+    s.add_argument("--crop", default=None)
+    s.add_argument("--location", default="Pune")
+    s.add_argument("--top-k", type=int, default=6)
+    s.add_argument("--enable-web", action="store_true")
+    s.set_defaults(func=cmd_rag)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

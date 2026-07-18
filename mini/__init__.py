@@ -1,5 +1,5 @@
 """KrushiVerseAI Mini — ML factory for the ~1M-parameter agriculture model."""
 
-__version__ = "0.15.0-sprint14"
-__sprint__ = "S14"
-__feature_phase__ = "E5-quant"  # W-QUANT INT8/INT4 + W-DEPLOY package/registry
+__version__ = "0.16.0-sprint15"
+__sprint__ = "S15"
+__feature_phase__ = "FP-8"  # Mini+RAG inference: intent → retrieve → generate → validate
