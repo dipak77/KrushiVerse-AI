@@ -1,0 +1,15 @@
+{
+  "batch_id": "20260718T142614Z-32b610ea",
+  "worker_id": "W-INGEST",
+  "created_at": "2026-07-18T14:26:14Z",
+  "schema_version": "1.0",
+  "registry_version": "1.0.0",
+  "entries": [],
+  "summary": {
+    "copied": 0,
+    "skipped": 15,
+    "failed": 0,
+    "sources_considered": 11
+  },
+  "ok": true
+}

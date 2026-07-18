@@ -87,6 +87,7 @@ tabs = st.tabs([
     "🤖 AI Krushi Assistant",
     "📚 Advanced RAG & Sources",
     "🗂️ Domain Taxonomy",
+    "🏭 Data Factory",
     "📸 Vision Disease Diagnostic",
     "📡 Live RAG (Weather, Market, IoT, Satellite)",
     "🧪 Soil & Fertilizer Planner",
@@ -349,8 +350,75 @@ with tabs[2]:
         st.json(UNITS["preferred_display"])
         st.caption("Dimensions: " + ", ".join(UNITS["dimensions"].keys()))
 
-# TAB 4: Vision
+# TAB 4: Data Factory (Sprint 5)
 with tabs[3]:
+    st.header("🏭 Mini Data Factory — Coverage Analysis (Sprint 5)")
+    st.write(
+        "Run W-ANALYZE after standardize to inspect missingness, language/crop balance, "
+        "duplicates, and taxonomy coverage gaps."
+    )
+    from mini.paths import LAKE_ROOT
+    import json as _json
+
+    c1, c2, c3 = st.columns(3)
+    if c1.button("1. Standardize export"):
+        with st.spinner("Standardizing..."):
+            sres = get_worker("W-STANDARDIZE").run(dry_run=False)
+        st.session_state["factory_standard"] = sres
+    if c2.button("2. Run W-ANALYZE", type="primary"):
+        with st.spinner("Analyzing dataset..."):
+            ares = get_worker("W-ANALYZE").run(dry_run=False)
+        st.session_state["factory_analyze"] = ares
+    if c3.button("Reload ANALYZE_LATEST"):
+        p = LAKE_ROOT / "ANALYZE_LATEST.json"
+        if p.exists():
+            st.session_state["factory_report"] = _json.loads(p.read_text(encoding="utf-8"))
+        else:
+            st.warning("No ANALYZE_LATEST.json yet")
+
+    ares = st.session_state.get("factory_analyze")
+    report = st.session_state.get("factory_report")
+    if ares and ares.metrics:
+        report = ares.metrics
+    if report:
+        summ = report.get("summary") or {}
+        m1, m2, m3, m4 = st.columns(4)
+        m1.metric("Records", summ.get("total_records", 0))
+        m2.metric("Gaps", summ.get("gap_count", 0))
+        m3.metric("Dup rate %", summ.get("duplicate_rate_pct", 0))
+        m4.metric("Missing crop %", summ.get("missing_crop_pct", 0))
+
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.subheader("Language balance")
+            st.bar_chart(summ.get("language_balance") or {})
+            st.subheader("Category balance")
+            st.bar_chart(summ.get("category_balance") or {})
+        with col_b:
+            st.subheader("Length histograms (question)")
+            qh = ((report.get("records") or {}).get("length") or {}).get("question", {}).get("histogram") or {}
+            if qh:
+                st.bar_chart(qh)
+            st.subheader("Taxonomy gaps")
+            gaps = (report.get("taxonomy_gaps") or {}).get("gaps") or []
+            if gaps:
+                st.dataframe(pd.DataFrame(gaps), use_container_width=True)
+            else:
+                st.info("No gaps listed")
+            miss = (report.get("taxonomy_gaps") or {}).get("missing_crops") or []
+            if miss:
+                st.caption("Missing crops vs taxonomy: " + ", ".join(miss[:20]))
+
+        with st.expander("Full analysis JSON"):
+            st.json(report)
+        html_p = LAKE_ROOT / "ANALYZE_LATEST.html"
+        if html_p.exists():
+            st.caption(f"HTML report: `{html_p}`")
+    else:
+        st.info("Run standardize then W-ANALYZE to populate the dashboard.")
+
+# TAB 5: Vision
+with tabs[4]:
     st.header("🔬 Computer Vision Plant Disease Classifier")
     st.write("Upload a crop leaf photo or select sample leaf image to perform diagnostic analysis.")
 
@@ -376,8 +444,8 @@ with tabs[3]:
             st.markdown(f"**🌿 Organic Control:** {result['organic_treatment']['mr']}")
             st.markdown(f"**🧪 Chemical Control:** {result['chemical_treatment']['mr']}")
 
-# TAB 5: Live RAG
-with tabs[4]:
+# TAB 6: Live RAG
+with tabs[5]:
     st.header("📡 Live RAG Intelligence Center")
 
     m1, m2, m3, m4 = st.columns(4)
@@ -398,8 +466,8 @@ with tabs[4]:
     st.dataframe(pd.DataFrame(market_feed.get_market_prices()), use_container_width=True)
     st.caption(f"Open data status: {opendata_client.status()}")
 
-# TAB 6: Soil & Fertilizer
-with tabs[5]:
+# TAB 7: Soil & Fertilizer
+with tabs[6]:
     st.header("🧪 Soil Health Card OCR & Fertilizer Planner")
 
     col_s1, col_s2 = st.columns([1, 1])
@@ -439,8 +507,8 @@ with tabs[5]:
 
             st.info(f"**मराठी संदेश:** {p_res['application_schedule_mr']}")
 
-# TAB 7: GraphRAG
-with tabs[6]:
+# TAB 8: GraphRAG
+with tabs[7]:
     st.header("🕸️ GraphRAG Agricultural Knowledge Graph")
     st.write("Explore graph relations between crops, pests, diseases, fertilizers, and government schemes.")
 
@@ -451,8 +519,8 @@ with tabs[6]:
     ecosystem = graph_rag.get_crop_ecosystem(selected_graph_crop)
     st.json(ecosystem)
 
-# TAB 8: Predictive
-with tabs[7]:
+# TAB 9: Predictive
+with tabs[8]:
     st.header("📊 Predictive AI Models & Automated Workflows")
 
     p1, p2 = st.columns(2)

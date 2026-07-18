@@ -20,6 +20,9 @@ data/lake/**
 !data/lake/reports/
 !data/lake/reports/**
 !data/lake/STANDARD_LATEST.json
+!data/lake/ANALYZE_LATEST.json
+!data/lake/ANALYZE_LATEST.html
+!mini/datasets/ANALYZE_LATEST.json
 !data/lake/training/
 !data/lake/training/**
 !data/lake/validation/

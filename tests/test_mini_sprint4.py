@@ -38,7 +38,7 @@ def _ensure_processed():
 
 
 def test_sprint4_markers():
-    assert __sprint__ == "S4"
+    assert __sprint__ in {"S4", "S5"}
     assert __feature_phase__.startswith("FP-")
 
 

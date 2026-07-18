@@ -189,13 +189,12 @@ End-to-end implementation roadmap for the ~1M-parameter agriculture Mini LLM, da
 
 Summary: **6 epics · 18 two-week sprints · automated worker DAG** (ingest → clean → QA → KG → tokenizer → train → eval → deploy), reusing the existing v10.2 multi-source RAG platform. The Mini model is one worker component, not the only intelligence.
 
-### Sprint 0–4 (through Schema v1 standard export) — done
+### Sprint 0–5 (through coverage analysis) — done
 
 ```bash
-python -m mini.orchestrator ingest --execute --skip-http
-python -m mini.orchestrator quality --execute
 python -m mini.orchestrator standardize --execute
-python -m mini.orchestrator run sprint4 --execute
+python -m mini.orchestrator analyze --execute
+python -m mini.orchestrator run sprint5 --execute
 ```
 
-API: `/api/taxonomy` · `/api/lake/status` · `/api/lake/ingest` · `/api/lake/quality` · `/api/lake/standard`
+API: `/api/taxonomy` · `/api/lake/*` · `/api/lake/analyze`

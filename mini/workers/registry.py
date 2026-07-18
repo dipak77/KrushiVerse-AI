@@ -70,16 +70,7 @@ class TaxonomyWorker(BaseWorker):
         )
 
 
-@register_worker
-class AnalyzeWorker(BaseWorker):
-    worker_id = "W-ANALYZE"
-    name = "Analyze"
-    description = "Coverage and quality dashboards after ingest"
-    epic = "E2"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: analyze Sprint 5")
+# W-ANALYZE → mini.workers.analyze
 
 
 @register_worker
@@ -238,6 +229,7 @@ from mini.workers.standardize import (  # noqa: E402,F401
     StandardWorker,
     StandardizePipelineWorker,
 )
+from mini.workers.analyze import AnalyzeWorker  # noqa: E402,F401
 
 
 @register_worker

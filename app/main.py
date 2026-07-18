@@ -254,6 +254,28 @@ def lake_standard_run(execute: bool = False):
     result = get_worker("W-STANDARDIZE").run(dry_run=not execute)
     return result.model_dump()
 
+@app.get("/api/lake/analyze")
+def lake_analyze_status():
+    """Latest coverage analysis report."""
+    from mini.paths import LAKE_ROOT
+    import json
+
+    latest = LAKE_ROOT / "ANALYZE_LATEST.json"
+    if not latest.exists():
+        return {
+            "ok": False,
+            "message": "No analysis yet. POST /api/lake/analyze?execute=true",
+        }
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/analyze")
+def lake_analyze_run(execute: bool = False):
+    """Run W-ANALYZE coverage/quality intelligence."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-ANALYZE").run(dry_run=not execute)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}
