@@ -25,113 +25,52 @@ def _stub_result(worker_id: str, dry_run: bool, message: str, **metrics: Any) ->
     )
 
 
+# W-INGEST → mini.workers.ingest
+# W-VALIDATE / W-CLEAN / W-DEDUP / W-QUALITY → mini.workers.quality
+
+
+# W-NORMALIZE / W-LANGDETECT / W-STANDARD / W-STANDARDIZE → mini.workers.standardize
+
+
 @register_worker
-class IngestWorker(BaseWorker):
-    worker_id = "W-INGEST"
-    name = "Ingest"
-    description = "Pull sources into lake/raw/{domain}/ with manifests"
-    epic = "E1"
-    status = "stub"
+class TaxonomyWorker(BaseWorker):
+    worker_id = "W-TAXONOMY"
+    name = "Taxonomy Validate"
+    description = "Validate frozen taxonomy integrity and platform KB coverage"
+    epic = "E0"
+    status = "ready"
 
     def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        paths = ensure_lake_layout() if not dry_run else []
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Sprint 0 stub: lake layout ready; full ingest in Sprint 2",
-            lake_paths=len(paths),
-            raw_root=relative_to_repo(LAKE_RAW),
+        from mini.taxonomy.service import taxonomy_service
+        import json
+        from mini.paths import TAXONOMY_DIR, relative_to_repo
+
+        report = taxonomy_service.validate()
+        artifacts: list[str] = []
+        if not dry_run:
+            TAXONOMY_DIR.mkdir(parents=True, exist_ok=True)
+            out = TAXONOMY_DIR / "validation_report.json"
+            out.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+            artifacts.append(relative_to_repo(out))
+        return WorkerResult(
+            worker_id=self.worker_id,
+            ok=bool(report.get("ok")),
+            dry_run=dry_run,
+            message="Taxonomy validation " + ("passed" if report.get("ok") else "FAILED"),
+            artifacts=artifacts,
+            metrics={
+                "version": report.get("taxonomy_version"),
+                "integrity_ok": report.get("integrity", {}).get("ok"),
+                "coverage_ok": report.get("platform_coverage", {}).get("ok"),
+                "errors": (report.get("integrity", {}).get("errors") or [])
+                + (report.get("platform_coverage", {}).get("errors") or []),
+            },
+            errors=(report.get("integrity", {}).get("errors") or [])
+            + (report.get("platform_coverage", {}).get("errors") or []),
         )
 
 
-@register_worker
-class ValidateWorker(BaseWorker):
-    worker_id = "W-VALIDATE"
-    name = "Validate"
-    description = "Schema/type validation of raw batches"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: validation scheduled Sprint 3")
-
-
-@register_worker
-class CleanWorker(BaseWorker):
-    worker_id = "W-CLEAN"
-    name = "Clean"
-    description = "Text cleaning and encoding normalization"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: clean pipeline Sprint 3")
-
-
-@register_worker
-class DedupWorker(BaseWorker):
-    worker_id = "W-DEDUP"
-    name = "Deduplicate"
-    description = "Exact and near-duplicate removal"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: dedup Sprint 3")
-
-
-@register_worker
-class NormalizeWorker(BaseWorker):
-    worker_id = "W-NORMALIZE"
-    name = "Normalize"
-    description = "Canonical crop/region/units via taxonomy"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: normalize Sprint 4")
-
-
-@register_worker
-class LangDetectWorker(BaseWorker):
-    worker_id = "W-LANGDETECT"
-    name = "Language Detect"
-    description = "Tag language mr/hi/en/mixed"
-    epic = "E1"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: language detect Sprint 4")
-
-
-@register_worker
-class StandardWorker(BaseWorker):
-    worker_id = "W-STANDARD"
-    name = "Standardize"
-    description = "Emit Schema v1 StandardRecord parquet/JSONL"
-    epic = "E2"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(
-            self.worker_id,
-            dry_run,
-            "Sprint 0 stub: StandardRecord contract locked; emit in Sprint 4",
-            schema_version="1.0",
-            training_root=relative_to_repo(LAKE_TRAINING),
-        )
-
-
-@register_worker
-class AnalyzeWorker(BaseWorker):
-    worker_id = "W-ANALYZE"
-    name = "Analyze"
-    description = "Coverage and quality dashboards after ingest"
-    epic = "E2"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: analyze Sprint 5")
+# W-ANALYZE → mini.workers.analyze
 
 
 @register_worker
@@ -274,6 +213,23 @@ class InferWorker(BaseWorker):
 
     def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
         return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: inference chain Sprint 15")
+
+
+# Import real workers so they register into WORKER_REGISTRY
+from mini.workers.ingest import IngestWorker  # noqa: E402,F401
+from mini.workers.quality import (  # noqa: E402,F401
+    CleanWorker,
+    DedupWorker,
+    QualityPipelineWorker,
+    ValidateWorker,
+)
+from mini.workers.standardize import (  # noqa: E402,F401
+    LangDetectWorker,
+    NormalizeWorker,
+    StandardWorker,
+    StandardizePipelineWorker,
+)
+from mini.workers.analyze import AnalyzeWorker  # noqa: E402,F401
 
 
 @register_worker

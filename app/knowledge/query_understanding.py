@@ -1,45 +1,48 @@
-"""Query understanding: crop/entity extraction, intent tags, multi-query expansion."""
+"""Query understanding: crop/entity extraction, intent tags, multi-query expansion.
+
+Crop aliases are sourced from the frozen Mini taxonomy (Sprint 1) so platform
+routing and the ML factory stay aligned.
+"""
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
 
+from mini.taxonomy.aliases import (
+    CATEGORY_ALIASES,
+    CROP_ALIASES,
+    resolve_crops_in_text,
+)
 
-CROP_ALIASES: dict[str, list[str]] = {
-    "Cotton": ["cotton", "कापूस", "kapus", "kapas"],
-    "Soybean": ["soybean", "soya", "सोयाबीन", "soy"],
-    "Sugarcane": ["sugarcane", "cane", "ऊस", "oos", "us"],
-    "Pomegranate": ["pomegranate", "डाळिंब", "dalimb", "anar"],
-    "Onion": ["onion", "कांदा", "kanda"],
-    "Rice": ["rice", "paddy", "भात", "तांदूळ", "dhan"],
-    "Wheat": ["wheat", "गहू", "gahu", "gehun"],
-    "Maize": ["maize", "corn", "मका", "maka", "makka"],
-    "Tur (Pigeon Pea)": ["tur", "toor", "arhar", "pigeon pea", "तूर", "red gram"],
-    "Gram (Chickpea)": ["gram", "chickpea", "chana", "हरभरा", "harbhara"],
-    "Groundnut": ["groundnut", "peanut", "भुईमूग", "mungfali", "bhuimug"],
-    "Turmeric": ["turmeric", "हळद", "halad", "haldi"],
-    "Grapes": ["grape", "grapes", "द्राक्ष", "draksh"],
-    "Banana": ["banana", "केळी", "keli"],
-    "Mango": ["mango", "आंबा", "amba"],
-    "Tomato": ["tomato", "टोमॅटो", "tamatar"],
-    "Chilli": ["chilli", "chili", "pepper", "मिरची", "mirchi"],
-    "Sorghum (Jowar)": ["sorghum", "jowar", "ज्वारी", "jwari"],
-    "Bajra (Pearl Millet)": ["bajra", "pearl millet", "बाजरी", "bajri"],
-    "Mustard": ["mustard", "मोहरी", "sarson", "mohri"],
-    "Potato": ["potato", "बटाटा", "batata", "aloo"],
-    "Orange (Nagpur Santra)": ["orange", "santra", "संत्रा", "citrus", "nagpur santra"],
-}
+# Re-export for callers that imported CROP_ALIASES from this module
+__all__ = [
+    "CROP_ALIASES",
+    "INTENT_KEYWORDS",
+    "QueryPlan",
+    "QueryUnderstanding",
+    "query_understanding",
+]
 
+# Map taxonomy category aliases → planner intents (backward compatible keys)
 INTENT_KEYWORDS: dict[str, list[str]] = {
-    "weather": ["weather", "rain", "rainfall", "monsoon", "humidity", "पाऊस", "हवामान", "temperature"],
-    "disease": ["disease", "pest", "blight", "virus", "worm", "thrips", "रोग", "कीड", "spot", "infection"],
-    "market": ["market", "price", "mandi", "rate", "msp", "भाव", "बाजार", "मंडी", "rate"],
-    "fertilizer": ["fertilizer", "manure", "npk", "urea", "dap", "खत", "माती", "soil", "nutrient"],
-    "scheme": ["scheme", "subsidy", "yojana", "insurance", "pm-kisan", "योजना", "अनुदान", "विमा"],
-    "irrigation": ["irrigation", "drip", "water", "सिंचन", "ठिबक", "पाणी", "sprinkler"],
-    "seed": ["seed", "variety", "hybrid", "बियाणे", "जात", "variety"],
-    "finance": ["loan", "kcc", "credit", "roi", "cost", "कर्ज", "वित्त"],
+    "weather": CATEGORY_ALIASES.get("weather", []),
+    "disease": list(
+        dict.fromkeys(
+            (CATEGORY_ALIASES.get("disease") or []) + (CATEGORY_ALIASES.get("pest") or [])
+        )
+    ),
+    "market": CATEGORY_ALIASES.get("market", []),
+    "fertilizer": list(
+        dict.fromkeys(
+            (CATEGORY_ALIASES.get("fertilizer") or []) + (CATEGORY_ALIASES.get("soil") or [])
+        )
+    ),
+    "scheme": CATEGORY_ALIASES.get("scheme", []),
+    "irrigation": CATEGORY_ALIASES.get("irrigation", []),
+    "seed": CATEGORY_ALIASES.get("seed", []),
+    "finance": CATEGORY_ALIASES.get("finance", []),
+    "machinery": CATEGORY_ALIASES.get("machinery", []),
 }
 
 
@@ -53,6 +56,7 @@ class QueryPlan:
     needs_web: bool = False
     needs_live_tools: bool = False
     language_hint: str = "en"
+    categories: list[str] = field(default_factory=list)
 
 
 class QueryUnderstanding:
@@ -61,17 +65,33 @@ class QueryUnderstanding:
         lower = normalized.lower()
         crops = self.extract_crops(lower)
         if not crops and default_crop:
-            crops = [default_crop]
+            # resolve default through taxonomy when possible
+            from mini.taxonomy.aliases import resolve_crop_name
 
-        intents = [name for name, kws in INTENT_KEYWORDS.items() if any(k in lower for k in kws)]
+            crops = [resolve_crop_name(default_crop) or default_crop]
+
+        intents = [
+            name for name, kws in INTENT_KEYWORDS.items() if any(k.lower() in lower for k in kws)
+        ]
+        categories = [
+            cat
+            for cat, kws in CATEGORY_ALIASES.items()
+            if any(k.lower() in lower for k in kws)
+        ]
         if not intents:
             intents = ["general"]
+        if not categories:
+            categories = ["general"]
 
         expanded = self._expand(normalized, crops, intents)
         needs_web = self._needs_web(lower, intents)
         needs_live = any(i in intents for i in ("weather", "market")) or needs_web
 
-        lang = "mr" if re.search(r"[\u0900-\u097F]", normalized) else "en"
+        if re.search(r"[\u0900-\u097F]", normalized):
+            # Devanagari — prefer mr; could refine hi later via word lists
+            lang = "mr"
+        else:
+            lang = "en"
 
         return QueryPlan(
             original=query,
@@ -82,17 +102,12 @@ class QueryUnderstanding:
             needs_web=needs_web,
             needs_live_tools=needs_live,
             language_hint=lang,
+            categories=categories,
         )
 
     def extract_crops(self, text_lower: str) -> list[str]:
-        found: list[str] = []
-        for crop, aliases in CROP_ALIASES.items():
-            for alias in aliases:
-                if alias.lower() in text_lower:
-                    if crop not in found:
-                        found.append(crop)
-                    break
-        return found
+        # resolve_crops_in_text expects any case; use original-ish lower for match
+        return resolve_crops_in_text(text_lower)
 
     def _expand(self, query: str, crops: list[str], intents: list[str]) -> list[str]:
         qs = [query]
@@ -114,7 +129,8 @@ class QueryUnderstanding:
                     qs.append(f"{crop} weather advisory humidity rainfall pest risk")
                 elif intent == "seed":
                     qs.append(f"{crop} recommended seed varieties India ICAR")
-        # Deduplicate preserving order
+                elif intent == "machinery":
+                    qs.append(f"{crop} farm machinery sprayer seeder recommendation")
         seen = set()
         out = []
         for q in qs:
@@ -126,9 +142,23 @@ class QueryUnderstanding:
 
     def _needs_web(self, lower: str, intents: list[str]) -> bool:
         web_triggers = [
-            "latest", "today", "current", "news", "2024", "2025", "2026",
-            "web", "online", "update", "recent", "forecast", "live",
-            "आता", "आज", "ताजे", "सद्य",
+            "latest",
+            "today",
+            "current",
+            "news",
+            "2024",
+            "2025",
+            "2026",
+            "web",
+            "online",
+            "update",
+            "recent",
+            "forecast",
+            "live",
+            "आता",
+            "आज",
+            "ताजे",
+            "सद्य",
         ]
         if any(t in lower for t in web_triggers):
             return True

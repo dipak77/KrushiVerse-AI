@@ -1,0 +1,168 @@
+{
+  "run_id": "20260718T142622Z-31460252",
+  "started_at": "2026-07-18T14:26:22Z",
+  "finished_at": "2026-07-18T14:26:22Z",
+  "dry_run": false,
+  "ok": true,
+  "sources_considered": 11,
+  "files_copied": 0,
+  "files_skipped": 15,
+  "files_failed": 0,
+  "results": [
+    {
+      "source_id": "platform_crops_diseases",
+      "domain": "crop",
+      "source_path": "data\\crops_and_diseases.json",
+      "dest_path": "data\\lake\\raw\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+      "sha256": "abd9ef16b1f7e982d9460e786076ab25ed9f6bdf6b23af58a509d1cf29af334b",
+      "bytes": 36041,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_crops_diseases",
+      "domain": "disease",
+      "source_path": "data\\crops_and_diseases.json",
+      "dest_path": "data\\lake\\raw\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+      "sha256": "abd9ef16b1f7e982d9460e786076ab25ed9f6bdf6b23af58a509d1cf29af334b",
+      "bytes": 36041,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_crops_diseases",
+      "domain": "pest",
+      "source_path": "data\\crops_and_diseases.json",
+      "dest_path": "data\\lake\\raw\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+      "sha256": "abd9ef16b1f7e982d9460e786076ab25ed9f6bdf6b23af58a509d1cf29af334b",
+      "bytes": 36041,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_soil_fertilizers",
+      "domain": "soil",
+      "source_path": "data\\soil_and_fertilizers.json",
+      "dest_path": "data\\lake\\raw\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+      "sha256": "4f5ef3f44ff508a72223b191e104293db032056e53dc9ec36d4286ae6f802a04",
+      "bytes": 10450,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_soil_fertilizers",
+      "domain": "fertilizer",
+      "source_path": "data\\soil_and_fertilizers.json",
+      "dest_path": "data\\lake\\raw\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+      "sha256": "4f5ef3f44ff508a72223b191e104293db032056e53dc9ec36d4286ae6f802a04",
+      "bytes": 10450,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_government_schemes",
+      "domain": "government",
+      "source_path": "data\\government_schemes.json",
+      "dest_path": "data\\lake\\raw\\government\\platform_government_schemes\\government_schemes.json",
+      "sha256": "9966bd51bdb08ce7b213318d1377d38e73eb8efb9bece3257ac621744340eddf",
+      "bytes": 11604,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_market_prices",
+      "domain": "market",
+      "source_path": "data\\market_prices.json",
+      "dest_path": "data\\lake\\raw\\market\\platform_market_prices\\market_prices.json",
+      "sha256": "1ca2de07b5179b161acfcac4801bc9db5707bb12fc7874836bac31ae43a57d6a",
+      "bytes": 9296,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_knowledge_graph",
+      "domain": "general",
+      "source_path": "data\\knowledge_graph.json",
+      "dest_path": "data\\lake\\raw\\general\\platform_knowledge_graph\\knowledge_graph.json",
+      "sha256": "21f87e70b833241ecefd6e9285d8fae5b30b3373b55ca0c9fdeca75f8f978812",
+      "bytes": 13782,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_agri_advisories",
+      "domain": "general",
+      "source_path": "data\\agri_advisories.json",
+      "dest_path": "data\\lake\\raw\\general\\platform_agri_advisories\\agri_advisories.json",
+      "sha256": "ec9cf0f607af511554531b8086ff7ba03ef76a40eb60920c00eada1406093e95",
+      "bytes": 50748,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_agri_advisories",
+      "domain": "crop",
+      "source_path": "data\\agri_advisories.json",
+      "dest_path": "data\\lake\\raw\\crop\\platform_agri_advisories\\agri_advisories.json",
+      "sha256": "ec9cf0f607af511554531b8086ff7ba03ef76a40eb60920c00eada1406093e95",
+      "bytes": 50748,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_seed_varieties",
+      "domain": "seed",
+      "source_path": "data\\seed_varieties.json",
+      "dest_path": "data\\lake\\raw\\seed\\platform_seed_varieties\\seed_varieties.json",
+      "sha256": "bc41dbb7684834583ebbb1992ce3d6889650f982c8d1d4b63f46d4c7b11e480d",
+      "bytes": 3050,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_irrigation_practices",
+      "domain": "irrigation",
+      "source_path": "data\\irrigation_practices.json",
+      "dest_path": "data\\lake\\raw\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+      "sha256": "460e2ba6a335cb32941b27487892037d9375ad9dd37a1c72d0afa1300b3f9d72",
+      "bytes": 2317,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_climate_zones",
+      "domain": "weather",
+      "source_path": "data\\climate_zones.json",
+      "dest_path": "data\\lake\\raw\\weather\\platform_climate_zones\\climate_zones.json",
+      "sha256": "32b3baeae572197ee60e8220ee5e29e0133ba2190c9a2ee5ac9a2db7c09fc947",
+      "bytes": 2574,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "platform_open_source_catalog",
+      "domain": "general",
+      "source_path": "data\\open_source_catalog.json",
+      "dest_path": "data\\lake\\raw\\general\\platform_open_source_catalog\\open_source_catalog.json",
+      "sha256": "c4531bbaae0115c13aee22c8079d7c75187ed9cafddebd11cda6aa692f303f76",
+      "bytes": 2223,
+      "action": "skipped_identical",
+      "message": "Idempotent skip — content hash matches"
+    },
+    {
+      "source_id": "datagov_agmarknet",
+      "domain": "market",
+      "source_path": null,
+      "dest_path": null,
+      "sha256": null,
+      "bytes": null,
+      "action": "skipped_disabled",
+      "message": "type=http_api not ingested in this run"
+    }
+  ],
+  "manifest_paths": [
+    "data\\lake\\manifests\\ingest_20260718T142622Z-31460252.json"
+  ],
+  "lake_raw": "data\\lake\\raw",
+  "errors": []
+}

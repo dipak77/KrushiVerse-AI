@@ -1,11 +1,6 @@
 {
-  "version": "0.1.0-draft",
-  "sprint": "S0",
-  "note": "Draft taxonomy for Sprint 0; freeze in Sprint 1",
-  "categories": [
-    "soil", "weather", "crop", "disease", "pest", "fertilizer",
-    "irrigation", "scheme", "market", "finance", "machinery",
-    "seed", "advisory", "general"
-  ],
-  "crop_count_target_s1": 22
+  "version": "1.0.0",
+  "status": "frozen",
+  "sprint": "S1",
+  "note": "Canonical taxonomy freeze — see mini/taxonomy/domains.py as source of truth"
 }

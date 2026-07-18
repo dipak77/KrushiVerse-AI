@@ -152,6 +152,130 @@ def rag_backends():
         "collection": settings.QDRANT_COLLECTION,
     }
 
+@app.get("/api/taxonomy")
+def taxonomy_summary_api():
+    """Frozen agriculture domain taxonomy (Sprint 1)."""
+    from mini.taxonomy.service import taxonomy_service
+
+    return {
+        "summary": taxonomy_service.summary(),
+        "categories": taxonomy_service.category_details(),
+        "crops": taxonomy_service.crops(),
+        "stages": taxonomy_service.stages(),
+        "languages": ["en", "mr", "hi"],
+    }
+
+@app.get("/api/taxonomy/validate")
+def taxonomy_validate_api():
+    from mini.taxonomy.service import taxonomy_service
+
+    report = taxonomy_service.validate()
+    if not report.get("ok"):
+        # still 200 with ok=false so clients can display errors; use 422 if preferred
+        return report
+    return report
+
+@app.get("/api/taxonomy/resolve")
+def taxonomy_resolve(crop: Optional[str] = None, district: Optional[str] = None, text: Optional[str] = None):
+    from mini.taxonomy.service import taxonomy_service
+
+    return {
+        "crop": taxonomy_service.resolve_crop(crop or text or "") if (crop or text) else None,
+        "crops_in_text": taxonomy_service.extract_crops(text or crop or ""),
+        "region": taxonomy_service.resolve_region(district=district) if district else None,
+        "categories": taxonomy_service.detect_category(text or crop or "") if (text or crop) else [],
+    }
+
+@app.get("/api/lake/status")
+def lake_status_api():
+    """Data lake raw inventory (Sprint 2)."""
+    from mini.lake.ingest import lake_tree_summary
+    from mini.lake.registry import load_source_registry
+
+    return {
+        "registry": load_source_registry().summary(),
+        "lake": lake_tree_summary(),
+    }
+
+@app.post("/api/lake/ingest")
+def lake_ingest_api(execute: bool = False, skip_http: bool = False):
+    """Trigger W-INGEST (default dry-run unless execute=true)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-INGEST").run(dry_run=not execute, include_http=not skip_http)
+    return result.model_dump()
+
+@app.get("/api/lake/quality")
+def lake_quality_status():
+    """Latest quality pipeline report if present."""
+    from pathlib import Path
+    from mini.paths import LAKE_ROOT
+    import json
+
+    latest = LAKE_ROOT / "QUALITY_LATEST.json"
+    if not latest.exists():
+        return {"ok": False, "message": "No quality report yet. Run POST /api/lake/quality?execute=true"}
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/quality")
+def lake_quality_run(execute: bool = False, near_threshold: float = 0.92):
+    """Run validate → clean → dedup quality pipeline."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QUALITY").run(
+        dry_run=not execute,
+        near_threshold=near_threshold,
+    )
+    return result.model_dump()
+
+@app.get("/api/lake/standard")
+def lake_standard_status():
+    """Latest standardized dataset export report."""
+    from pathlib import Path
+    from mini.paths import LAKE_ROOT, DATASETS_DIR
+    import json
+
+    latest = LAKE_ROOT / "STANDARD_LATEST.json"
+    ver = DATASETS_DIR / "LATEST_VERSION.json"
+    out = {"ok": latest.exists() or ver.exists()}
+    if latest.exists():
+        out["standard"] = json.loads(latest.read_text(encoding="utf-8"))
+    if ver.exists():
+        out["latest_version"] = json.loads(ver.read_text(encoding="utf-8"))
+    if not out["ok"]:
+        out["message"] = "No standard export yet. POST /api/lake/standard?execute=true"
+    return out
+
+@app.post("/api/lake/standard")
+def lake_standard_run(execute: bool = False):
+    """Extract Schema v1 StandardRecords and export train/val/test (+ parquet)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-STANDARDIZE").run(dry_run=not execute)
+    return result.model_dump()
+
+@app.get("/api/lake/analyze")
+def lake_analyze_status():
+    """Latest coverage analysis report."""
+    from mini.paths import LAKE_ROOT
+    import json
+
+    latest = LAKE_ROOT / "ANALYZE_LATEST.json"
+    if not latest.exists():
+        return {
+            "ok": False,
+            "message": "No analysis yet. POST /api/lake/analyze?execute=true",
+        }
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/analyze")
+def lake_analyze_run(execute: bool = False):
+    """Run W-ANALYZE coverage/quality intelligence."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-ANALYZE").run(dry_run=not execute)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}
