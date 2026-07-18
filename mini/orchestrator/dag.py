@@ -40,6 +40,7 @@ PIPELINES: dict[str, list[str]] = {
     "sprint13": ["W-EVAL"],
     "sprint14": ["W-QUANT", "W-DEPLOY"],
     "sprint15": ["W-RAG", "W-AGENT", "W-INFER"],
+    "sprint16": ["W-INFER", "W-DEPLOY"],
     "sft": ["W-SFT"],
     "pretrain": ["W-PRETRAIN"],
     "quant": ["W-QUANT"],

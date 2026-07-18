@@ -19,6 +19,13 @@ class Settings(BaseModel):
     WEB_CACHE_TTL_SEC: int = int(os.getenv("WEB_CACHE_TTL_SEC", "300"))
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "8"))
 
+    # Mini LLM product integration (Sprint 16 / FP-9)
+    # Default OFF so existing planner behavior is unchanged unless explicitly enabled.
+    USE_MINI_LLM: bool = _env_bool("USE_MINI_LLM", "false")
+    MINI_DEFAULT_MODE: str = os.getenv("MINI_DEFAULT_MODE", "grounded")
+    MINI_MAX_NEW_TOKENS: int = int(os.getenv("MINI_MAX_NEW_TOKENS", "40"))
+    MINI_MODEL_VERSION: str = os.getenv("MINI_MODEL_VERSION", "auto")
+
     # Embeddings + Qdrant
     # backend: auto | hash | minilm | openai
     EMBEDDING_BACKEND: str = os.getenv("EMBEDDING_BACKEND", "auto")

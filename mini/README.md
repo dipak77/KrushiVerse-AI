@@ -1,38 +1,44 @@
 # KrushiVerseAI Mini Factory
 
-Lightweight agriculture ML factory for the **~1M-parameter Mini LLM**, sharing contracts with the platform RAG/agents stack.
-
 | Field | Value |
 |---|---|
-| Sprint | **S15 — Inference pipeline (Mini + RAG)** |
-| Package | `mini/` |
-| Schema | `1.0` (`StandardRecord`) |
-| Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-8** |
+| Sprint | **S16 — Platform Mini chat + USE_MINI_LLM** |
+| Feature phase | **FP-9** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
-## CLI
+## Product endpoints
 
 ```bash
-python -m mini.orchestrator list-workers
-python -m mini.orchestrator status
-python -m mini.orchestrator pretrain --execute --mode domain --steps 200
-python -m mini.orchestrator sft --execute --steps-v03 120 --steps-v04 120
-python -m mini.orchestrator eval --execute --version v0.4
-python -m mini.orchestrator quant --execute --version v0.4
-python -m mini.orchestrator deploy --execute --tag v0.5-quant --force
-python -m mini.orchestrator rag --execute --query "pink bollworm cotton IPM"
-python -m mini.orchestrator infer --execute --query "How do I manage pink bollworm in cotton with IPM in Maharashtra?"
+GET  /api/mini/status
+POST /api/mini/chat   # always Mini+RAG (grounded by default)
+POST /api/query       # planner; Mini synthesizer only if USE_MINI_LLM=true
 ```
 
-## Sprint 0–15 acceptance
+## Feature flag
 
-- [x] Lake → QA → KG → tokenizer → pretrain → SFT → eval → quant/deploy  
-- [x] **Grounded Mini+RAG inference with citations + validator + fallback**  
-- [x] Tests: `test_mini_sprint0`–`15`  
+```bash
+# Default: classic template synthesizer
+USE_MINI_LLM=false
 
-**Local-only:** `data/lake/**`, checkpoints, `INFER_LATEST.json`, quant/serve dumps.
+# Mini becomes planner brain (agents still run as specialists)
+USE_MINI_LLM=true
+```
+
+## CLI (factory)
+
+```bash
+python -m mini.orchestrator infer --execute --query "pink bollworm cotton IPM"
+python -m mini.orchestrator eval --execute --version v0.4
+python -m mini.orchestrator quant --execute
+python -m mini.orchestrator deploy --execute --force
+```
+
+## Sprint 0–16
+
+- [x] Lake → train → SFT → eval → quant → infer  
+- [x] **Platform `/api/mini/chat` + flag-gated planner Mini synthesizer**  
+- [x] Streamlit Mini panel with citations  
 
 ## Next
 
-Sprint 16 — `/api/mini/chat`, Streamlit Mini panel, `USE_MINI_LLM` feature flag.
+Sprint 17 — production beta → Mini v1.0 checklist / hardening.

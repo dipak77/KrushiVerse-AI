@@ -425,6 +425,19 @@ lang_option = st.sidebar.radio("Response Language / भाषा", ["Marathi (�
 lang_code = "mr" if "Marathi" in lang_option else "en"
 
 enable_web = st.sidebar.checkbox("Enable Web RAG", value=True)
+from app.config import settings as _app_settings
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("🧠 Mini LLM (S16 / FP-9)")
+st.sidebar.caption(
+    f"Env flag USE_MINI_LLM = **{_app_settings.USE_MINI_LLM}** "
+    f"(restart app after changing env)"
+)
+use_mini_panel = st.sidebar.checkbox(
+    "Prefer Mini panel chat (POST /api/mini/chat path)",
+    value=bool(_app_settings.USE_MINI_LLM),
+    help="Uses Mini+RAG grounded chain. Planner still uses USE_MINI_LLM for /api/query synthesizer.",
+)
 st.sidebar.markdown("---")
 st.sidebar.subheader("KB / Embeddings")
 _stats = kb_loader.knowledge_stats()
@@ -482,6 +495,7 @@ if _aliases:
 
 tabs = st.tabs([
     "🤖 AI Krushi Assistant",
+    "🧠 Mini LLM + Citations",
     "📚 Advanced RAG & Sources",
     "🗂️ Domain Taxonomy",
     "🏭 Data Factory",
@@ -552,17 +566,113 @@ with tabs[0]:
             else:
                 st.info("No citations attached for this answer.")
 
+            if res.get("use_mini_llm") or res.get("synthesizer") == "mini_llm":
+                st.success(f"Synthesizer: Mini LLM (USE_MINI_LLM={res.get('use_mini_llm')})")
+            else:
+                st.caption(f"Synthesizer: {res.get('synthesizer') or 'template'} (flag off = classic)")
+
             with st.expander("🔍 Multi-Agent plan & knowledge layer JSON"):
                 st.json({
                     "active_agents": res["active_agent_names"],
                     "knowledge_layer": res["knowledge_layer"],
                     "raw_agent_outputs": res["agent_outputs"],
+                    "synthesizer": res.get("synthesizer"),
+                    "use_mini_llm": res.get("use_mini_llm"),
                 })
         else:
             st.warning("Please type a query or select a sample query above.")
 
-# TAB 2: Advanced RAG & Sources
+# TAB 2: Mini LLM + Citations (Sprint 16)
 with tabs[1]:
+    st.header("🧠 Mini LLM Assistant (Sprint 16 / FP-9)")
+    st.write(
+        "Grounded Mini+RAG chat with citations. Uses `run_mini_chat` / `POST /api/mini/chat`. "
+        "Planner synthesizer still respects env `USE_MINI_LLM` (default off)."
+    )
+    st.info(
+        f"USE_MINI_LLM={_app_settings.USE_MINI_LLM} · mode={_app_settings.MINI_DEFAULT_MODE} · "
+        f"model={_app_settings.MINI_MODEL_VERSION}"
+    )
+    mini_q = st.text_area(
+        "Mini query",
+        value="How do I manage pink bollworm in cotton with IPM in Maharashtra?",
+        height=90,
+        key="mini_llm_query",
+    )
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        mini_mode = st.selectbox("Mode", ["grounded", "open"], index=0, key="mini_mode")
+    with c2:
+        mini_crop = st.text_input("Crop hint", value="Cotton", key="mini_crop")
+    with c3:
+        mini_agents = st.checkbox("Enable agent notes", value=True, key="mini_agents")
+
+    if st.button("🚀 Ask Mini", type="primary", key="mini_ask_btn"):
+        if mini_q.strip():
+            with st.spinner("Mini inference: intent → RAG → generate → validate..."):
+                from app.llm.mini_bridge import run_mini_chat
+
+                mini_res = run_mini_chat(
+                    mini_q.strip(),
+                    language=lang_code,
+                    crop=mini_crop or None,
+                    location=farm_info["location"].get("district", "Pune"),
+                    mode=mini_mode,
+                    enable_web=enable_web if use_mini_panel else False,
+                    enable_agents=mini_agents,
+                )
+                st.session_state["last_mini_result"] = mini_res
+
+            mini_res = st.session_state.get("last_mini_result") or {}
+            st.markdown("### Answer")
+            st.markdown(mini_res.get("answer") or mini_res.get("synthesized_answer") or "—")
+            render_stat_cards(
+                [
+                    {
+                        "icon": "⚙️",
+                        "label": "Engine",
+                        "value": mini_res.get("engine") or "—",
+                        "accent": "indigo",
+                    },
+                    {
+                        "icon": "📚",
+                        "label": "Sources",
+                        "value": mini_res.get("n_sources") or 0,
+                        "accent": "leaf",
+                    },
+                    {
+                        "icon": "🔁",
+                        "label": "Fallback",
+                        "value": str(mini_res.get("used_fallback")),
+                        "accent": "saffron",
+                    },
+                    {
+                        "icon": "✅",
+                        "label": "OK",
+                        "value": str(mini_res.get("ok")),
+                        "accent": "terracotta",
+                    },
+                ]
+            )
+            st.markdown("#### Citations")
+            cites = mini_res.get("citations") or []
+            if cites:
+                for i, c in enumerate(cites[:10], 1):
+                    st.markdown(
+                        f"**{c.get('marker') or f'[{i}]'}** {c.get('title')} — "
+                        f"`{c.get('origin')}`"
+                    )
+                    if c.get("text"):
+                        st.caption((c.get("text") or "")[:240])
+            else:
+                st.warning("No citations (grounded mode should refuse empty sources).")
+            with st.expander("Mini JSON"):
+                st.json(mini_res)
+        else:
+            st.warning("Enter a query for Mini.")
+
+# TAB 3: Advanced RAG & Sources
+with tabs[2]:
     st.header("📚 Advanced Multi-Source RAG Explorer")
     st.write(
         "Run hybrid + dense (Qdrant/local) + GraphRAG + tools + web retrieval. "
@@ -726,7 +836,7 @@ with tabs[1]:
         )
 
 # TAB 3: Domain Taxonomy browser (Sprint 1)
-with tabs[2]:
+with tabs[3]:
     st.header("🗂️ Domain Taxonomy Browser (Sprint 1 — Frozen v1.0)")
     st.write(
         "Single source of truth for categories, crops (EN/MR/HI), stages, regions, and units. "
@@ -776,7 +886,7 @@ with tabs[2]:
         st.caption("Dimensions: " + ", ".join(UNITS["dimensions"].keys()))
 
 # TAB 4: Data Factory (Sprint 5)
-with tabs[3]:
+with tabs[4]:
     st.header("🏭 Mini Data Factory — Coverage Analysis (Sprint 5)")
     st.write(
         "Run W-ANALYZE after standardize to inspect missingness, language/crop balance, "
@@ -845,7 +955,7 @@ with tabs[3]:
         st.info("Run standardize then W-ANALYZE to populate the dashboard.")
 
 # TAB 5: Vision
-with tabs[4]:
+with tabs[5]:
     st.header("🔬 Computer Vision Plant Disease Classifier")
     st.write("Upload a crop leaf photo or select sample leaf image to perform diagnostic analysis.")
 
@@ -877,7 +987,7 @@ with tabs[4]:
             diag_card("🧪 Chemical Control", result["chemical_treatment"]["mr"], variant="chem")
 
 # TAB 6: Live RAG
-with tabs[5]:
+with tabs[6]:
     st.header("📡 Live RAG Intelligence Center")
 
     w_data = weather_feed.get_weather("Pune")
@@ -906,7 +1016,7 @@ with tabs[5]:
     st.caption(f"Open data status: {opendata_client.status()}")
 
 # TAB 7: Soil & Fertilizer
-with tabs[6]:
+with tabs[7]:
     st.header("🧪 Soil Health Card OCR & Fertilizer Planner")
 
     col_s1, col_s2 = st.columns([1, 1])
@@ -948,7 +1058,7 @@ with tabs[6]:
             diag_card("मराठी संदेश", p_res["application_schedule_mr"], variant="neutral")
 
 # TAB 8: GraphRAG
-with tabs[7]:
+with tabs[8]:
     st.header("🕸️ GraphRAG Agricultural Knowledge Graph")
     st.write("Explore graph relations between crops, pests, diseases, fertilizers, and government schemes.")
 
@@ -960,7 +1070,7 @@ with tabs[7]:
     st.json(ecosystem)
 
 # TAB 9: Predictive
-with tabs[8]:
+with tabs[9]:
     st.header("📊 Predictive AI Models & Automated Workflows")
 
     p1, p2 = st.columns(2)

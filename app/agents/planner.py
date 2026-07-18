@@ -167,13 +167,23 @@ class PlannerAgent:
             f"(local hybrid + GraphRAG + {len(rag.get('tools_used') or [])} tools"
             f"{' + web' if use_web else ''})."
         )
+        # Sprint 16: Mini synthesizer when USE_MINI_LLM=1; agents stay tool specialists.
         final_answer = response_synthesizer.synthesize(
             plan_summary,
             agent_results,
             language=language,
             rag_context=rag.get("context_text"),
             citations=rag.get("citations"),
+            query=query,
+            crop=crop_name,
+            location=district,
+            enable_web=use_web,
+            use_mini=settings.USE_MINI_LLM,
         )
+        synth_meta = getattr(response_synthesizer, "last_meta", None) or {
+            "synthesizer": "template",
+            "use_mini_llm": False,
+        }
 
         farm_memory_store.log_action(
             farm_id=farm["farm_id"],
@@ -181,7 +191,8 @@ class PlannerAgent:
             details=(
                 f"Query: '{query}'. Crop resolved: {crop_name}. "
                 f"Active agents: {[ag.name for ag in active_agents]}. "
-                f"Tools: {rag.get('tools_used')}"
+                f"Tools: {rag.get('tools_used')}. "
+                f"Synthesizer: {synth_meta.get('synthesizer')}"
             ),
         )
 
@@ -205,6 +216,9 @@ class PlannerAgent:
             },
             "agent_outputs": agent_results,
             "synthesized_answer": final_answer,
+            "synthesizer": synth_meta.get("synthesizer"),
+            "use_mini_llm": bool(settings.USE_MINI_LLM),
+            "mini_meta": synth_meta if settings.USE_MINI_LLM else None,
         }
 
 

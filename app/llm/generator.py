@@ -1,5 +1,15 @@
+from __future__ import annotations
+
+from typing import Any
+
+from app.config import settings
+
+
 class MarathiResponseSynthesizer:
-    """Generates localized agricultural responses in Marathi and English."""
+    """Generates localized agricultural responses in Marathi and English.
+
+    Sprint 16: optional Mini LLM synthesizer behind USE_MINI_LLM (default off).
+    """
 
     MARATHI_TEMPLATES = {
         "greeting": "नमस्कार शेतकरी मित्र! AI कृषी मित्र प्रणालीमध्ये आपले स्वागत आहे.",
@@ -13,6 +23,9 @@ class MarathiResponseSynthesizer:
         "footer": "\n---\n*कृषी विज्ञान केंद्र, ICAR, खुले शासकीय स्रोत, व वेब/टूल-आधारित RAG वर आधारित AI कृषी मित्र सल्ला. फवारणी/खते स्थानिक तज्ञ तपासून घ्या.*"
     }
 
+    def __init__(self) -> None:
+        self.last_meta: dict[str, Any] = {"synthesizer": "template"}
+
     def synthesize(
         self,
         plan_summary: str,
@@ -20,12 +33,45 @@ class MarathiResponseSynthesizer:
         language: str = "mr",
         rag_context: str | None = None,
         citations: list | None = None,
+        *,
+        query: str | None = None,
+        crop: str | None = None,
+        location: str = "Pune",
+        enable_web: bool | None = None,
+        use_mini: bool | None = None,
     ) -> str:
-        """Synthesize specialized agent outputs into a unified, clear response in Marathi or English."""
+        """Synthesize specialized agent outputs into a unified response.
+
+        When ``use_mini`` is True (or settings.USE_MINI_LLM), Mini+RAG is the
+        primary synthesizer; agents remain upstream tool specialists.
+        Flag off preserves classic template synthesis (backward compatible).
+        """
+        flag = settings.USE_MINI_LLM if use_mini is None else bool(use_mini)
+        if flag and (query or plan_summary):
+            try:
+                from app.llm.mini_bridge import synthesize_with_mini
+
+                answer, meta = synthesize_with_mini(
+                    query or plan_summary,
+                    plan_summary=plan_summary,
+                    agent_outputs=agent_outputs or {},
+                    language=language,
+                    crop=crop,
+                    location=location,
+                    enable_web=enable_web,
+                    citations=citations,
+                )
+                if answer and answer.strip():
+                    self.last_meta = meta
+                    return answer
+            except Exception as e:
+                self.last_meta = {"synthesizer": "template", "mini_error": str(e)}
+        else:
+            self.last_meta = {"synthesizer": "template", "use_mini_llm": False}
+
         if language.lower() in ["mr", "marathi"]:
             return self._synthesize_marathi(plan_summary, agent_outputs, citations=citations)
-        else:
-            return self._synthesize_english(plan_summary, agent_outputs, citations=citations)
+        return self._synthesize_english(plan_summary, agent_outputs, citations=citations)
 
     def _format_citations(self, citations: list | None, language: str = "en") -> str:
         if not citations:

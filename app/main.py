@@ -55,6 +55,17 @@ class QueryRequest(BaseModel):
     language: Optional[str] = "mr"  # "mr" for Marathi, "en" for English
     enable_web: Optional[bool] = None
 
+class MiniChatRequest(BaseModel):
+    query: str
+    language: Optional[str] = "en"
+    crop: Optional[str] = None
+    location: Optional[str] = "Pune"
+    mode: Optional[str] = None  # grounded | open
+    enable_web: Optional[bool] = False
+    enable_agents: Optional[bool] = True
+    max_new_tokens: Optional[int] = None
+    seed: Optional[int] = 42
+
 class AdvancedRAGRequest(BaseModel):
     query: str
     crop: Optional[str] = None
@@ -119,6 +130,59 @@ def process_farmer_query(request: QueryRequest):
             enable_web=request.enable_web,
         )
         return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/mini/status")
+def mini_status():
+    """Mini product integration flags + latest infer report (Sprint 16 / FP-9)."""
+    from mini.paths import INFERENCE_DIR, MODELS_DIR
+    import json
+    from mini import __feature_phase__, __sprint__, __version__ as mini_ver
+
+    latest = INFERENCE_DIR / "INFER_LATEST.json"
+    infer = None
+    if latest.exists():
+        try:
+            infer = json.loads(latest.read_text(encoding="utf-8"))
+        except Exception:
+            infer = {"ok": False, "error": "unreadable INFER_LATEST"}
+    return {
+        "ok": True,
+        "mini_version": mini_ver,
+        "sprint": __sprint__,
+        "feature_phase": __feature_phase__,
+        "use_mini_llm": settings.USE_MINI_LLM,
+        "mini_default_mode": settings.MINI_DEFAULT_MODE,
+        "mini_model_version": settings.MINI_MODEL_VERSION,
+        "serve_dir_exists": (MODELS_DIR / "serve").exists(),
+        "latest_infer": {
+            "ok": (infer or {}).get("ok"),
+            "engine": (infer or {}).get("engine"),
+            "n_sources": (infer or {}).get("n_sources"),
+            "created_at": (infer or {}).get("created_at"),
+        }
+        if infer
+        else None,
+    }
+
+@app.post("/api/mini/chat")
+def mini_chat(request: MiniChatRequest):
+    """Direct Mini+RAG chat endpoint (Sprint 16). Always uses Mini chain (not gated by USE_MINI_LLM)."""
+    try:
+        from app.llm.mini_bridge import run_mini_chat
+
+        return run_mini_chat(
+            request.query,
+            language=request.language or "en",
+            crop=request.crop,
+            location=request.location or "Pune",
+            mode=request.mode or settings.MINI_DEFAULT_MODE,
+            enable_web=bool(request.enable_web) if request.enable_web is not None else False,
+            enable_agents=bool(request.enable_agents) if request.enable_agents is not None else True,
+            max_new_tokens=request.max_new_tokens,
+            seed=int(request.seed or 42),
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
