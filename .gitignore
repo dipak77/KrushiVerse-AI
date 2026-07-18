@@ -6,6 +6,9 @@ __pycache__/
 .env
 .cache/
 *.npz
+# Frontend
+ui/web/node_modules/
+ui/web/dist/
 
 # --- Local-only: data lake + Mini generated artifacts (do not push) ---
 # Full data lake (training dumps, reports, manifests)

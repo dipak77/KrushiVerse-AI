@@ -30,24 +30,396 @@ from mini.taxonomy.service import taxonomy_service
 st.set_page_config(
     page_title="AI Krushi Mitra — KrushiVerse-AI Platform",
     page_icon="🌾",
-    layout="wide"
+    layout="wide",
 )
 
-st.title("🌾 AI Krushi Mitra — Autonomous AI Agriculture Platform")
-st.caption(
-    "Gen 10.2 + Mini Sprint 10 — ~1M Mini harness · multi-source RAG · "
-    "GraphRAG · open data · agents · predictive models"
+# Primary OS UI is the React app in ui/web (reference design).
+# Streamlit remains available for factory/dev operators.
+st.sidebar.markdown(
+    """
+**🖥️ Primary UI (new design)**  
+Build: `cd ui/web && npm install && npm run build`  
+Open: [http://127.0.0.1:8000/ui](http://127.0.0.1:8000/ui)  
+Dev: `npm run dev` in `ui/web` (proxies `/api` → :8000)
+"""
+)
+
+# ============================================================================
+# DESIGN SYSTEM
+# Palette: deep indigo (--ink/--indigo), marigold saffron (--saffron), and
+# vegetation leaf-green (--leaf) — a nod to dawn-to-dusk over a plowed field.
+# The "furrow" gradient (indigo -> saffron -> leaf) is the page's signature
+# motif and recurs as card borders, the hero footer strip, and section
+# dividers. Note: this styles Streamlit's generated DOM via data-testid
+# selectors, which can shift slightly between Streamlit versions — if a
+# style doesn't seem to apply after an upgrade, inspect the element and
+# adjust the matching selector below.
+# ============================================================================
+
+CUSTOM_CSS = """
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
+:root {
+    --ink: #1E1B4B;
+    --ink-soft: #57534E;
+    --indigo: #4F46E5;
+    --indigo-dark: #3730A3;
+    --saffron: #F59E0B;
+    --saffron-dark: #D97706;
+    --leaf: #16A34A;
+    --terracotta: #C2410C;
+    --cream: #FBF7EF;
+    --card: #FFFFFF;
+    --line: #E7E1D3;
+    --furrow: linear-gradient(90deg, var(--indigo) 0%, var(--saffron) 55%, var(--leaf) 100%);
+}
+
+html, body, [class*="css"] {
+    font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+}
+
+.stApp {
+    background:
+        repeating-linear-gradient(180deg, rgba(79,70,229,0.025) 0px, rgba(79,70,229,0.025) 1px, transparent 1px, transparent 34px),
+        var(--cream);
+}
+
+h1, h2, h3 {
+    font-family: 'Baloo 2', 'Noto Sans Devanagari', sans-serif !important;
+    color: var(--ink) !important;
+    letter-spacing: -0.01em;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+    background: linear-gradient(120deg, var(--ink) 0%, var(--indigo-dark) 55%, var(--indigo) 100%);
+    border-radius: 20px;
+    padding: 2rem 2.25rem 1.6rem 2.25rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -12px rgba(30,27,75,0.45);
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 6px;
+    background: var(--furrow);
+}
+.hero-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    color: var(--saffron);
+    background: rgba(245,158,11,0.14);
+    border: 1px solid rgba(245,158,11,0.35);
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.7rem;
+}
+.hero-title {
+    font-family: 'Baloo 2', 'Noto Sans Devanagari', sans-serif !important;
+    color: #FFFFFF !important;
+    font-size: 2.3rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.35rem 0 !important;
+}
+.hero-sub {
+    color: #D8D6F5;
+    font-size: 0.98rem;
+    max-width: 780px;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ---------- Field divider (signature motif) ---------- */
+.field-divider {
+    height: 4px;
+    border-radius: 999px;
+    background: var(--furrow);
+    opacity: 0.55;
+    margin: 1.1rem 0 1.4rem 0;
+}
+
+/* ---------- Stat cards ---------- */
+.stat-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1rem 1.1rem 0.9rem 1.1rem;
+    box-shadow: 0 1px 2px rgba(30,27,75,0.04);
+    border-top: 4px solid var(--indigo);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    min-height: 104px;
+    margin-bottom: 0.4rem;
+}
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px -8px rgba(30,27,75,0.25);
+}
+.stat-card.accent-indigo { border-top-color: var(--indigo); }
+.stat-card.accent-saffron { border-top-color: var(--saffron); }
+.stat-card.accent-leaf { border-top-color: var(--leaf); }
+.stat-card.accent-terracotta { border-top-color: var(--terracotta); }
+.stat-icon { font-size: 1.3rem; margin-bottom: 0.15rem; }
+.stat-value {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    word-break: break-word;
+}
+.stat-label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin-top: 0.15rem;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+    font-weight: 500;
+}
+.badge-success { background: rgba(22,163,74,0.12); color: var(--leaf); border: 1px solid rgba(22,163,74,0.3); }
+.badge-warn { background: rgba(217,119,6,0.12); color: var(--saffron-dark); border: 1px solid rgba(217,119,6,0.3); }
+.badge-neutral { background: rgba(79,70,229,0.1); color: var(--indigo); border: 1px solid rgba(79,70,229,0.25); }
+
+/* ---------- Sidebar ---------- */
+section[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, var(--ink) 0%, #241F5E 100%);
+}
+section[data-testid="stSidebar"] * {
+    color: #EDEBFB !important;
+}
+section[data-testid="stSidebar"] h1,
+section[data-testid="stSidebar"] h2,
+section[data-testid="stSidebar"] h3 {
+    color: #FFFFFF !important;
+}
+.id-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-left: 4px solid var(--saffron);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.8rem;
+}
+.id-card-row { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.65rem; }
+.id-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--furrow);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Baloo 2', sans-serif; font-weight: 700; color: #1E1B4B;
+    flex-shrink: 0;
+}
+.id-name { font-weight: 600; font-size: 0.95rem; }
+.id-sub { font-size: 0.72rem; color: #B9B6E8; font-family: 'JetBrains Mono', monospace; }
+.id-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.chip {
+    font-size: 0.68rem;
+    background: rgba(255,255,255,0.09);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 0.18rem 0.5rem;
+    border-radius: 999px;
+}
+.sys-row {
+    font-size: 0.8rem;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.28rem 0;
+    color: #D8D6F5;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ---------- Tabs ---------- */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 4px;
+    background: rgba(79,70,229,0.06);
+    padding: 6px;
+    border-radius: 14px;
+}
+.stTabs [data-baseweb="tab"] {
+    height: 42px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+.stTabs [aria-selected="true"] {
+    background: var(--card) !important;
+    color: var(--ink) !important;
+    box-shadow: 0 2px 8px rgba(30,27,75,0.12);
+    font-weight: 600;
+}
+
+/* ---------- Buttons ---------- */
+.stButton > button {
+    background: linear-gradient(120deg, var(--indigo) 0%, var(--indigo-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.5rem 1.2rem;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.25);
+}
+.stButton > button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(79,70,229,0.35);
+}
+.stButton > button[kind="primary"] {
+    background: linear-gradient(120deg, var(--saffron-dark) 0%, var(--saffron) 100%);
+    box-shadow: 0 2px 8px rgba(245,158,11,0.35);
+}
+
+/* ---------- Inputs ---------- */
+[data-testid="stTextInput"] input,
+[data-testid="stTextArea"] textarea,
+[data-testid="stNumberInput"] input {
+    border-radius: 10px !important;
+    border: 1px solid var(--line) !important;
+}
+[data-testid="stTextInput"] input:focus,
+[data-testid="stTextArea"] textarea:focus {
+    border-color: var(--saffron) !important;
+    box-shadow: 0 0 0 2px rgba(245,158,11,0.2) !important;
+}
+
+/* ---------- Native metrics (kept for less-prominent tabs) ---------- */
+[data-testid="stMetric"] {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--indigo);
+    border-radius: 14px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 1px 2px rgba(30,27,75,0.04);
+}
+[data-testid="stMetricLabel"] { color: var(--ink-soft) !important; }
+[data-testid="stMetricValue"] { font-family: 'Baloo 2', sans-serif !important; color: var(--ink) !important; }
+
+/* ---------- Expanders ---------- */
+[data-testid="stExpander"] {
+    border: 1px solid var(--line) !important;
+    border-radius: 12px !important;
+    background: var(--card);
+}
+
+/* ---------- Dataframes ---------- */
+[data-testid="stDataFrame"] {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+/* ---------- Alerts ---------- */
+div[data-testid="stAlert"] {
+    border-radius: 12px;
+}
+
+/* ---------- Result / diagnostic cards ---------- */
+.diag-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 5px solid var(--leaf);
+    border-radius: 12px;
+    padding: 0.85rem 1.05rem;
+    margin-bottom: 0.6rem;
+}
+.diag-card.chem { border-left-color: var(--terracotta); }
+.diag-card.neutral { border-left-color: var(--indigo); }
+"""
+
+st.markdown(f"<style>{CUSTOM_CSS}</style>", unsafe_allow_html=True)
+
+
+# ============================================================================
+# REUSABLE COMPONENTS
+# ============================================================================
+
+def render_stat_cards(items):
+    """Render a row of stat cards. items: list of dicts with icon/label/value/accent."""
+    cols = st.columns(len(items))
+    for col, item in zip(cols, items):
+        accent = item.get("accent", "indigo")
+        col.markdown(
+            f'<div class="stat-card accent-{accent}">'
+            f'<div class="stat-icon">{item["icon"]}</div>'
+            f'<div class="stat-value">{item["value"]}</div>'
+            f'<div class="stat-label">{item["label"]}</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
+
+def badge(text, kind="neutral"):
+    return f'<span class="badge badge-{kind}">{text}</span>'
+
+
+def field_divider():
+    st.markdown('<div class="field-divider"></div>', unsafe_allow_html=True)
+
+
+def diag_card(title, body_html, variant=""):
+    css_class = f"diag-card {variant}".strip()
+    st.markdown(
+        f'<div class="{css_class}"><b>{title}</b><br>{body_html}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================================
+# HERO
+# ============================================================================
+
+st.markdown(
+    """
+    <div class="hero">
+        <div class="hero-badge">GEN 10.2 &nbsp;·&nbsp; MINI SPRINT 9</div>
+        <h1 class="hero-title">🌾 AI Krushi Mitra</h1>
+        <p class="hero-sub">Autonomous AI Agriculture Platform — domain tokenizer · multi-source RAG ·
+        GraphRAG · open data · agents · predictive models</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
 )
 
 # Sidebar - Farm Profile
-st.sidebar.header("🏡 Farm Context & Memory")
 farm_id = st.sidebar.text_input("Farm ID", value="FARM_101")
 farm_info = farm_memory_store.get_farm(farm_id) or farm_memory_store.get_farm("FARM_101")
 
-st.sidebar.markdown(f"**Farmer:** {farm_info['farmer_name']}")
-st.sidebar.markdown(f"**Location:** {farm_info['location']['village']}, {farm_info['location']['district']}")
-st.sidebar.markdown(f"**Current Crop:** {farm_info['current_crop']['crop_name_mr']} ({farm_info['current_crop']['crop_name']})")
-st.sidebar.markdown(f"**Acreage:** {farm_info['land_area_acres']} Acres")
+_farmer_name = farm_info["farmer_name"]
+_village = farm_info["location"]["village"]
+_district = farm_info["location"]["district"]
+_crop_mr = farm_info["current_crop"]["crop_name_mr"]
+_crop_en = farm_info["current_crop"]["crop_name"]
+_acres = farm_info["land_area_acres"]
+_initials = "".join([w[0] for w in _farmer_name.split()[:2]]).upper() or "🌾"
+
+st.sidebar.markdown(
+    f"""
+    <div class="id-card">
+        <div class="id-card-row">
+            <div class="id-avatar">{_initials}</div>
+            <div>
+                <div class="id-name">{_farmer_name}</div>
+                <div class="id-sub">🆔 {farm_id}</div>
+            </div>
+        </div>
+        <div class="id-chips">
+            <span class="chip">📍 {_village}, {_district}</span>
+            <span class="chip">🌱 {_crop_en} / {_crop_mr}</span>
+            <span class="chip">📐 {_acres} acres</span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 lang_option = st.sidebar.radio("Response Language / भाषा", ["Marathi (मराठी)", "English"])
 lang_code = "mr" if "Marathi" in lang_option else "en"
@@ -57,20 +429,45 @@ st.sidebar.markdown("---")
 st.sidebar.subheader("KB / Embeddings")
 _stats = kb_loader.knowledge_stats()
 st.sidebar.metric("Indexed docs", _stats["total_documents"])
+
 _emb = embedding_provider.info()
-st.sidebar.caption(f"Embedding: `{_emb['backend']}` · dim={_emb['dim']}")
-_hyb = hybrid_retriever.backend_info()
-st.sidebar.caption(f"Dense: `{_hyb.get('dense_backend')}`")
-_od = opendata_client.status()
-st.sidebar.caption(
-    "Agmarknet live: " + ("✅ key set" if _od.get("configured") else "⚠️ local fallback (set DATA_GOV_IN_API_KEY)")
+_emb_backend = _emb["backend"]
+_emb_dim = _emb["dim"]
+st.sidebar.markdown(
+    f'<div class="sys-row"><span>Embedding</span>{badge(f"{_emb_backend} · dim={_emb_dim}", "neutral")}</div>',
+    unsafe_allow_html=True,
 )
+
+_hyb = hybrid_retriever.backend_info()
+_dense_backend = _hyb.get("dense_backend") or "—"
+st.sidebar.markdown(
+    f'<div class="sys-row"><span>Dense backend</span>{badge(_dense_backend, "neutral")}</div>',
+    unsafe_allow_html=True,
+)
+
+_od = opendata_client.status()
+_od_kind = "success" if _od.get("configured") else "warn"
+_od_text = "✅ key set" if _od.get("configured") else "⚠️ local fallback"
+st.sidebar.markdown(
+    f'<div class="sys-row"><span>Agmarknet live</span>{badge(_od_text, _od_kind)}</div>',
+    unsafe_allow_html=True,
+)
+if not _od.get("configured"):
+    st.sidebar.caption("Set DATA_GOV_IN_API_KEY to enable live prices.")
 
 # Sidebar taxonomy browser (read-only) — Sprint 1 demo
 st.sidebar.markdown("---")
 st.sidebar.subheader("🗂️ Taxonomy (S1 frozen)")
 _tax = taxonomy_service.summary()
-st.sidebar.caption(f"v{_tax['version']} · {_tax['status']} · {_tax['crops']} crops")
+_tax_version_label = "v" + str(_tax["version"])
+_tax_status_label = _tax["status"]
+_tax_crops_label = str(_tax["crops"])
+st.sidebar.markdown(
+    f'<div class="sys-row"><span>Version</span>{badge(_tax_version_label, "neutral")}</div>'
+    f'<div class="sys-row"><span>Status</span>{badge(_tax_status_label, "success")}</div>'
+    f'<div class="sys-row"><span>Crops</span>{badge(_tax_crops_label, "neutral")}</div>',
+    unsafe_allow_html=True,
+)
 _tax_cat = st.sidebar.selectbox("Category", taxonomy_service.categories())
 _tax_crop = st.sidebar.selectbox("Crop", taxonomy_service.crop_names())
 _crop_rec = taxonomy_service.get_crop_record(_tax_crop)
@@ -126,25 +523,32 @@ with tabs[0]:
                 )
                 st.session_state["last_assistant_result"] = res
 
+            field_divider()
             st.markdown("### 📝 Synthesized Marathi/English Response:")
             st.markdown(res["synthesized_answer"])
 
             kl = res.get("knowledge_layer") or {}
-            c1, c2, c3, c4 = st.columns(4)
-            c1.metric("Crop resolved", res.get("crop", "—"))
-            c2.metric("Fused docs", kl.get("fused_document_count", 0))
-            c3.metric("Web hits", kl.get("web_result_count", 0))
-            c4.metric("Tools", len(kl.get("tools_used") or []))
+            render_stat_cards([
+                {"icon": "🌾", "label": "Crop resolved", "value": res.get("crop", "—"), "accent": "leaf"},
+                {"icon": "📚", "label": "Fused docs", "value": kl.get("fused_document_count", 0), "accent": "indigo"},
+                {"icon": "🌐", "label": "Web hits", "value": kl.get("web_result_count", 0), "accent": "saffron"},
+                {"icon": "🛠️", "label": "Tools used", "value": len(kl.get("tools_used") or []), "accent": "terracotta"},
+            ])
 
             st.markdown("#### 📎 Citations / Sources")
             cites = kl.get("citations") or []
             if cites:
                 for i, c in enumerate(cites[:10], 1):
                     url = c.get("url") or ""
-                    line = f"**{i}. {c.get('title') or c.get('source')}** — `{c.get('origin')}` / {c.get('source')}"
-                    if url:
-                        line += f" · [link]({url})"
-                    st.markdown(line)
+                    title = c.get("title") or c.get("source")
+                    origin = c.get("origin")
+                    source = c.get("source")
+                    link_html = f' · <a href="{url}" target="_blank">Open source ↗</a>' if url else ""
+                    diag_card(
+                        f"{i}. {title}",
+                        f'<span class="stat-label">{origin} / {source}</span>{link_html}',
+                        variant="neutral",
+                    )
             else:
                 st.info("No citations attached for this answer.")
 
@@ -192,11 +596,13 @@ with tabs[1]:
 
     rag = st.session_state.get("last_rag_result")
     if rag:
-        b1, b2, b3, b4 = st.columns(4)
-        b1.metric("Local hits", rag.get("local_hit_count", 0))
-        b2.metric("Fused docs", len(rag.get("fused_documents") or []))
-        b3.metric("Web results", len(rag.get("web_results") or []))
-        b4.metric("Tools used", len(rag.get("tools_used") or []))
+        field_divider()
+        render_stat_cards([
+            {"icon": "📂", "label": "Local hits", "value": rag.get("local_hit_count", 0), "accent": "indigo"},
+            {"icon": "🧬", "label": "Fused docs", "value": len(rag.get("fused_documents") or []), "accent": "leaf"},
+            {"icon": "🌐", "label": "Web results", "value": len(rag.get("web_results") or []), "accent": "saffron"},
+            {"icon": "🛠️", "label": "Tools used", "value": len(rag.get("tools_used") or []), "accent": "terracotta"},
+        ])
 
         st.subheader("Query plan")
         st.json(rag.get("query_plan"))
@@ -234,7 +640,7 @@ with tabs[1]:
     else:
         st.info("Run a query above to populate fused docs and citations.")
 
-    st.markdown("---")
+    field_divider()
     st.subheader("🏛 data.gov.in / Agmarknet open data")
     od1, od2, od3 = st.columns(3)
     commodity = od1.text_input("Commodity", value="Cotton")
@@ -255,7 +661,7 @@ with tabs[1]:
     st.subheader("Registered tools")
     st.dataframe(pd.DataFrame(tool_registry.list_tools()), use_container_width=True)
 
-    st.markdown("---")
+    field_divider()
     st.subheader("🗂 Data lake ingest (Sprint 2)")
     from mini.lake.registry import load_source_registry
     from mini.lake.ingest import lake_tree_summary
@@ -326,12 +732,14 @@ with tabs[2]:
         "Single source of truth for categories, crops (EN/MR/HI), stages, regions, and units. "
         "Used by normalize workers and query understanding."
     )
-    s1, s2, s3, s4 = st.columns(4)
     summ = taxonomy_service.summary()
-    s1.metric("Version", summ["version"])
-    s2.metric("Crops", summ["crops"])
-    s3.metric("Categories", summ["categories"])
-    s4.metric("MH districts", summ["mh_districts"])
+    render_stat_cards([
+        {"icon": "🏷️", "label": "Version", "value": summ["version"], "accent": "indigo"},
+        {"icon": "🌾", "label": "Crops", "value": summ["crops"], "accent": "leaf"},
+        {"icon": "📁", "label": "Categories", "value": summ["categories"], "accent": "saffron"},
+        {"icon": "🗺️", "label": "MH districts", "value": summ["mh_districts"], "accent": "terracotta"},
+    ])
+    field_divider()
 
     col_t1, col_t2 = st.columns(2)
     with col_t1:
@@ -398,12 +806,14 @@ with tabs[3]:
     if ares and ares.metrics:
         report = ares.metrics
     if report:
+        field_divider()
         summ = report.get("summary") or {}
-        m1, m2, m3, m4 = st.columns(4)
-        m1.metric("Records", summ.get("total_records", 0))
-        m2.metric("Gaps", summ.get("gap_count", 0))
-        m3.metric("Dup rate %", summ.get("duplicate_rate_pct", 0))
-        m4.metric("Missing crop %", summ.get("missing_crop_pct", 0))
+        render_stat_cards([
+            {"icon": "🧾", "label": "Records", "value": summ.get("total_records", 0), "accent": "indigo"},
+            {"icon": "🕳️", "label": "Gaps", "value": summ.get("gap_count", 0), "accent": "terracotta"},
+            {"icon": "🪞", "label": "Dup rate %", "value": summ.get("duplicate_rate_pct", 0), "accent": "saffron"},
+            {"icon": "🌱", "label": "Missing crop %", "value": summ.get("missing_crop_pct", 0), "accent": "leaf"},
+        ])
 
         col_a, col_b = st.columns(2)
         with col_a:
@@ -454,30 +864,42 @@ with tabs[4]:
             result = vision_classifier.diagnose_image(image_bytes=img_bytes, filename=filename, crop_hint=crop_hint)
 
             st.success("Analysis Complete!")
-            st.metric("Detected Disease", f"{result['disease_identified_mr']} ({result['disease_identified_en']})")
-            st.metric("Confidence", f"{int(result['confidence_score'] * 100)}%")
+            _disease_mr = result["disease_identified_mr"]
+            _disease_en = result["disease_identified_en"]
+            _confidence_pct = int(result["confidence_score"] * 100)
+            render_stat_cards([
+                {"icon": "🩺", "label": "Detected disease", "value": f"{_disease_mr} ({_disease_en})", "accent": "terracotta"},
+                {"icon": "📈", "label": "Confidence", "value": f"{_confidence_pct}%", "accent": "leaf"},
+            ])
 
-            st.markdown(f"**Symptoms:** {result['symptoms_mr']}")
-            st.markdown(f"**🌿 Organic Control:** {result['organic_treatment']['mr']}")
-            st.markdown(f"**🧪 Chemical Control:** {result['chemical_treatment']['mr']}")
+            diag_card("Symptoms", result["symptoms_mr"], variant="neutral")
+            diag_card("🌿 Organic Control", result["organic_treatment"]["mr"], variant="")
+            diag_card("🧪 Chemical Control", result["chemical_treatment"]["mr"], variant="chem")
 
 # TAB 6: Live RAG
 with tabs[5]:
     st.header("📡 Live RAG Intelligence Center")
 
-    m1, m2, m3, m4 = st.columns(4)
-
     w_data = weather_feed.get_weather("Pune")
-    m1.metric("Live Temp (°C)", f"{w_data['temperature_c']}°C", f"Humidity: {w_data['relative_humidity_pct']}%")
-
     m_data = market_feed.get_market_summary_for_crop("Pomegranate")
-    m2.metric("APMC Solapur Modal", f"₹{m_data.get('average_modal_price_rs_quintal', 10500)} / qtl", m_data.get("source_mode", "local"))
-
     iot_data = iot_feed.get_sensor_telemetry(farm_id)
-    m3.metric("IoT Soil Moisture", f"{iot_data['sensors']['soil_moisture_vol_pct']}%", iot_data['status']['soil_moisture_status'])
-
     sat_data = satellite_feed.get_satellite_indices(farm_id)
-    m4.metric("Sentinel-2 NDVI", f"{sat_data['indices']['NDVI_normalized_difference_vegetation_index']}", "High Chlorophyll Vigor")
+
+    _temp = w_data["temperature_c"]
+    _humidity = w_data["relative_humidity_pct"]
+    _apmc_price = m_data.get("average_modal_price_rs_quintal", 10500)
+    _apmc_mode = m_data.get("source_mode", "local")
+    _soil_moisture = iot_data["sensors"]["soil_moisture_vol_pct"]
+    _soil_status = iot_data["status"]["soil_moisture_status"]
+    _ndvi = sat_data["indices"]["NDVI_normalized_difference_vegetation_index"]
+
+    render_stat_cards([
+        {"icon": "🌡️", "label": f"Live temp · humidity {_humidity}%", "value": f"{_temp}°C", "accent": "saffron"},
+        {"icon": "🏷️", "label": f"APMC Solapur modal · {_apmc_mode}", "value": f"₹{_apmc_price}/qtl", "accent": "indigo"},
+        {"icon": "💧", "label": f"IoT soil moisture · {_soil_status}", "value": f"{_soil_moisture}%", "accent": "leaf"},
+        {"icon": "🛰️", "label": "Sentinel-2 NDVI · high vigor", "value": f"{_ndvi}", "accent": "terracotta"},
+    ])
+    field_divider()
 
     st.subheader("📊 APMC Mandi Price Feeds")
     st.dataframe(pd.DataFrame(market_feed.get_market_prices()), use_container_width=True)
@@ -517,12 +939,13 @@ with tabs[6]:
 
             st.success("Fertilizer Recommendation Generated!")
             f_bags = p_res["recommended_fertilizer_bags"]
-            b1, b2, b3 = st.columns(3)
-            b1.metric("Urea (45kg Bags)", f_bags["Urea_45kg_bags"])
-            b2.metric("DAP (50kg Bags)", f_bags["DAP_50kg_bags"])
-            b3.metric("MOP (50kg Bags)", f_bags["MOP_50kg_bags"])
+            render_stat_cards([
+                {"icon": "🧪", "label": "Urea (45kg bags)", "value": f_bags["Urea_45kg_bags"], "accent": "indigo"},
+                {"icon": "🧪", "label": "DAP (50kg bags)", "value": f_bags["DAP_50kg_bags"], "accent": "saffron"},
+                {"icon": "🧪", "label": "MOP (50kg bags)", "value": f_bags["MOP_50kg_bags"], "accent": "leaf"},
+            ])
 
-            st.info(f"**मराठी संदेश:** {p_res['application_schedule_mr']}")
+            diag_card("मराठी संदेश", p_res["application_schedule_mr"], variant="neutral")
 
 # TAB 8: GraphRAG
 with tabs[7]:
@@ -547,21 +970,22 @@ with tabs[8]:
         y_crop = st.selectbox("Yield Crop", ["Pomegranate", "Cotton", "Soybean", "Sugarcane", "Onion", "Rice", "Wheat"])
         y_acres = st.number_input("Land Acres", value=3.0)
         yp = yield_model.predict_yield(crop=y_crop, acreage=y_acres)
-        st.metric(
-            "Predicted Total Yield",
-            f"{yp['total_predicted_yield']} Quintals",
-            f"Per Acre: {yp['predicted_yield_per_acre']} Quintals",
-        )
+        render_stat_cards([
+            {"icon": "🌾", "label": "Predicted total yield (qtl)", "value": yp["total_predicted_yield"], "accent": "leaf"},
+            {"icon": "📏", "label": "Per acre (qtl)", "value": yp["predicted_yield_per_acre"], "accent": "indigo"},
+        ])
 
     with p2:
         st.subheader("💧 Smart Irrigation Runtime Calculator")
         ir = irrigation_model.calculate_water_requirement(
             crop=y_crop, acreage=y_acres, temperature_c=30.0, humidity_pct=75.0
         )
-        st.metric("Daily Water Requirement", f"{ir['total_farm_water_required_liters_day']} Liters/day")
-        st.metric("Drip Runtime", f"{ir['drip_irrigation_schedule']['drip_runtime_hours_per_day']} Hours/day")
+        render_stat_cards([
+            {"icon": "🚰", "label": "Daily water requirement (L/day)", "value": ir["total_farm_water_required_liters_day"], "accent": "indigo"},
+            {"icon": "⏱️", "label": "Drip runtime (hrs/day)", "value": ir["drip_irrigation_schedule"]["drip_runtime_hours_per_day"], "accent": "saffron"},
+        ])
 
-    st.markdown("---")
+    field_divider()
     st.subheader("⚡ Automated Farm Health Audit & Workflow Actions")
     if st.button("Run Automated Farm Health Audit"):
         wf_res = workflow_engine.run_farm_health_checks(farm_id)

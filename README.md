@@ -199,4 +199,14 @@ python -m mini.orchestrator run sprint10 --execute
 
 API: `/api/taxonomy` · `/api/lake/*` · `/api/lake/tokenizer` · `/api/lake/pretrain`
 
-**Do not push:** `data/lake/**`, `mini/datasets/**`, tokenizer model binaries, `mini/models/checkpoints/**`.
+### React OS UI (reference design)
+
+```bash
+cd ui/web
+npm install
+npm run build
+# then open http://127.0.0.1:8000/ui  (or / while FastAPI serves dist/)
+# dev: npm run dev  → http://127.0.0.1:5173  (API proxy to :8000)
+```
+
+**Do not push:** `data/lake/**`, `mini/datasets/**`, tokenizer model binaries, `mini/models/checkpoints/**`, `ui/web/node_modules/**`.

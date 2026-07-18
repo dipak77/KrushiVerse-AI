@@ -4,10 +4,13 @@ from app.main import app
 client = TestClient(app)
 
 def test_root_endpoint():
-    response = client.get("/")
+    # Prefer JSON health; / may serve React SPA when ui/web/dist is built
+    response = client.get("/api/health")
     assert response.status_code == 200
     data = response.json()
     assert "platform" in data
+    root = client.get("/")
+    assert root.status_code == 200
 
 def test_query_endpoint():
     response = client.post("/api/query", json={"query": "What fertilizers for Cotton?", "language": "mr"})

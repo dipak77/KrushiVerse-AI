@@ -1,4 +1,9 @@
+from pathlib import Path
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import Optional
 
@@ -29,6 +34,18 @@ app = FastAPI(
     version=settings.VERSION,
     description="Generation 10.2 — Multi-Source RAG with dense embeddings/Qdrant, data.gov.in Agmarknet, web tools, GraphRAG"
 )
+
+# Dev + production browser UI (React SPA in ui/web)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+UI_DIST = Path(__file__).resolve().parent.parent / "ui" / "web" / "dist"
+UI_PUBLIC = Path(__file__).resolve().parent.parent / "ui" / "web" / "public"
 
 # Request Models
 class QueryRequest(BaseModel):
@@ -68,8 +85,8 @@ class FertilizerPredictRequest(BaseModel):
     K_kg_ha: float = 280.0
 
 # Endpoints
-@app.get("/")
-def read_root():
+@app.get("/api/health")
+def api_health():
     return {
         "platform": settings.APP_NAME,
         "version": settings.VERSION,
@@ -79,7 +96,16 @@ def read_root():
         "embeddings": embedding_provider.info(),
         "opendata": opendata_client.status(),
         "hybrid_backends": hybrid_retriever.backend_info(),
+        "ui": "built" if (UI_DIST / "index.html").exists() else "run npm run build in ui/web",
     }
+
+@app.get("/")
+def read_root():
+    """Prefer React OS UI when built; otherwise return API health JSON."""
+    index = UI_DIST / "index.html"
+    if index.exists():
+        return FileResponse(index)
+    return api_health()
 
 @app.post("/api/query")
 def process_farmer_query(request: QueryRequest):
@@ -459,3 +485,41 @@ def get_crop_graph(crop: str):
 @app.post("/api/workflows/audit")
 def audit_farm_workflows(farm_id: str = "FARM_101"):
     return workflow_engine.run_farm_health_checks(farm_id)
+
+
+# --- React OS UI (built assets from ui/web) ---
+if UI_PUBLIC.exists():
+    # public images (field aerial, leaf samples) available at /leaves/*, /field-aerial.jpg
+    app.mount("/leaves", StaticFiles(directory=str(UI_PUBLIC / "leaves")), name="leaf-images")
+
+    @app.get("/field-aerial.jpg")
+    def field_aerial():
+        p = UI_PUBLIC / "field-aerial.jpg"
+        if p.exists():
+            return FileResponse(p)
+        raise HTTPException(404, "field image missing")
+
+
+@app.get("/ui")
+@app.get("/ui/")
+@app.get("/dashboard")
+def serve_ui_root():
+    index = UI_DIST / "index.html"
+    if index.exists():
+        return FileResponse(index)
+    raise HTTPException(
+        status_code=503,
+        detail="UI not built. From repo: cd ui/web && npm install && npm run build",
+    )
+
+
+@app.get("/ui/{asset_path:path}")
+def serve_ui_assets(asset_path: str):
+    """SPA fallback for nested client routes (if any)."""
+    candidate = UI_DIST / asset_path
+    if candidate.is_file():
+        return FileResponse(candidate)
+    index = UI_DIST / "index.html"
+    if index.exists():
+        return FileResponse(index)
+    raise HTTPException(404, "UI asset not found")
