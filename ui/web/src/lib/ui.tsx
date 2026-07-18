@@ -110,16 +110,27 @@ export function StatTile({
   );
 }
 
-export function Sparkline({ data, color = "var(--leaf)", w = 84, h = 30 }: { data: number[]; color?: string; w?: number; h?: number }) {
-  const min = Math.min(...data), max = Math.max(...data);
-  const pts = data.map((v, i) => [ (i / (data.length - 1)) * w, h - 3 - ((v - min) / (max - min || 1)) * (h - 8) ]);
+export function Sparkline({ data, color = "var(--leaf)", w = 84, h = 30 }: { data?: number[]; color?: string; w?: number; h?: number }) {
+  const safe = (data || []).map((v) => (Number.isFinite(Number(v)) ? Number(v) : 0));
+  // Need ≥2 points for a line; pad single / empty series so charts never crash.
+  const series =
+    safe.length >= 2 ? safe : safe.length === 1 ? [safe[0], safe[0]] : [0, 0];
+  const min = Math.min(...series);
+  const max = Math.max(...series);
+  const span = max - min || 1;
+  const denom = Math.max(1, series.length - 1);
+  const pts = series.map((v, i) => [
+    (i / denom) * w,
+    h - 3 - ((v - min) / span) * (h - 8),
+  ]);
   const line = pts.map((p) => p.join(",")).join(" ");
   const area = `0,${h} ` + line + ` ${w},${h}`;
+  const last = pts[pts.length - 1] || [0, h / 2];
   return (
     <svg width={w} height={h} className="overflow-visible flex-none">
       <polygon points={area} fill={color} opacity={0.12} />
       <polyline points={line} fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" className="draw-line" />
-      <circle cx={pts[pts.length - 1][0]} cy={pts[pts.length - 1][1]} r={2.6} fill={color}>
+      <circle cx={last[0]} cy={last[1]} r={2.6} fill={color}>
         <animate attributeName="opacity" values="1;0.3;1" dur="1.6s" repeatCount="indefinite" />
       </circle>
     </svg>
