@@ -295,6 +295,35 @@ def lake_qasynth_run(execute: bool = False, target: int = 62500):
     result = get_worker("W-QASYNTH").run(dry_run=not execute, target_min_total=target)
     return result.model_dump()
 
+@app.get("/api/lake/kg")
+def lake_kg_status():
+    """Latest knowledge graph build report (W-KGBUILD)."""
+    from mini.paths import DATASETS_DIR, LAKE_ROOT
+    import json
+
+    for path in (DATASETS_DIR / "KG_LATEST.json", LAKE_ROOT / "KG_LATEST.json"):
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            # full graph file has meta; lake marker may be meta-only
+            if "meta" in data:
+                return {"ok": True, **(data.get("meta") or {}), "path": str(path)}
+            return {"ok": True, **data, "path": str(path)}
+    return {"ok": False, "message": "No KG build yet. POST /api/lake/kg?execute=true"}
+
+@app.post("/api/lake/kg")
+def lake_kg_run(execute: bool = False, write_seed: bool = False):
+    """Run W-KGBUILD automated knowledge graph construction (S8).
+
+    write_seed defaults false on API so platform seed is not overwritten unless requested.
+    """
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-KGBUILD").run(
+        dry_run=not execute,
+        write_platform_seed=write_seed,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

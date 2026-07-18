@@ -115,6 +115,18 @@ def cmd_qasynth(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_kgbuild(args: argparse.Namespace) -> int:
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-KGBUILD").run(
+        dry_run=not args.execute,
+        write_platform_seed=bool(args.write_seed),
+        include_districts=not args.no_districts,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -191,6 +203,16 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--execute", action="store_true", help="Write synth dataset version + review CSV")
     s.add_argument("--target", type=int, default=62500, help="Minimum total synth records target")
     s.set_defaults(func=cmd_qasynth)
+
+    s = sub.add_parser("kgbuild", help="Build agri knowledge graph (W-KGBUILD, S8 ≥200 nodes / ≥400 edges)")
+    s.add_argument("--execute", action="store_true", help="Write KG_LATEST + GraphML + triples")
+    s.add_argument(
+        "--write-seed",
+        action="store_true",
+        help="Also rewrite data/knowledge_graph.json for platform GraphRAG (local only)",
+    )
+    s.add_argument("--no-districts", action="store_true", help="Skip district GROWN_IN expansion")
+    s.set_defaults(func=cmd_kgbuild)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

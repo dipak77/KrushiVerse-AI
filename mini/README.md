@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S7 — QA pack expansion** (≥50k train) |
+| Sprint | **S8 — Knowledge graph builder** (≥200 nodes / ≥400 edges) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-3** |
+| Feature phase | **FP-4** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -28,6 +28,7 @@ python -m mini.orchestrator quality --execute
 python -m mini.orchestrator standardize --execute
 python -m mini.orchestrator analyze --execute
 python -m mini.orchestrator qasynth --execute --target 62500
+python -m mini.orchestrator kgbuild --execute
 python -m mini.orchestrator lake-status
 ```
 
@@ -60,18 +61,18 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–7 acceptance
+## Sprint 0–8 acceptance
 
 - [x] Factory through QA synth  
 - [x] **W-QASYNTH v2** ≥50k train, ≥8 domains, ≥20% non-EN  
-- [x] Hard negatives + safety refusals  
-- [x] Tests: `test_mini_sprint0`–`7`  
+- [x] **W-KGBUILD** ≥200 nodes / ≥400 edges, GraphML + triples + Neo4j stub  
+- [x] Tests: `test_mini_sprint0`–`8`  
 
 ```bash
-python -m mini.orchestrator qasynth --execute --target 62500
-python -m mini.orchestrator run sprint7 --execute
+python -m mini.orchestrator kgbuild --execute
+python -m mini.orchestrator run sprint8 --execute
 ```
 
 ## Next
 
-Sprint 8 — `W-KGBUILD` automated knowledge graph builder.
+Sprint 9 — `W-TOKEN` agriculture-aware SentencePiece tokenizer.

@@ -22,8 +22,8 @@ client = TestClient(app)
 
 def test_sprint2_markers():
     # S2 deliverables remain; markers advance with later sprints
-    assert __sprint__ in {"S2", "S3", "S4", "S5", "S6", "S7"}
-    assert __feature_phase__ in {"FP-1", "FP-2", "FP-3"}
+    assert __sprint__ in {"S2", "S3", "S4", "S5", "S6", "S7", "S8"}
+    assert __feature_phase__ in {"FP-1", "FP-2", "FP-3", "FP-4"}
 
 
 def test_source_registry_loads():

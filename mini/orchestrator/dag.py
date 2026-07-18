@@ -32,6 +32,8 @@ PIPELINES: dict[str, list[str]] = {
     "sprint5": ["W-STANDARDIZE", "W-ANALYZE"],
     "sprint6": ["W-QUALITY", "W-QASYNTH", "W-ANALYZE"],
     "sprint7": ["W-QUALITY", "W-QASYNTH", "W-ANALYZE"],
+    "sprint8": ["W-STANDARDIZE", "W-KGBUILD", "W-ANALYZE"],
+    "kgbuild": ["W-KGBUILD"],
     "qasynth": ["W-QASYNTH"],
     "analyze": ["W-ANALYZE"],
     "quality": ["W-QUALITY"],

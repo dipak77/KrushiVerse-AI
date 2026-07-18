@@ -34,3 +34,10 @@ data/lake/**
 mini/datasets/versions/**
 !mini/datasets/versions/
 !mini/datasets/LATEST_VERSION.json
+# KG versioned dumps (keep latest marker + small stubs)
+mini/datasets/kg/**
+!mini/datasets/kg/
+!mini/datasets/kg/graph_triples.jsonl
+!mini/datasets/kg/neo4j_loader_stub.cypher
+!mini/datasets/kg/latest.graphml
+!mini/datasets/KG_LATEST.json
