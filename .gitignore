@@ -44,6 +44,12 @@ mini/models/SFT_LATEST.json
 mini/eval/**
 !mini/eval/
 !mini/eval/.gitkeep
+!mini/eval/__init__.py
+!mini/eval/gold_sets.py
+!mini/eval/metrics.py
+!mini/eval/probes.py
+!mini/eval/gates.py
+!mini/eval/harness.py
 
 mini/inference/**
 !mini/inference/

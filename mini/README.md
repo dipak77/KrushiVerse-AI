@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S12 — Instruction + agri-QA SFT (v0.3 / v0.4)** |
+| Sprint | **S13 — Evaluation harness (W-EVAL)** |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-7** |
+| Feature phase | **E5-eval** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -32,6 +32,7 @@ python -m mini.orchestrator kgbuild --execute
 python -m mini.orchestrator token --execute --vocab-size 32000
 python -m mini.orchestrator pretrain --execute --mode domain --steps 200 --seed 42
 python -m mini.orchestrator sft --execute --steps-v03 120 --steps-v04 120 --seed 42
+python -m mini.orchestrator eval --execute --version v0.4 --profile default
 python -m mini.orchestrator lake-status
 ```
 
@@ -45,8 +46,8 @@ mini/
   workers/          # Automated worker modules
   orchestrator/     # DAG + CLI
   models/           # train + SFT code; checkpoints local-only
+  eval/             # gold sets, probes, gates, harness (reports local)
   datasets/         # future manifests
-  eval/             # future gold sets
   inference/        # future serve chain
 ```
 
@@ -64,20 +65,21 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–12 acceptance
+## Sprint 0–13 acceptance
 
 - [x] Factory through QA synth + KG + tokenizer  
 - [x] Mini ~1.36M arch + domain pretrain v0.2-base  
-- [x] **SFT v0.3-instruct + v0.4-agri-qa** (F1/loss beats base)  
-- [x] Tests: `test_mini_sprint0`–`12`  
+- [x] SFT v0.3-instruct + v0.4-agri-qa  
+- [x] **W-EVAL scorecard (HTML/JSON) + gates (non-zero on fail)**  
+- [x] Tests: `test_mini_sprint0`–`13`  
 
-**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, `mini/models/v0.2-base/**`, `mini/models/v0.3-instruct/**`, `mini/models/v0.4-agri-qa/**`.
+**Local-only (do not push):** `data/lake/**`, `mini/datasets/**`, tokenizer binaries, `mini/models/v0.*/**`, `mini/eval/EVAL_*.json|html`.
 
 ```bash
-python -m mini.orchestrator sft --execute --steps-v03 120 --steps-v04 120 --seed 42
-python -m mini.orchestrator run sprint12 --execute
+python -m mini.orchestrator eval --execute --version v0.4 --profile default
+python -m mini.orchestrator run sprint13 --execute
 ```
 
 ## Next
 
-Sprint 13 — `W-EVAL` gold sets, gates, hallucination probes.
+Sprint 14 — `W-QUANT` INT8/INT4 + packaging; `W-DEPLOY` version registry.

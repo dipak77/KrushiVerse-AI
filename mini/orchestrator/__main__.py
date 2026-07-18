@@ -175,6 +175,22 @@ def cmd_sft(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_eval(args: argparse.Namespace) -> int:
+    """Run W-EVAL; non-zero exit when gates fail (acceptance)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-EVAL").run(
+        dry_run=not args.execute,
+        version=args.version,
+        gate_profile=args.profile,
+        seed=args.seed,
+        max_new_tokens=args.max_new_tokens,
+        max_gold=args.max_gold,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -291,6 +307,20 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--max-val", type=int, default=400, help="Max val SFT examples")
     s.add_argument("--lr", type=float, default=2e-3, help="Learning rate")
     s.set_defaults(func=cmd_sft)
+
+    s = sub.add_parser("eval", help="Evaluate Mini checkpoint with gates (W-EVAL, S13)")
+    s.add_argument("--execute", action="store_true", help="Run eval + write HTML/JSON report")
+    s.add_argument("--version", default="v0.4", help="Model version: v0.4, v0.3, v0.2")
+    s.add_argument(
+        "--profile",
+        default="default",
+        choices=["default", "strict", "prod", "promote"],
+        help="Gate profile (strict may fail tiny models)",
+    )
+    s.add_argument("--seed", type=int, default=42, help="RNG seed")
+    s.add_argument("--max-new-tokens", type=int, default=28, help="Generation length")
+    s.add_argument("--max-gold", type=int, default=None, help="Optional cap on gold items")
+    s.set_defaults(func=cmd_eval)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

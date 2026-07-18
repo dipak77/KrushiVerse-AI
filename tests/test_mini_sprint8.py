@@ -16,8 +16,8 @@ client = TestClient(app)
 
 
 def test_sprint8_markers():
-    assert __sprint__ in {"S8", "S9", "S10", "S11", "S12"}
-    assert __feature_phase__ in {"FP-4", "FP-5", "FP-5b", "FP-6", "FP-7"}
+    assert __sprint__ in {"S8", "S9", "S10", "S11", "S12", "S13"}
+    assert __feature_phase__ in {"FP-4", "FP-5", "FP-5b", "FP-6", "FP-7", "E5-eval"}
 
 
 def test_kgbuild_ready():

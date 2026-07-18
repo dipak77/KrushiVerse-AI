@@ -82,18 +82,7 @@ class TaxonomyWorker(BaseWorker):
 
 # W-PRETRAIN → mini.workers.pretrain
 # W-SFT → mini.workers.sft
-
-
-@register_worker
-class EvalWorker(BaseWorker):
-    worker_id = "W-EVAL"
-    name = "Evaluate"
-    description = "Metrics, gates, hallucination probes"
-    epic = "E5"
-    status = "stub"
-
-    def execute(self, *, dry_run: bool = False, **kwargs: Any) -> WorkerResult:
-        return _stub_result(self.worker_id, dry_run, "Sprint 0 stub: eval Sprint 13")
+# W-EVAL → mini.workers.eval
 
 
 @register_worker
@@ -186,6 +175,7 @@ from mini.workers.kg_build import KGBuildWorker  # noqa: E402,F401
 from mini.workers.token import TokenizerWorker  # noqa: E402,F401
 from mini.workers.pretrain import PretrainWorker  # noqa: E402,F401
 from mini.workers.sft import SFTWorker  # noqa: E402,F401
+from mini.workers.eval import EvalWorker  # noqa: E402,F401
 
 
 @register_worker

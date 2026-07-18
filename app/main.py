@@ -443,6 +443,39 @@ def lake_sft_run(
     )
     return result.model_dump()
 
+@app.get("/api/lake/eval")
+def lake_eval_status():
+    """Latest Mini eval scorecard (W-EVAL)."""
+    from mini.paths import EVAL_DIR
+    import json
+
+    latest = EVAL_DIR / "EVAL_LATEST.json"
+    if latest.exists():
+        return json.loads(latest.read_text(encoding="utf-8"))
+    return {"ok": False, "message": "No eval run yet. POST /api/lake/eval?execute=true"}
+
+@app.post("/api/lake/eval")
+def lake_eval_run(
+    execute: bool = False,
+    version: str = "v0.4",
+    profile: str = "default",
+    seed: int = 42,
+    max_new_tokens: int = 28,
+    max_gold: Optional[int] = None,
+):
+    """Run W-EVAL gold + probes + gates (S13). ok=false when gates fail."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-EVAL").run(
+        dry_run=not execute,
+        version=version,
+        gate_profile=profile,
+        seed=seed,
+        max_new_tokens=max_new_tokens,
+        max_gold=max_gold,
+    )
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}
