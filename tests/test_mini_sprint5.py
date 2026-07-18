@@ -25,7 +25,7 @@ def _prepare_dataset():
 
 
 def test_sprint5_markers():
-    assert __sprint__ == "S5"
+    assert __sprint__ in {"S5", "S6"}
 
 
 def test_analyze_worker_ready():

@@ -276,6 +276,25 @@ def lake_analyze_run(execute: bool = False):
     result = get_worker("W-ANALYZE").run(dry_run=not execute)
     return result.model_dump()
 
+@app.get("/api/lake/qasynth")
+def lake_qasynth_status():
+    """Latest QA synthesis export report."""
+    from mini.paths import LAKE_ROOT
+    import json
+
+    latest = LAKE_ROOT / "QASYNTH_LATEST.json"
+    if not latest.exists():
+        return {"ok": False, "message": "No synth run yet. POST /api/lake/qasynth?execute=true"}
+    return json.loads(latest.read_text(encoding="utf-8"))
+
+@app.post("/api/lake/qasynth")
+def lake_qasynth_run(execute: bool = False, target: int = 12000):
+    """Run W-QASYNTH multilingual expert QA synthesis."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-QASYNTH").run(dry_run=not execute, target_min_total=target)
+    return result.model_dump()
+
 @app.get("/api/tools")
 def list_external_tools():
     return {"tools": tool_registry.list_tools()}

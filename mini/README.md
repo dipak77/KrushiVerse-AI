@@ -4,11 +4,11 @@ Lightweight agriculture ML factory that will produce the **~1M-parameter Mini LL
 
 | Field | Value |
 |---|---|
-| Sprint | **S5 — Analyze dashboard** |
+| Sprint | **S6 — QA synthesis** (≥10k train / ≥1k val) |
 | Package | `mini/` |
 | Schema | `1.0` (`StandardRecord`) |
 | Taxonomy | **v1.0.0 frozen** |
-| Feature phase | **FP-2** (+ coverage intelligence) |
+| Feature phase | **FP-3** |
 | Plan | [`docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md`](../docs/KRUSHIVERSE_MINI_SPRINT_PLAN.md) |
 
 ## CLI
@@ -27,6 +27,7 @@ python -m mini.orchestrator ingest --execute --skip-http
 python -m mini.orchestrator quality --execute
 python -m mini.orchestrator standardize --execute
 python -m mini.orchestrator analyze --execute
+python -m mini.orchestrator qasynth --execute --target 12000
 python -m mini.orchestrator lake-status
 ```
 
@@ -59,18 +60,18 @@ data/lake/
 
 **Never train from `raw/`.**
 
-## Sprint 0–5 acceptance
+## Sprint 0–6 acceptance
 
-- [x] Factory through Schema v1 export  
-- [x] **W-ANALYZE** coverage/gaps dashboard (JSON + HTML + Streamlit)  
-- [x] Tests: `test_mini_sprint0`–`5`  
+- [x] Factory through analyze dashboard  
+- [x] **W-QASYNTH** multilingual packs ≥10k train / ≥1k val  
+- [x] Human review queue CSV + no fact_key leakage  
+- [x] Tests: `test_mini_sprint0`–`6`  
 
 ```bash
-python -m mini.orchestrator standardize --execute
-python -m mini.orchestrator analyze --execute
-python -m mini.orchestrator run sprint5 --execute
+python -m mini.orchestrator qasynth --execute --target 12000
+python -m mini.orchestrator run sprint6 --execute
 ```
 
 ## Next
 
-Sprint 6 — `W-QASYNTH` expert QA synthesis packs.
+Sprint 7 — Domain expert packs expansion toward ~50k.
