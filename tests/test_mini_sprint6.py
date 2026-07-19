@@ -25,7 +25,7 @@ def _prep_processed():
 
 
 def test_sprint6_markers():
-    assert __sprint__ in {"S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18"}
+    assert __sprint__ in {"S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S20"}
     assert __feature_phase__ in {"FP-3", "FP-4", "FP-5", "FP-5b", "FP-6", "FP-7", "E5-eval", "E5-quant", "FP-8", "FP-9", "FP-10", "v2-15M"}
 
 

@@ -16,7 +16,7 @@ client = TestClient(app)
 
 
 def test_sprint16_markers():
-    assert __sprint__ in {"S16", "S17", "S18"}
+    assert __sprint__ in {"S16", "S17", "S18", "S20"}
     assert __feature_phase__ in {"FP-9", "FP-10", "v2-15M"}
 
 
@@ -72,7 +72,7 @@ def test_api_mini_status_and_chat():
     assert s.status_code == 200
     body = s.json()
     assert body["ok"] is True
-    assert body["sprint"] in {"S16", "S17", "S18"}
+    assert body["sprint"] in {"S16", "S17", "S18", "S20"}
     assert "use_mini_llm" in body
 
     r = client.post(

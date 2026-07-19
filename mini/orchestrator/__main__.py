@@ -156,6 +156,14 @@ def cmd_pretrain(args: argparse.Namespace) -> int:
         seed=args.seed,
         vocab_size=args.vocab_size,
         max_qa=args.max_qa,
+        variant=getattr(args, "variant", None) or "v1",
+        version=getattr(args, "version", None) or "v0.2-base",
+        grad_accum=getattr(args, "grad_accum", None) or 1,
+        fp16=bool(getattr(args, "fp16", False)),
+        grad_checkpoint=bool(getattr(args, "grad_checkpoint", False)),
+        lr=getattr(args, "lr", None),
+        eval_every=getattr(args, "eval_every", None),
+        config=getattr(args, "config", None),
     )
     print(result.model_dump_json(indent=2))
     return 0 if result.ok else 1
@@ -385,15 +393,23 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--max-qa", type=int, default=80000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_token)
 
-    s = sub.add_parser("pretrain", help="Domain pretrain Mini v0.2-base (W-PRETRAIN, S11)")
-    s.add_argument("--execute", action="store_true", help="Train + write local v0.2-base checkpoint")
-    s.add_argument("--mode", default="domain", choices=["domain", "smoke", "both"], help="Train mode")
+    s = sub.add_parser("pretrain", help="Domain pretrain Mini (v1→v0.2 or v2-15M→v0.6-base)")
+    s.add_argument("--execute", action="store_true", help="Train + write local checkpoint")
+    s.add_argument("--mode", default="domain", choices=["domain", "smoke", "both"], help="Train mode (v1)")
+    s.add_argument("--variant", default="v1", help="v1 | v2-15M")
+    s.add_argument("--version", default="v0.2-base", help="Output version dir (v0.2-base | v0.6-base)")
     s.add_argument("--steps", type=int, default=200, help="Domain train steps")
-    s.add_argument("--batch-size", type=int, default=8, help="Batch size")
-    s.add_argument("--block-size", type=int, default=128, help="Packed context length")
+    s.add_argument("--batch-size", type=int, default=8, help="Micro batch size")
+    s.add_argument("--grad-accum", type=int, default=1, help="Gradient accumulation steps (v2: 4)")
+    s.add_argument("--block-size", type=int, default=128, help="Packed context length (v2: 1024)")
     s.add_argument("--seed", type=int, default=42, help="RNG seed")
-    s.add_argument("--vocab-size", type=int, default=4096, help="Model vocab size")
+    s.add_argument("--vocab-size", type=int, default=4096, help="Model vocab size (v2: 8192)")
     s.add_argument("--max-qa", type=int, default=25000, help="Max QA lines for corpus")
+    s.add_argument("--lr", type=float, default=None, help="Learning rate override")
+    s.add_argument("--eval-every", type=int, default=None, help="Eval/save interval")
+    s.add_argument("--fp16", action="store_true", help="CUDA AMP fp16 (v2 laptop)")
+    s.add_argument("--grad-checkpoint", action="store_true", help="Activation checkpointing (saves VRAM)")
+    s.add_argument("--config", default=None, help="Path to config_v2_15M.json")
     s.set_defaults(func=cmd_pretrain)
 
     s = sub.add_parser("sft", help="Instruction + agri-QA SFT (W-SFT, S12 v0.3/v0.4)")

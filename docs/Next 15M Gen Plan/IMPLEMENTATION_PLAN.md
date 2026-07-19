@@ -4,7 +4,7 @@
 **Baseline:** Mini v1.0 (~1.36M) factory complete (S0–S17)  
 **Target:** v2.0.0-15M grounded agri synthesizer  
 **Hardware:** RTX 2050 4GB + 16GB RAM (primary)  
-**Status:** Phase 1 in progress  
+**Status:** Phase 1 done · Phase 2 (S20 pretrain) wiring complete  
 
 ---
 
