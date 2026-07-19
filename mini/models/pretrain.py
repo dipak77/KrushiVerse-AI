@@ -50,12 +50,17 @@ class BlockDataset(Dataset):
         return ids
 
 
-def _batchify(batch: list[torch.Tensor], pad_id: int = 0) -> tuple[torch.Tensor, torch.Tensor]:
+def _batchify(
+    batch: list[torch.Tensor],
+    pad_id: int = 0,
+    ignore_index: int = -100,
+) -> tuple[torch.Tensor, torch.Tensor]:
     # all same length from packing
     x = torch.stack(batch, dim=0)
     # inputs = all but last, labels = all but first
     inp = x[:, :-1]
     lab = x[:, 1:].clone()
+    lab[lab == pad_id] = ignore_index
     return inp, lab
 
 

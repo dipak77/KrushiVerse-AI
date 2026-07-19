@@ -13,7 +13,7 @@ from mini.workers.base import BaseWorker, register_worker
 class TokenizerWorker(BaseWorker):
     worker_id = "W-TOKEN"
     name = "Tokenizer"
-    description = "Train domain SentencePiece tokenizer 30–50k (S9 / FP-5)"
+    description = "Train domain SentencePiece (v1 32k BPE or v2 8k unigram)"
     epic = "E4"
     status = "ready"
 
@@ -22,12 +22,14 @@ class TokenizerWorker(BaseWorker):
         version = str(kwargs.get("version") or "v0.1")
         train_baseline = bool(kwargs.get("train_baseline", True))
         max_qa = int(kwargs.get("max_qa_lines", 80_000))
+        model_type = str(kwargs.get("model_type") or ("unigram" if version.startswith("v2") else "bpe"))
         report = run_tokenizer_train(
             dry_run=dry_run,
             vocab_size=vocab,
             version=version,
             train_baseline=train_baseline,
             max_qa_lines=max_qa,
+            model_type=model_type,
         )
         train = report.get("train") or {}
         fert = report.get("fertility") or {}

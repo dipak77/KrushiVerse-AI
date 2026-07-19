@@ -54,10 +54,30 @@ class SFTDataset(Dataset):
             ids = ids[: self.max_len - 1] + [self.tok.eos_id]
         if len(ids) < 4:
             ids = ids + [self.tok.eos_id] * (4 - len(ids))
-        return torch.tensor(ids, dtype=torch.long), self.rows[idx]
+        meta = dict(self.rows[idx])
+        meta["_tokenizer"] = self.tok  # for assistant-only span detection
+        return torch.tensor(ids, dtype=torch.long), meta
 
 
-def _collate(batch, pad_id: int = 0):
+def _assistant_start_index(ids: list[int], tokenizer: DomainTokenizer) -> int:
+    """Find token index of the start of assistant completion (after ### Assistant:)."""
+    # Encode marker without specials; find subsequence in ids
+    marker = "### Assistant:\n"
+    mid = tokenizer.encode(marker, add_special=False)
+    if not mid:
+        mid = tokenizer.encode("### Assistant:", add_special=False)
+    if not mid:
+        return 0
+    n, m = len(ids), len(mid)
+    for i in range(max(0, n - m + 1)):
+        if ids[i : i + m] == mid:
+            return i + m  # first token of assistant answer
+    # fallback: half sequence (still better than training full prompt)
+    return max(0, n // 2)
+
+
+def _collate(batch, pad_id: int = 0, *, assistant_only: bool = True, ignore_index: int = -100):
+    """Collate SFT batch. Labels use ignore_index for pad and (optionally) non-assistant tokens."""
     seqs = [b[0] for b in batch]
     meta = [b[1] for b in batch]
     max_len = max(s.numel() for s in seqs)
@@ -66,7 +86,28 @@ def _collate(batch, pad_id: int = 0):
         out[i, : s.numel()] = s
     inp = out[:, :-1]
     lab = out[:, 1:].clone()
-    # MiniLM ignore_index is pad_id (not -100)
+    # mask pads
+    lab[lab == pad_id] = ignore_index
+    if assistant_only:
+        # mask prompt tokens (system+user) so loss is only on assistant span
+        for i, (s, row) in enumerate(zip(seqs, meta)):
+            ids = s.tolist()
+            # prefer live tokenizer from first row if present
+            tok = row.get("_tokenizer")
+            if tok is not None:
+                start = _assistant_start_index(ids, tok)
+            else:
+                # heuristic: search for common marker token pattern via text re-encode skipped;
+                # use half as safe fallback when tokenizer not attached
+                start = max(1, len(ids) // 2)
+            # labels are shifted by 1 relative to full sequence positions
+            # full position j predicts token j+1 → label index j-1 for token j? 
+            # lab[t] corresponds to predicting out[t+1] from out[t]
+            # We want loss only when out[t+1] is assistant content, i.e. t+1 >= start
+            # so mask lab[t] when t+1 < start  ⇒  t < start-1
+            cutoff = max(0, start - 1)
+            if cutoff > 0:
+                lab[i, :cutoff] = ignore_index
     return inp, lab, meta
 
 
@@ -172,7 +213,12 @@ def _train_stage(
         ds,
         batch_size=batch_size,
         shuffle=True,
-        collate_fn=lambda b: _collate(b, pad_id=tokenizer.pad_id),
+        collate_fn=lambda b: _collate(
+            b,
+            pad_id=tokenizer.pad_id,
+            assistant_only=True,
+            ignore_index=int(getattr(model.config, "ignore_index", -100)),
+        ),
     )
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=0.01)
     model.train()

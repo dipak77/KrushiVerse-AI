@@ -18,8 +18,8 @@ client = TestClient(app)
 
 
 def test_sprint15_markers():
-    assert __sprint__ in {"S15", "S16", "S17"}
-    assert __feature_phase__ in {"FP-8", "FP-9", "FP-10"}
+    assert __sprint__ in {"S15", "S16", "S17", "S18"}
+    assert __feature_phase__ in {"FP-8", "FP-9", "FP-10", "v2-15M"}
 
 
 def test_infer_rag_agent_ready():

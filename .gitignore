@@ -33,6 +33,7 @@ mini/models/**
 !mini/models/sft.py
 !mini/models/quantize.py
 !mini/models/deploy.py
+!mini/models/config_v2_15M.json
 !mini/models/PARAM_COUNT.json
 mini/models/checkpoints/
 mini/models/*.pt
@@ -89,3 +90,7 @@ mini/tokenizer/**
 !mini/tokenizer/.gitkeep
 !mini/tokenizer/__init__.py
 !mini/tokenizer/train.py
+
+# Tools (cleanup, etc.)
+!mini/tools/
+!mini/tools/**

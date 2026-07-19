@@ -585,15 +585,23 @@ def run_tokenizer_train(
     version: str = TOKENIZER_VERSION,
     train_baseline: bool = True,
     max_qa_lines: int = 80_000,
+    model_type: str = "bpe",
 ) -> dict[str, Any]:
-    """Full W-TOKEN pipeline: corpus → domain SP → fertility vs baseline."""
+    """Full W-TOKEN pipeline: corpus → domain SP → fertility vs baseline.
+
+    v1 (S9): vocab 30–50k BPE → version v0.1
+    v2 (S18): vocab 8192 unigram → version v2-8k (unified Mini tokenizer)
+    """
     ensure_lake_layout()
     version = version or TOKENIZER_VERSION
+    is_v2 = str(version).startswith("v2") or int(vocab_size) <= 12000
+    if is_v2 and model_type == "bpe" and int(vocab_size) <= 12000:
+        model_type = "unigram"  # v2 default: Unigram for MR morphology
     out_dir = TOKENIZER_DIR / version
     artifacts: list[str] = []
 
     corpus_path = out_dir / "corpus.txt"
-    domain_prefix = out_dir / "sp_agri"
+    domain_prefix = out_dir / ("sp_v2" if is_v2 else "sp_agri")
     baseline_prefix = out_dir / "sp_baseline"
 
     if dry_run:
@@ -603,9 +611,10 @@ def run_tokenizer_train(
             "dry_run": True,
             "version": version,
             "planned_vocab_size": vocab_size,
+            "planned_model_type": model_type,
             "planned_symbols": len(symbols),
             "out_dir": relative_to_repo(out_dir),
-            "sprint": "S9",
+            "sprint": "S18" if is_v2 else "S9",
         }
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -618,6 +627,7 @@ def run_tokenizer_train(
         domain_prefix,
         vocab_size=vocab_size,
         user_symbols=symbols,
+        model_type=model_type,
     )
     if train_info.get("model_file"):
         artifacts.append(train_info["model_file"])
@@ -668,9 +678,13 @@ def run_tokenizer_train(
             fertility_improved = True
 
     actual = int(train_info.get("actual_vocab_size") or 0)
-    vocab_ok = VOCAB_MIN <= actual <= VOCAB_MAX
-    if not vocab_ok and VOCAB_MIN <= vocab_size <= VOCAB_MAX and actual >= 30000:
-        vocab_ok = True
+    if is_v2:
+        # v2-8k: accept within 10% of requested
+        vocab_ok = actual >= int(vocab_size * 0.85) and actual <= int(vocab_size * 1.15) + 64
+    else:
+        vocab_ok = VOCAB_MIN <= actual <= VOCAB_MAX
+        if not vocab_ok and VOCAB_MIN <= vocab_size <= VOCAB_MAX and actual >= 30000:
+            vocab_ok = True
 
     demo = []
     if model_path.exists():
@@ -683,8 +697,9 @@ def run_tokenizer_train(
     report: dict[str, Any] = {
         "ok": bool(model_path.exists()) and vocab_ok and (fertility_improved or base_mean is None),
         "version": version,
-        "sprint": "S9",
-        "feature_phase": "FP-5",
+        "sprint": "S18" if is_v2 else "S9",
+        "feature_phase": "v2-15M-tok" if is_v2 else "FP-5",
+        "model_type": model_type,
         "created_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "corpus": corpus_info,
         "train": train_info,

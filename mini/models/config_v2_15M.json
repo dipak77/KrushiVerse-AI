@@ -1,0 +1,123 @@
+{
+  "model_name": "KrushiVerseAI Mini v2 - 15M",
+  "version": "2.0.0-15M",
+  "description": "Grounded micro-LLM for Maharashtra agri QA, optimized for RTX 2050 4GB Laptop + 16GB RAM. Same factory workers as v1.0",
+  "architecture": {
+    "class_name": "MiniLM",
+    "model_type": "decoder-only transformer",
+    "approx_params": 15100000,
+    "param_breakdown": {
+      "embedding": 2621440,
+      "transformer_layers": 12398080,
+      "final_norm": 320,
+      "total_with_tying": "~15.0M (tied embedding/lm_head)"
+    }
+  },
+  "hyperparameters": {
+    "vocab_size": 8192,
+    "n_embd": 320,
+    "n_layer": 10,
+    "n_head": 8,
+    "head_dim": 40,
+    "n_hidden": 864,
+    "ffn_multiplier": 2.7,
+    "block_size": 1024,
+    "dropout": 0.0,
+    "bias": false,
+    "weight_tying": true,
+    "positional_encoding": "RoPE",
+    "rope_theta": 10000,
+    "normalization": "RMSNorm",
+    "activation": "SwiGLU",
+    "attention_type": "causal scaled-dot-product"
+  },
+  "tokenization": {
+    "type": "SentencePiece Unigram",
+    "model": "unigram",
+    "vocab_size": 8192,
+    "character_coverage": 0.9995,
+    "languages": [
+      "en",
+      "mr",
+      "hi",
+      "mr-en-translit"
+    ],
+    "note": "Single unified tokenizer - DELETE old 4k DomainTokenizer + 32k SP dual track. Train this 8k on balanced lake corpus",
+    "special_ids": {
+      "pad": 0,
+      "unk": 1,
+      "bos": 2,
+      "eos": 3
+    }
+  },
+  "training": {
+    "hardware_target": "RTX 2050 4GB + i5-13500H + 16GB RAM",
+    "vram_usage_est": {
+      "batch_16_block_1024_fp16": "~2.1 GB",
+      "batch_16_block_1024_fp32": "~3.6 GB - will OOM on 4GB, use fp16"
+    },
+    "estimated_time_on_your_machine": {
+      "pretrain_15k_steps_fp16_gpu": "2.5 to 3.5 hours",
+      "sft_6k_steps_fp16_gpu": "45 to 70 mins",
+      "total": "~4 hours"
+    },
+    "pretrain": {
+      "objective": "next_token_cross_entropy",
+      "optimizer": "AdamW",
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01,
+      "warmup_steps": 500,
+      "batch_size": 16,
+      "gradient_accumulation": 2,
+      "effective_batch": 32,
+      "steps": 15000,
+      "dtype": "fp16",
+      "loss_masking": "full_sequence_for_pretrain"
+    },
+    "sft": {
+      "stage_1_instruct": {
+        "steps": 3000,
+        "batch_size": 16,
+        "learning_rate": 0.0002,
+        "loss_masking": "assistant_only - CRITICAL FIX: train only on tokens after ### Assistant:"
+      },
+      "stage_2_agri_qa_rag": {
+        "steps": 3000,
+        "batch_size": 16,
+        "learning_rate": 0.0001,
+        "loss_masking": "assistant_only",
+        "rag_context_ratio": 0.7,
+        "safety_upsample": 1.5
+      }
+    }
+  },
+  "inference": {
+    "mode_default": "grounded",
+    "max_new_tokens": 180,
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "repetition_penalty": 1.1,
+    "stop_sequences": [
+      "### User:",
+      "### System:",
+      "</s>"
+    ],
+    "citation_enforcement": true
+  },
+  "factory_compatibility": {
+    "orchestrator_commands": [
+      "python -m mini.orchestrator tokenizer --vocab-size 8192 --model-type unigram",
+      "python -m mini.orchestrator pretrain --execute --config config_v2_15M.json --steps 15000 --batch-size 16 --dtype fp16 --seed 42",
+      "python -m mini.orchestrator sft --execute --config config_v2_15M.json --steps-v03 3000 --steps-v04 3000 --batch-size 16",
+      "python -m mini.orchestrator eval --execute --version v2-15M --profile strict",
+      "python -m mini.orchestrator quant --execute --version v2-15M --format int8-onnx"
+    ]
+  },
+  "upgrade_notes_from_v1": [
+    "DELETE dual tokenizer - single 8k unigram fixes Marathi fertility",
+    "Fix block_size 1024 everywhere - no more 128 vs 512 mismatch",
+    "Fix SFT loss to assistant_only - biggest quality win",
+    "Increase max_new_tokens 40 -> 180 for real answers",
+    "Use fp16 on RTX 2050 for 2x speed and fit in 4GB VRAM"
+  ]
+}

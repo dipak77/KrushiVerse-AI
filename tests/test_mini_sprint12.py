@@ -21,8 +21,8 @@ client = TestClient(app)
 
 
 def test_sprint12_markers():
-    assert __sprint__ in {"S12", "S13", "S14", "S15", "S16", "S17"}
-    assert __feature_phase__ in {"FP-7", "E5-eval", "E5-quant", "FP-8", "FP-9", "FP-10"}
+    assert __sprint__ in {"S12", "S13", "S14", "S15", "S16", "S17", "S18"}
+    assert __feature_phase__ in {"FP-7", "E5-eval", "E5-quant", "FP-8", "FP-9", "FP-10", "v2-15M"}
 
 
 def test_sft_worker_ready():

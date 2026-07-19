@@ -1,5 +1,5 @@
-"""KrushiVerseAI Mini — ML factory for the ~1M-parameter agriculture model."""
+"""KrushiVerseAI Mini — ML factory (v1.0 shipped; v2 15M foundation in progress)."""
 
-__version__ = "1.0.0"
-__sprint__ = "S17"
-__feature_phase__ = "FP-10"  # Mini v1.0 release: RC gate, checklist, load smoke, matrix
+__version__ = "2.0.0-dev"
+__sprint__ = "S18"
+__feature_phase__ = "v2-15M"  # 15M scale-up: unified 8k tok, config, assistant-only SFT, cleanup

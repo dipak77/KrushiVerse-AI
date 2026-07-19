@@ -136,6 +136,9 @@ def cmd_token(args: argparse.Namespace) -> int:
         version=args.version,
         train_baseline=not args.no_baseline,
         max_qa_lines=args.max_qa,
+        model_type=getattr(args, "model_type", None) or (
+            "unigram" if str(args.version).startswith("v2") else "bpe"
+        ),
     )
     print(result.model_dump_json(indent=2))
     return 0 if result.ok else 1
@@ -270,6 +273,22 @@ def cmd_release(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_cleanup(args: argparse.Namespace) -> int:
+    """Free local disk: mini/datasets/versions dumps, smoke ckpts, optional runs."""
+    from mini.tools.cleanup_local import run_cleanup
+    import json
+
+    report = run_cleanup(
+        dry_run=not args.execute,
+        keep_synth=args.keep_synth,
+        keep_other=args.keep_other,
+        smoke_ckpts=not args.no_smoke_ckpts,
+        runs=args.runs,
+    )
+    print(json.dumps(report, indent=2, ensure_ascii=False, default=str))
+    return 0 if report.get("ok") else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -357,10 +376,11 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--no-districts", action="store_true", help="Skip district GROWN_IN expansion")
     s.set_defaults(func=cmd_kgbuild)
 
-    s = sub.add_parser("token", help="Train domain SentencePiece tokenizer (W-TOKEN, S9 30–50k)")
-    s.add_argument("--execute", action="store_true", help="Write tokenizer/v0.1 artifacts")
-    s.add_argument("--vocab-size", type=int, default=32000, help="Vocab size (30k–50k)")
-    s.add_argument("--version", default="v0.1", help="Tokenizer version tag")
+    s = sub.add_parser("token", help="Train domain SentencePiece (v1 32k BPE or v2 8k unigram)")
+    s.add_argument("--execute", action="store_true", help="Write tokenizer artifacts")
+    s.add_argument("--vocab-size", type=int, default=32000, help="Vocab size (v1: 30–50k, v2: 8192)")
+    s.add_argument("--version", default="v0.1", help="Tokenizer version tag (v2-8k for Mini v2)")
+    s.add_argument("--model-type", default=None, help="bpe | unigram (default: unigram for v2)")
     s.add_argument("--no-baseline", action="store_true", help="Skip generic baseline fertility model")
     s.add_argument("--max-qa", type=int, default=80000, help="Max QA lines for corpus")
     s.set_defaults(func=cmd_token)
@@ -456,6 +476,14 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--smoke-rounds", type=int, default=2, help="Load smoke rounds")
     s.add_argument("--seed", type=int, default=42)
     s.set_defaults(func=cmd_release)
+
+    s = sub.add_parser("cleanup", help="Delete disposable local datasets/versions + smoke ckpts")
+    s.add_argument("--execute", action="store_true", help="Actually delete (default dry-run)")
+    s.add_argument("--keep-synth", type=int, default=1, help="Newest synth version dirs to keep")
+    s.add_argument("--keep-other", type=int, default=1, help="Newest other version dirs to keep")
+    s.add_argument("--no-smoke-ckpts", action="store_true", help="Skip smoke checkpoint delete")
+    s.add_argument("--runs", action="store_true", help="Also delete mini/runs/*")
+    s.set_defaults(func=cmd_cleanup)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

@@ -114,7 +114,7 @@ class Block(nn.Module):
 
 
 class MiniLM(nn.Module):
-    """Agriculture Mini decoder-only LM (~1M params with default config)."""
+    """Agriculture Mini decoder-only LM (v1 ~1M or v2 ~15M via MiniConfig)."""
 
     def __init__(self, config: MiniConfig | None = None):
         super().__init__()
@@ -127,6 +127,7 @@ class MiniLM(nn.Module):
         self.lm_head = nn.Linear(c.n_embd, c.vocab_size, bias=False)
         if c.tie_weights:
             self.lm_head.weight = self.tok_emb.weight
+        self.gradient_checkpointing = bool(getattr(c, "gradient_checkpointing", False))
         self.apply(self._init_weights)
 
     def _init_weights(self, module: nn.Module):
@@ -146,27 +147,50 @@ class MiniLM(nn.Module):
         if T > self.config.block_size:
             raise ValueError(f"Sequence length {T} > block_size {self.config.block_size}")
         x = self.drop(self.tok_emb(idx))
-        for block in self.blocks:
-            x = block(x)
+        if self.gradient_checkpointing and self.training:
+            for block in self.blocks:
+                x = torch.utils.checkpoint.checkpoint(block, x, use_reentrant=False)
+        else:
+            for block in self.blocks:
+                x = block(x)
         x = self.norm_f(x)
         logits = self.lm_head(x)
         loss = None
         if targets is not None:
+            ignore = int(getattr(self.config, "ignore_index", -100))
             loss = F.cross_entropy(
                 logits.view(-1, logits.size(-1)),
                 targets.view(-1),
-                ignore_index=self.config.pad_id,
+                ignore_index=ignore,
             )
         return logits, loss
 
     @torch.no_grad()
-    def generate(self, idx: torch.Tensor, max_new_tokens: int = 32, temperature: float = 1.0) -> torch.Tensor:
+    def generate(
+        self,
+        idx: torch.Tensor,
+        max_new_tokens: int = 32,
+        temperature: float = 1.0,
+        top_p: float | None = None,
+    ) -> torch.Tensor:
         for _ in range(max_new_tokens):
             idx_cond = idx[:, -self.config.block_size :]
             logits, _ = self(idx_cond)
             logits = logits[:, -1, :] / max(temperature, 1e-5)
-            probs = F.softmax(logits, dim=-1)
-            next_id = torch.multinomial(probs, num_samples=1)
+            if top_p is not None and 0.0 < top_p < 1.0:
+                sorted_logits, sorted_idx = torch.sort(logits, descending=True)
+                probs_s = F.softmax(sorted_logits, dim=-1)
+                cum = torch.cumsum(probs_s, dim=-1)
+                mask = cum > top_p
+                mask[..., 1:] = mask[..., :-1].clone()
+                mask[..., 0] = False
+                sorted_logits = sorted_logits.masked_fill(mask, float("-inf"))
+                probs = F.softmax(sorted_logits, dim=-1)
+                next_s = torch.multinomial(probs, num_samples=1)
+                next_id = sorted_idx.gather(-1, next_s)
+            else:
+                probs = F.softmax(logits, dim=-1)
+                next_id = torch.multinomial(probs, num_samples=1)
             idx = torch.cat([idx, next_id], dim=1)
         return idx
 
