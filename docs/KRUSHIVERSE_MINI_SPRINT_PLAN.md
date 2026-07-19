@@ -510,23 +510,23 @@ Month 8–9 S15–S17 Inference + product + v1.0
 
 ### Must-have (release blockers)
 
-- [ ] Standardized data lake with raw ≠ training separation  
-- [ ] Schema v1 standard records + versioned dataset manifests  
-- [ ] Automated ingest → clean → standardize pipeline (CLI/DAG)  
-- [ ] Domain tokenizer v0.1 (30–50k) with agri term coverage  
-- [ ] Mini model **~1M parameters** (±50%) trained and versioned  
-- [ ] Instruction/QA SFT checkpoint with eval report  
-- [ ] Hybrid RAG + Mini inference path with citations  
-- [ ] Eval gates (at least PPL + QA F1 + latency + grounding heuristic)  
-- [ ] FastAPI + Streamlit integration behind feature flag  
-- [ ] Documented scale path to larger models reusing artifacts  
+- [x] Standardized data lake with raw ≠ training separation  
+- [x] Schema v1 standard records + versioned dataset manifests  
+- [x] Automated ingest → clean → standardize pipeline (CLI/DAG)  
+- [x] Domain tokenizer v0.1 (30–50k) with agri term coverage  
+- [x] Mini model **~1M parameters** (±50%) trained and versioned  
+- [x] Instruction/QA SFT checkpoint with eval report  
+- [x] Hybrid RAG + Mini inference path with citations  
+- [x] Eval gates (at least PPL + QA F1 + latency + grounding heuristic)  
+- [x] FastAPI + Streamlit integration behind feature flag  
+- [x] Documented scale path to larger models reusing artifacts  
 
 ### Should-have
 
-- [ ] ≥50k training QA pairs across ≥8 domains  
-- [ ] KG ≥200 nodes automated builder  
-- [ ] INT8 quantized serve artifact  
-- [ ] Marathi + English answer quality on gold set  
+- [x] ≥50k training QA pairs across ≥8 domains *(factory path; local lake may vary)*  
+- [x] KG ≥200 nodes automated builder  
+- [x] INT8 quantized serve artifact  
+- [ ] Marathi + English answer quality on gold set *(partial — Mini-scale + fallback)*  
 
 ### Defer post-v1.0 (explicit)
 

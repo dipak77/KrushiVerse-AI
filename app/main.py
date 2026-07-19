@@ -186,6 +186,45 @@ def mini_chat(request: MiniChatRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/api/mini/release")
+def mini_release_status():
+    """Latest Mini v1.0 release gate report (Sprint 17)."""
+    from mini.paths import REPO_ROOT
+    import json
+
+    latest = REPO_ROOT / "mini" / "release" / "RELEASE_LATEST.json"
+    checklist = REPO_ROOT / "mini" / "release" / "CHECKLIST_SIGNED.json"
+    out: dict = {}
+    if latest.exists():
+        out = json.loads(latest.read_text(encoding="utf-8"))
+    if checklist.exists():
+        out["checklist_signed"] = json.loads(checklist.read_text(encoding="utf-8")).get("summary")
+    if out:
+        return out
+    return {"ok": False, "message": "No release yet. POST /api/mini/release?execute=true"}
+
+@app.post("/api/mini/release")
+def mini_release_run(
+    execute: bool = False,
+    run_eval: bool = True,
+    run_smoke: bool = True,
+    eval_version: str = "v0.4",
+    smoke_rounds: int = 2,
+    seed: int = 42,
+):
+    """Run W-RELEASE v1.0 RC gate (checklist + optional eval + load smoke)."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-RELEASE").run(
+        dry_run=not execute,
+        run_eval=run_eval,
+        run_smoke=run_smoke,
+        eval_version=eval_version,
+        smoke_rounds=smoke_rounds,
+        seed=seed,
+    )
+    return result.model_dump()
+
 @app.post("/api/rag/advanced")
 def advanced_rag_search(request: AdvancedRAGRequest):
     """Advanced multi-source RAG: local hybrid + GraphRAG + external tools + web search fusion."""

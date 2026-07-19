@@ -116,6 +116,7 @@ from mini.workers.deploy import DeployWorker  # noqa: E402,F401
 from mini.workers.rag import RAGWorker  # noqa: E402,F401
 from mini.workers.agent import AgentWorker  # noqa: E402,F401
 from mini.workers.infer import InferWorker  # noqa: E402,F401
+from mini.workers.release import ReleaseWorker  # noqa: E402,F401
 
 
 @register_worker

@@ -34,7 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 def test_mini_version_markers():
     # Sprint markers advance with each sprint; earlier artifacts remain valid.
-    assert __sprint__ in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16"}
+    assert __sprint__ in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17"}
     assert __feature_phase__.startswith("FP-")
     assert __version__
 
@@ -97,10 +97,11 @@ def test_workers_registered():
         "W-RAG",
         "W-AGENT",
         "W-INFER",
+        "W-RELEASE",
     }
     missing = required - ids
     assert not missing, f"Missing workers: {missing}"
-    assert len(workers) >= 21
+    assert len(workers) >= 22
     # quality workers from Sprint 3
     assert "W-QUALITY" in ids or "W-VALIDATE" in ids
 

@@ -254,6 +254,22 @@ def cmd_rag(args: argparse.Namespace) -> int:
     return 0 if result.ok else 1
 
 
+def cmd_release(args: argparse.Namespace) -> int:
+    """Mini v1.0 RC gate — non-zero if checklist/eval/smoke fail."""
+    from mini.workers.base import get_worker
+
+    result = get_worker("W-RELEASE").run(
+        dry_run=not args.execute,
+        run_eval=not args.skip_eval,
+        run_smoke=not args.skip_smoke,
+        eval_version=args.eval_version,
+        smoke_rounds=args.smoke_rounds,
+        seed=args.seed,
+    )
+    print(result.model_dump_json(indent=2))
+    return 0 if result.ok else 1
+
+
 def cmd_init_lake(_: argparse.Namespace) -> int:
     paths = ensure_lake_layout()
     print(f"Lake layout ready ({len(paths)} paths).")
@@ -431,6 +447,15 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--top-k", type=int, default=6)
     s.add_argument("--enable-web", action="store_true")
     s.set_defaults(func=cmd_rag)
+
+    s = sub.add_parser("release", help="Mini v1.0 RC gate + checklist (W-RELEASE, S17)")
+    s.add_argument("--execute", action="store_true", help="Run RC gate and write release artifacts")
+    s.add_argument("--skip-eval", action="store_true", help="Skip W-EVAL-style model scorecard")
+    s.add_argument("--skip-smoke", action="store_true", help="Skip load smoke")
+    s.add_argument("--eval-version", default="v0.4", help="Checkpoint version for eval gate")
+    s.add_argument("--smoke-rounds", type=int, default=2, help="Load smoke rounds")
+    s.add_argument("--seed", type=int, default=42)
+    s.set_defaults(func=cmd_release)
 
     s = sub.add_parser("run-worker", help="Run a single worker")
     s.add_argument("worker_id", help="e.g. W-BOOTSTRAP")

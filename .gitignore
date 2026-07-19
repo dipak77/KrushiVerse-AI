@@ -70,6 +70,16 @@ mini/inference/**
 !mini/inference/generate_mini.py
 !mini/inference/pipeline.py
 
+# Mini release tooling (code committed; signed reports local-ok to commit for CI demos)
+!mini/release/
+!mini/release/**
+mini/release/RELEASE_LATEST.json
+mini/release/CHECKLIST_SIGNED.json
+mini/release/VERSION_MATRIX.json
+mini/release/SCALE_ROADMAP.json
+# RUNBOOK.md is source — keep
+!mini/release/RUNBOOK.md
+
 mini/runs/
 mini/orchestrator/events.jsonl
 
