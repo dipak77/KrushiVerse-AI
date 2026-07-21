@@ -541,8 +541,9 @@ def train_sentencepiece(
         try:
             spm.SentencePieceTrainer.train(**train_kwargs)
         except RuntimeError:
-            # last resort: smaller but still in acceptance band floor
-            train_kwargs["vocab_size"] = max(VOCAB_MIN, min(vocab_size, 30000))
+            # last resort: avoid forcing VOCAB_MIN (30k) for v2-8k jobs,
+            # which can cause heavy recomputation and crashes on constrained machines.
+            train_kwargs["vocab_size"] = max(8000, min(vocab_size, 30000))
             spm.SentencePieceTrainer.train(**train_kwargs)
         train_kwargs["_fallback_error"] = str(exc)
 

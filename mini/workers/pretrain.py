@@ -30,7 +30,7 @@ class PretrainWorker(BaseWorker):
         mode = str(kwargs.get("mode") or "domain")
         steps = int(kwargs.get("steps") or kwargs.get("overfit_steps") or (10_000 if is_v2 else 200))
         batch = int(kwargs.get("batch_size") or (4 if is_v2 else 8))
-        block = int(kwargs.get("block_size") or kwargs.get("seq_len") or (1024 if is_v2 else 128))
+        block = int(kwargs.get("block_size") or kwargs.get("seq_len") or (512 if is_v2 else 128))
         seed = int(kwargs.get("seed") or 42)
         vocab = int(kwargs.get("vocab_size") or (8192 if is_v2 else 4096))
         max_qa = int(kwargs.get("max_qa") or 40_000)
@@ -49,8 +49,8 @@ class PretrainWorker(BaseWorker):
             variant="v2-15M" if is_v2 else "v1",
             version=version,
             grad_accum=int(kwargs.get("grad_accum") or (4 if is_v2 else 1)),
-            use_fp16=bool(kwargs.get("fp16") or kwargs.get("use_fp16") or False),
-            grad_checkpoint=bool(kwargs.get("grad_checkpoint") or kwargs.get("gradient_checkpointing") or False),
+            use_fp16=bool(kwargs.get("fp16") or kwargs.get("use_fp16") or True),
+            grad_checkpoint=bool(kwargs.get("grad_checkpoint") or kwargs.get("gradient_checkpointing") or True),
             lr=float(kwargs["lr"]) if kwargs.get("lr") is not None else None,
             eval_every=int(kwargs["eval_every"]) if kwargs.get("eval_every") is not None else None,
             config_path=kwargs.get("config") or kwargs.get("config_path"),

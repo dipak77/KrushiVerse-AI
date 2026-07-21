@@ -1,24 +1,24 @@
 {
   "sprint": "S10",
-  "created_at": "2026-07-18T18:53:31Z",
+  "created_at": "2026-07-21T14:51:55Z",
   "config": {
-    "vocab_size": 4096,
-    "n_embd": 128,
-    "n_layer": 6,
-    "n_head": 4,
-    "n_hidden": 192,
-    "block_size": 512,
+    "vocab_size": 8192,
+    "n_embd": 320,
+    "n_layer": 10,
+    "n_head": 8,
+    "n_hidden": 864,
+    "block_size": 64,
     "tie_weights": true
   },
   "parameters": {
-    "total_tensors_sum": 1361536,
-    "trainable_tensors_sum": 1361536,
-    "unique_params": 1361536,
-    "millions": 1.3615
+    "total_tensors_sum": 15018560,
+    "trainable_tensors_sum": 15018560,
+    "unique_params": 15018560,
+    "millions": 15.0186
   },
   "target_range": {
-    "min": 800000,
-    "max": 1500000
+    "min": 8000000,
+    "max": 20000000
   },
   "in_range": true,
   "features": [
@@ -26,6 +26,7 @@
     "RMSNorm",
     "SwiGLU",
     "weight_tying",
-    "causal_sdpa"
+    "causal_sdpa",
+    "fused_adamw"
   ]
 }

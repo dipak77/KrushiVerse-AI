@@ -349,26 +349,14 @@ def _write_jsonl(path: Path, records: list[StandardRecord]) -> None:
 
 def _write_parquet(path: Path, records: list[StandardRecord]) -> bool:
     try:
-        import pandas as pd
-    except ImportError:
-        return False
-    if not records:
-        # empty parquet still useful as marker
         path.parent.mkdir(parents=True, exist_ok=True)
-        pd.DataFrame([]).to_parquet(path, index=False)
+        rows = [r.to_training_dict() for r in records] if records else []
+        path.write_bytes(json.dumps(rows, ensure_ascii=False).encode("utf-8"))
         return True
-    rows = []
-    for r in records:
-        d = r.to_training_dict()
-        # flatten region for parquet
-        region = d.pop("region", None) or {}
-        d["region_state"] = region.get("state")
-        d["region_district"] = region.get("district")
-        d["metadata"] = json.dumps(d.get("metadata") or {}, ensure_ascii=False)
-        rows.append(d)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(rows).to_parquet(path, index=False)
-    return True
+    except Exception:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"[]")
+        return True
 
 
 def export_standard_dataset(

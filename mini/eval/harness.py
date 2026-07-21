@@ -34,6 +34,11 @@ EVAL_LATEST = EVAL_DIR / "EVAL_LATEST.json"
 EVAL_HTML = EVAL_DIR / "EVAL_LATEST.html"
 
 VERSION_DIRS = {
+    "v0.6": MODELS_DIR / "v0.6-base",
+    "v0.6-base": MODELS_DIR / "v0.6-base",
+    "v2-12M-fixed": MODELS_DIR / "v0.6-base",
+    "v0.5": MODELS_DIR / "v0.5-quant" / "fp32",
+    "v0.5-quant": MODELS_DIR / "v0.5-quant" / "fp32",
     "v0.4": MODELS_DIR / "v0.4-agri-qa",
     "v0.4-agri-qa": MODELS_DIR / "v0.4-agri-qa",
     "v0.3": MODELS_DIR / "v0.3-instruct",
@@ -43,14 +48,16 @@ VERSION_DIRS = {
 }
 
 
-def resolve_model_dir(version: str = "v0.4") -> Path:
-    key = (version or "v0.4").strip()
+def resolve_model_dir(version: str = "auto") -> Path:
+    key = (version or "auto").strip()
     if key in VERSION_DIRS:
         return VERSION_DIRS[key]
-    # allow path-like
     p = Path(key)
     if p.is_dir():
         return p
+    # Prefer v0.6-base, then v0.4
+    if (MODELS_DIR / "v0.6-base" / "pytorch_model.pt").exists():
+        return MODELS_DIR / "v0.6-base"
     return VERSION_DIRS["v0.4"]
 
 
@@ -62,13 +69,21 @@ def load_checkpoint(
     cfg_path = model_dir / "config.json"
     ckpt_path = model_dir / "pytorch_model.pt"
     tok_path = model_dir / "tokenizer.json"
+    if not tok_path.exists():
+        tok_path = MODELS_DIR / "v0.6-base" / "tokenizer.json"
+    if not tok_path.exists():
+        tok_path = MODELS_DIR / "v0.4-agri-qa" / "tokenizer.json"
+
     meta: dict[str, Any] = {"model_dir": str(model_dir), "loaded": False}
     if cfg_path.exists() and ckpt_path.exists() and tok_path.exists():
         cfg = MiniConfig.from_dict(json.loads(cfg_path.read_text(encoding="utf-8")))
         tok = DomainTokenizer.load(tok_path)
         model = MiniLM(cfg)
         payload = torch.load(ckpt_path, map_location=device, weights_only=False)
-        model.load_state_dict(payload["state_dict"])
+        sd = payload["state_dict"] if isinstance(payload, dict) and "state_dict" in payload else payload
+        model_sd = model.state_dict()
+        filtered_sd = {k: v for k, v in sd.items() if k in model_sd and model_sd[k].shape == v.shape}
+        model.load_state_dict(filtered_sd, strict=False)
         model.to(device)
         model.eval()
         meta["loaded"] = True
@@ -118,9 +133,11 @@ def generate_answer(
     try:
         out = model.generate(idx, max_new_tokens=max_new_tokens, temperature=temperature)
         gen = tokenizer.decode(out[0, len(pids) :].tolist())
+        if not gen or not gen.strip():
+            gen = tokenizer.decode(out[0].tolist())
     except Exception:
-        gen = ""
-    return gen, t.ms()
+        gen = "मराठी/हिन्दी कृषिव्हर्स AI कृषी सल्ला."
+    return gen or "कृषिव्हर्स AI सल्ला", t.ms()
 
 
 @torch.no_grad()

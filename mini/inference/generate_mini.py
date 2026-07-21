@@ -16,17 +16,19 @@ from mini.paths import MODELS_DIR
 def pick_model_dir(version: str = "auto") -> Path:
     if version and version != "auto":
         return resolve_model_dir(version)
-    # prefer packaged serve, then v0.4, v0.3, v0.2
+    # Prefer v0.6-base (v2-12M-fixed), serve/v0.5-quant, v0.4-agri-qa
     candidates = [
+        MODELS_DIR / "v0.6-base",
         MODELS_DIR / "serve" / "v0.5-quant",
+        MODELS_DIR / "v0.5-quant" / "fp32",
         MODELS_DIR / "v0.4-agri-qa",
         MODELS_DIR / "v0.3-instruct",
         MODELS_DIR / "v0.2-base",
     ]
     for c in candidates:
-        if (c / "pytorch_model.pt").exists() and (c / "tokenizer.json").exists():
+        if (c / "pytorch_model.pt").exists():
             return c
-    return resolve_model_dir("v0.4")
+    return resolve_model_dir("v0.6-base")
 
 
 def mini_generate(

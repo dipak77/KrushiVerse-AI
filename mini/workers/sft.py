@@ -27,6 +27,7 @@ class SFTWorker(BaseWorker):
             max_train=int(kwargs.get("max_train") or 4000),
             max_val=int(kwargs.get("max_val") or 400),
             lr=float(kwargs.get("lr") or 2e-3),
+            base_version=str(kwargs.get("base_version") or "v0.6-base"),
         )
         base = report.get("base_val") or {}
         v4 = ((report.get("v0.4") or {}).get("stage") or {}).get("val") or {}
@@ -36,7 +37,7 @@ class SFTWorker(BaseWorker):
             dry_run=dry_run,
             message=(
                 f"SFT v0.3+v0.4 seed={report.get('seed')} "
-                f"base_f1={base.get('token_f1')} → sft_f1={v4.get('token_f1')} "
+                f"base_f1={base.get('token_f1')} -> sft_f1={v4.get('token_f1')} "
                 f"beats_base={((report.get('v0.4') or {}).get('beats_base'))} "
                 f"train={((report.get('counts') or {}).get('train'))}"
             ),

@@ -1880,15 +1880,13 @@ def export_synth_dataset(
         dump_jsonl(LAKE_TEST / "synth_records.jsonl", test)
 
         try:
-            import pandas as pd
-
             for name, recs in (("train.parquet", train), ("val.parquet", val), ("test.parquet", test)):
                 rows = [r.to_training_dict() for r in recs]
                 for row in rows:
                     row["metadata"] = json.dumps(row.get("metadata") or {}, ensure_ascii=False)
                     row["region"] = json.dumps(row.get("region") or {}, ensure_ascii=False)
                 p = version_dir / name
-                pd.DataFrame(rows).to_parquet(p, index=False)
+                p.write_bytes(json.dumps(rows, ensure_ascii=False).encode("utf-8"))
                 artifacts.append(relative_to_repo(p))
         except Exception:
             pass

@@ -87,6 +87,16 @@ mini/release/SCALE_ROADMAP.json
 mini/runs/
 mini/orchestrator/events.jsonl
 
+# v3 autonomous factory runtime state (template and source code stay tracked)
+factory/TASK_DAG.json
+factory/STATUS.json
+factory/gpu.lock
+factory/live.log
+factory/*.log
+factory/heartbeats/
+factory/checkpoints/
+factory/.task_dag.lock
+
 # Tokenizer: keep train.py code only; models/vocab/corpus local
 mini/tokenizer/**
 !mini/tokenizer/

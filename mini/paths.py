@@ -50,6 +50,7 @@ EVAL_DIR = MINI_ROOT / "eval"
 INFERENCE_DIR = MINI_ROOT / "inference"
 ORCHESTRATOR_DIR = MINI_ROOT / "orchestrator"
 TAXONOMY_DIR = MINI_ROOT / "taxonomy"
+SERVE_DIR = MINI_ROOT / "serve"
 EVENTS_LOG = ORCHESTRATOR_DIR / "events.jsonl"
 RUNS_DIR = MINI_ROOT / "runs"
 
