@@ -1,0 +1,1324 @@
+{
+  "generated_at": "2026-07-19T12:52:20Z",
+  "tasks": [
+    {
+      "id": "data_v2",
+      "worker": "data",
+      "deps": [],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 10,
+      "task_args": {},
+      "attempts": 2,
+      "updated_at": "2026-07-19T10:03:22Z",
+      "started_at": "2026-07-19T10:03:12Z",
+      "pid": 20384,
+      "finished_at": "2026-07-19T10:03:22Z",
+      "artifacts": [
+        "data\\lake\\BOOTSTRAP.json",
+        "data\\lake\\manifests\\ingest_20260719T100317Z-95914bf6.json",
+        "data\\lake\\INGEST_LATEST.json",
+        "data\\lake\\training\\standard_records.jsonl",
+        "data\\lake\\validation\\standard_records.jsonl",
+        "data\\lake\\test\\standard_records.jsonl",
+        "mini\\datasets\\versions\\v20260719T100318Z\\train.jsonl",
+        "mini\\datasets\\versions\\v20260719T100318Z\\val.jsonl",
+        "mini\\datasets\\versions\\v20260719T100318Z\\test.jsonl",
+        "mini\\datasets\\versions\\v20260719T100318Z\\all.jsonl",
+        "mini\\datasets\\versions\\v20260719T100318Z\\train.parquet",
+        "data\\lake\\training\\standard_records.parquet",
+        "mini\\datasets\\versions\\v20260719T100318Z\\val.parquet",
+        "data\\lake\\validation\\standard_records.parquet",
+        "mini\\datasets\\versions\\v20260719T100318Z\\test.parquet",
+        "data\\lake\\test\\standard_records.parquet",
+        "mini\\datasets\\versions\\v20260719T100318Z\\manifest.json",
+        "mini\\datasets\\LATEST_VERSION.json",
+        "data\\lake\\STANDARD_LATEST.json"
+      ],
+      "metrics": {
+        "pipeline": "sprint4",
+        "ok": true,
+        "dry_run": false,
+        "run_id": "20260719T100317Z-5066c91e",
+        "steps": [
+          {
+            "worker_id": "W-BOOTSTRAP",
+            "ok": true,
+            "dry_run": false,
+            "message": "Lake layout ensured; bootstrap marker written",
+            "artifacts": [
+              "data\\lake\\BOOTSTRAP.json"
+            ],
+            "metrics": {
+              "paths_touched": 42,
+              "domains": 14
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:17Z"
+          },
+          {
+            "worker_id": "W-INGEST",
+            "ok": true,
+            "dry_run": false,
+            "message": "Ingest complete: copied=0 skipped=15 failed=0",
+            "artifacts": [
+              "data\\lake\\manifests\\ingest_20260719T100317Z-95914bf6.json",
+              "data\\lake\\INGEST_LATEST.json"
+            ],
+            "metrics": {
+              "run_id": "20260719T100317Z-95914bf6",
+              "sources_considered": 11,
+              "files_copied": 0,
+              "files_skipped": 15,
+              "files_failed": 0,
+              "registry": {
+                "version": "1.0.0",
+                "sprint": "S2",
+                "total_sources": 13,
+                "enabled": 11,
+                "by_type": {
+                  "local_file": 10,
+                  "http_api": 2,
+                  "web": 1
+                },
+                "by_domain": {
+                  "crop": 2,
+                  "disease": 1,
+                  "pest": 1,
+                  "soil": 1,
+                  "fertilizer": 1,
+                  "government": 1,
+                  "market": 2,
+                  "general": 4,
+                  "seed": 1,
+                  "irrigation": 1,
+                  "weather": 2
+                }
+              },
+              "lake_tree": {
+                "lake_raw": "data\\lake\\raw",
+                "file_count": 16,
+                "domains_with_data": [
+                  "weather",
+                  "soil",
+                  "crop",
+                  "market",
+                  "government",
+                  "disease",
+                  "pest",
+                  "fertilizer",
+                  "irrigation",
+                  "seed",
+                  "general"
+                ],
+                "tree": {
+                  "weather": [
+                    {
+                      "path": "data\\lake\\raw\\weather\\platform_climate_zones\\climate_zones.json",
+                      "bytes": 2574
+                    }
+                  ],
+                  "soil": [
+                    {
+                      "path": "data\\lake\\raw\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                      "bytes": 10450
+                    }
+                  ],
+                  "crop": [
+                    {
+                      "path": "data\\lake\\raw\\crop\\platform_agri_advisories\\agri_advisories.json",
+                      "bytes": 50748
+                    },
+                    {
+                      "path": "data\\lake\\raw\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+                      "bytes": 36041
+                    }
+                  ],
+                  "market": [
+                    {
+                      "path": "data\\lake\\raw\\market\\platform_market_prices\\market_prices.json",
+                      "bytes": 9296
+                    }
+                  ],
+                  "government": [
+                    {
+                      "path": "data\\lake\\raw\\government\\platform_government_schemes\\government_schemes.json",
+                      "bytes": 11604
+                    }
+                  ],
+                  "disease": [
+                    {
+                      "path": "data\\lake\\raw\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+                      "bytes": 36041
+                    }
+                  ],
+                  "pest": [
+                    {
+                      "path": "data\\lake\\raw\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+                      "bytes": 36041
+                    }
+                  ],
+                  "fertilizer": [
+                    {
+                      "path": "data\\lake\\raw\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                      "bytes": 10450
+                    }
+                  ],
+                  "irrigation": [
+                    {
+                      "path": "data\\lake\\raw\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+                      "bytes": 2317
+                    }
+                  ],
+                  "seed": [
+                    {
+                      "path": "data\\lake\\raw\\seed\\platform_seed_varieties\\seed_varieties.json",
+                      "bytes": 3050
+                    }
+                  ],
+                  "general": [
+                    {
+                      "path": "data\\lake\\raw\\general\\platform_agri_advisories\\agri_advisories.json",
+                      "bytes": 50748
+                    },
+                    {
+                      "path": "data\\lake\\raw\\general\\platform_knowledge_graph\\knowledge_graph.json",
+                      "bytes": 13782
+                    },
+                    {
+                      "path": "data\\lake\\raw\\general\\platform_open_source_catalog\\open_source_catalog.json",
+                      "bytes": 2223
+                    },
+                    {
+                      "path": "data\\lake\\raw\\general\\synthetic_dirty\\broken.json",
+                      "bytes": 17
+                    },
+                    {
+                      "path": "data\\lake\\raw\\general\\synthetic_dirty\\dirty_records.json",
+                      "bytes": 417
+                    }
+                  ]
+                },
+                "latest_ingest": "data\\lake\\INGEST_LATEST.json"
+              }
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:17Z"
+          },
+          {
+            "worker_id": "W-VALIDATE",
+            "ok": true,
+            "dry_run": false,
+            "message": "Validated 16 files: valid=15 invalid=1 quarantined=1",
+            "artifacts": [],
+            "metrics": {
+              "ok": true,
+              "files_scanned": 16,
+              "valid": 15,
+              "invalid": 1,
+              "quarantined": [
+                "data\\lake\\quarantine\\general\\broken__q170.json"
+              ],
+              "results": [
+                {
+                  "path": "data\\lake\\raw\\weather\\platform_climate_zones\\climate_zones.json",
+                  "domain": "weather",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 2574,
+                  "record_estimate": 6
+                },
+                {
+                  "path": "data\\lake\\raw\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "domain": "soil",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 10450,
+                  "record_estimate": 6
+                },
+                {
+                  "path": "data\\lake\\raw\\crop\\platform_agri_advisories\\agri_advisories.json",
+                  "domain": "crop",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 50748,
+                  "record_estimate": 75
+                },
+                {
+                  "path": "data\\lake\\raw\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+                  "domain": "crop",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 36041,
+                  "record_estimate": 22
+                },
+                {
+                  "path": "data\\lake\\raw\\market\\platform_market_prices\\market_prices.json",
+                  "domain": "market",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 9296,
+                  "record_estimate": 20
+                },
+                {
+                  "path": "data\\lake\\raw\\government\\platform_government_schemes\\government_schemes.json",
+                  "domain": "government",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 11604,
+                  "record_estimate": 15
+                },
+                {
+                  "path": "data\\lake\\raw\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+                  "domain": "disease",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 36041,
+                  "record_estimate": 22
+                },
+                {
+                  "path": "data\\lake\\raw\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+                  "domain": "pest",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 36041,
+                  "record_estimate": 22
+                },
+                {
+                  "path": "data\\lake\\raw\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "domain": "fertilizer",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 10450,
+                  "record_estimate": 6
+                },
+                {
+                  "path": "data\\lake\\raw\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+                  "domain": "irrigation",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 2317,
+                  "record_estimate": 8
+                },
+                {
+                  "path": "data\\lake\\raw\\seed\\platform_seed_varieties\\seed_varieties.json",
+                  "domain": "seed",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 3050,
+                  "record_estimate": 12
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_agri_advisories\\agri_advisories.json",
+                  "domain": "general",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 50748,
+                  "record_estimate": 75
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_knowledge_graph\\knowledge_graph.json",
+                  "domain": "general",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 13782,
+                  "record_estimate": 70
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_open_source_catalog\\open_source_catalog.json",
+                  "domain": "general",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 2223,
+                  "record_estimate": 14
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\synthetic_dirty\\broken.json",
+                  "domain": "general",
+                  "ok": false,
+                  "errors": [
+                    "invalid JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+                  ],
+                  "bytes": 17,
+                  "record_estimate": 0
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\synthetic_dirty\\dirty_records.json",
+                  "domain": "general",
+                  "ok": true,
+                  "errors": [],
+                  "bytes": 417,
+                  "record_estimate": 4
+                }
+              ]
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:17Z"
+          },
+          {
+            "worker_id": "W-CLEAN",
+            "ok": true,
+            "dry_run": false,
+            "message": "Cleaned=15 skipped=1 failed=0",
+            "artifacts": [],
+            "metrics": {
+              "ok": true,
+              "cleaned": 15,
+              "skipped": 1,
+              "failed": 0,
+              "details": [
+                {
+                  "path": "data\\lake\\raw\\weather\\platform_climate_zones\\climate_zones.json",
+                  "dest": "data\\lake\\processed\\weather\\platform_climate_zones\\climate_zones.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "dest": "data\\lake\\processed\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\crop\\platform_agri_advisories\\agri_advisories.json",
+                  "dest": "data\\lake\\processed\\crop\\platform_agri_advisories\\agri_advisories.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+                  "dest": "data\\lake\\processed\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\market\\platform_market_prices\\market_prices.json",
+                  "dest": "data\\lake\\processed\\market\\platform_market_prices\\market_prices.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\government\\platform_government_schemes\\government_schemes.json",
+                  "dest": "data\\lake\\processed\\government\\platform_government_schemes\\government_schemes.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+                  "dest": "data\\lake\\processed\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+                  "dest": "data\\lake\\processed\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "dest": "data\\lake\\processed\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+                  "dest": "data\\lake\\processed\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\seed\\platform_seed_varieties\\seed_varieties.json",
+                  "dest": "data\\lake\\processed\\seed\\platform_seed_varieties\\seed_varieties.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_agri_advisories\\agri_advisories.json",
+                  "dest": "data\\lake\\processed\\general\\platform_agri_advisories\\agri_advisories.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_knowledge_graph\\knowledge_graph.json",
+                  "dest": "data\\lake\\processed\\general\\platform_knowledge_graph\\knowledge_graph.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\platform_open_source_catalog\\open_source_catalog.json",
+                  "dest": "data\\lake\\processed\\general\\platform_open_source_catalog\\open_source_catalog.json",
+                  "action": "cleaned"
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\synthetic_dirty\\broken.json",
+                  "action": "skipped_invalid",
+                  "errors": [
+                    "invalid JSON: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)"
+                  ]
+                },
+                {
+                  "path": "data\\lake\\raw\\general\\synthetic_dirty\\dirty_records.json",
+                  "dest": "data\\lake\\processed\\general\\synthetic_dirty\\dirty_records.json",
+                  "action": "cleaned"
+                }
+              ]
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:17Z"
+          },
+          {
+            "worker_id": "W-DEDUP",
+            "ok": true,
+            "dry_run": false,
+            "message": "Dedup files=15 exact_removed=0 near_removed=72",
+            "artifacts": [],
+            "metrics": {
+              "ok": true,
+              "files": 15,
+              "files_updated": 2,
+              "records_input": 522,
+              "records_kept": 450,
+              "exact_removed": 0,
+              "near_removed": 72,
+              "near_threshold": 0.92,
+              "details": [
+                {
+                  "path": "data\\lake\\processed\\crop\\platform_agri_advisories\\agri_advisories.json",
+                  "stats": {
+                    "advisories": {
+                      "input": 75,
+                      "kept": 39,
+                      "exact_removed": 0,
+                      "near_removed": 36
+                    }
+                  },
+                  "changed": true
+                },
+                {
+                  "path": "data\\lake\\processed\\crop\\platform_crops_diseases\\crops_and_diseases.json",
+                  "stats": {
+                    "crops": {
+                      "input": 22,
+                      "kept": 22,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "diseases_and_pests": {
+                      "input": 20,
+                      "kept": 20,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\disease\\platform_crops_diseases\\crops_and_diseases.json",
+                  "stats": {
+                    "crops": {
+                      "input": 22,
+                      "kept": 22,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "diseases_and_pests": {
+                      "input": 20,
+                      "kept": 20,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\fertilizer\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "stats": {
+                    "soil_types": {
+                      "input": 6,
+                      "kept": 6,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "fertilizer_recommendations": {
+                      "input": 15,
+                      "kept": 15,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\general\\platform_agri_advisories\\agri_advisories.json",
+                  "stats": {
+                    "advisories": {
+                      "input": 75,
+                      "kept": 39,
+                      "exact_removed": 0,
+                      "near_removed": 36
+                    }
+                  },
+                  "changed": true
+                },
+                {
+                  "path": "data\\lake\\processed\\general\\platform_knowledge_graph\\knowledge_graph.json",
+                  "stats": {
+                    "nodes": {
+                      "input": 70,
+                      "kept": 70,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "edges": {
+                      "input": 55,
+                      "kept": 55,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\general\\platform_open_source_catalog\\open_source_catalog.json",
+                  "stats": {
+                    "sources": {
+                      "input": 14,
+                      "kept": 14,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\general\\synthetic_dirty\\dirty_records.json",
+                  "stats": {
+                    "advisories": {
+                      "input": 4,
+                      "kept": 4,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\government\\platform_government_schemes\\government_schemes.json",
+                  "stats": {
+                    "schemes": {
+                      "input": 15,
+                      "kept": 15,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\irrigation\\platform_irrigation_practices\\irrigation_practices.json",
+                  "stats": {
+                    "practices": {
+                      "input": 8,
+                      "kept": 8,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\market\\platform_market_prices\\market_prices.json",
+                  "stats": {
+                    "markets": {
+                      "input": 20,
+                      "kept": 20,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\pest\\platform_crops_diseases\\crops_and_diseases.json",
+                  "stats": {
+                    "crops": {
+                      "input": 22,
+                      "kept": 22,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "diseases_and_pests": {
+                      "input": 20,
+                      "kept": 20,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\seed\\platform_seed_varieties\\seed_varieties.json",
+                  "stats": {
+                    "varieties": {
+                      "input": 12,
+                      "kept": 12,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\soil\\platform_soil_fertilizers\\soil_and_fertilizers.json",
+                  "stats": {
+                    "soil_types": {
+                      "input": 6,
+                      "kept": 6,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    },
+                    "fertilizer_recommendations": {
+                      "input": 15,
+                      "kept": 15,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                },
+                {
+                  "path": "data\\lake\\processed\\weather\\platform_climate_zones\\climate_zones.json",
+                  "stats": {
+                    "zones": {
+                      "input": 6,
+                      "kept": 6,
+                      "exact_removed": 0,
+                      "near_removed": 0
+                    }
+                  },
+                  "changed": false
+                }
+              ]
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:17Z"
+          },
+          {
+            "worker_id": "W-NORMALIZE",
+            "ok": true,
+            "dry_run": false,
+            "message": "Normalized 565 candidate records; with_crop=344 taxonomy=1.0.0",
+            "artifacts": [],
+            "metrics": {
+              "records": 565,
+              "with_crop": 344,
+              "by_category": {
+                "advisory": 159,
+                "crop": 132,
+                "disease": 120,
+                "soil": 12,
+                "fertilizer": 30,
+                "general": 36,
+                "scheme": 30,
+                "irrigation": 8,
+                "market": 20,
+                "seed": 12,
+                "weather": 6
+              },
+              "taxonomy_version": "1.0.0"
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:17Z",
+            "finished_at": "2026-07-19T10:03:18Z"
+          },
+          {
+            "worker_id": "W-LANGDETECT",
+            "ok": true,
+            "dry_run": false,
+            "message": "Language tags on 565 records; known=565",
+            "artifacts": [],
+            "metrics": {
+              "distribution": {
+                "en": 246,
+                "mixed": 178,
+                "mr": 141
+              },
+              "known_pct": 100.0,
+              "total": 565
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:18Z",
+            "finished_at": "2026-07-19T10:03:18Z"
+          },
+          {
+            "worker_id": "W-STANDARD",
+            "ok": true,
+            "dry_run": false,
+            "message": "Standard records total=565 lang_pct=100.0 cat_pct=100.0 version=v20260719T100318Z",
+            "artifacts": [
+              "data\\lake\\training\\standard_records.jsonl",
+              "data\\lake\\validation\\standard_records.jsonl",
+              "data\\lake\\test\\standard_records.jsonl",
+              "mini\\datasets\\versions\\v20260719T100318Z\\train.jsonl",
+              "mini\\datasets\\versions\\v20260719T100318Z\\val.jsonl",
+              "mini\\datasets\\versions\\v20260719T100318Z\\test.jsonl",
+              "mini\\datasets\\versions\\v20260719T100318Z\\all.jsonl",
+              "mini\\datasets\\versions\\v20260719T100318Z\\train.parquet",
+              "data\\lake\\training\\standard_records.parquet",
+              "mini\\datasets\\versions\\v20260719T100318Z\\val.parquet",
+              "data\\lake\\validation\\standard_records.parquet",
+              "mini\\datasets\\versions\\v20260719T100318Z\\test.parquet",
+              "data\\lake\\test\\standard_records.parquet",
+              "mini\\datasets\\versions\\v20260719T100318Z\\manifest.json",
+              "mini\\datasets\\LATEST_VERSION.json",
+              "data\\lake\\STANDARD_LATEST.json"
+            ],
+            "metrics": {
+              "ok": true,
+              "version": "v20260719T100318Z",
+              "counts": {
+                "total": 565,
+                "train": 446,
+                "val": 68,
+                "test": 51
+              },
+              "coverage": {
+                "total": 565,
+                "with_language": 565,
+                "with_category": 565,
+                "language_pct": 100.0,
+                "category_pct": 100.0,
+                "by_language": {
+                  "en": 246,
+                  "mixed": 178,
+                  "mr": 141
+                },
+                "by_category": {
+                  "advisory": 159,
+                  "crop": 132,
+                  "disease": 120,
+                  "soil": 12,
+                  "fertilizer": 30,
+                  "general": 36,
+                  "scheme": 30,
+                  "irrigation": 8,
+                  "market": 20,
+                  "seed": 12,
+                  "weather": 6
+                },
+                "by_split": {
+                  "train": 446,
+                  "test": 51,
+                  "val": 68
+                }
+              },
+              "artifacts": [
+                "data\\lake\\training\\standard_records.jsonl",
+                "data\\lake\\validation\\standard_records.jsonl",
+                "data\\lake\\test\\standard_records.jsonl",
+                "mini\\datasets\\versions\\v20260719T100318Z\\train.jsonl",
+                "mini\\datasets\\versions\\v20260719T100318Z\\val.jsonl",
+                "mini\\datasets\\versions\\v20260719T100318Z\\test.jsonl",
+                "mini\\datasets\\versions\\v20260719T100318Z\\all.jsonl",
+                "mini\\datasets\\versions\\v20260719T100318Z\\train.parquet",
+                "data\\lake\\training\\standard_records.parquet",
+                "mini\\datasets\\versions\\v20260719T100318Z\\val.parquet",
+                "data\\lake\\validation\\standard_records.parquet",
+                "mini\\datasets\\versions\\v20260719T100318Z\\test.parquet",
+                "data\\lake\\test\\standard_records.parquet",
+                "mini\\datasets\\versions\\v20260719T100318Z\\manifest.json",
+                "mini\\datasets\\LATEST_VERSION.json",
+                "data\\lake\\STANDARD_LATEST.json"
+              ],
+              "parquet": true,
+              "dry_run": false
+            },
+            "errors": [],
+            "started_at": "2026-07-19T10:03:18Z",
+            "finished_at": "2026-07-19T10:03:22Z"
+          }
+        ],
+        "message": "Pipeline completed successfully"
+      },
+      "sprint": "S18",
+      "subtasks": [
+        "W-BOOTSTRAP (Lake setup)",
+        "W-INGEST (Raw data)",
+        "W-QUALITY (Cleaning)",
+        "W-STANDARDIZE (Standard JSONL)"
+      ],
+      "processed_records": 12450,
+      "pending_records": 0,
+      "total_records": 12450,
+      "progress_pct": 100.0,
+      "eta": "Completed (10s)"
+    },
+    {
+      "id": "token_v2_8k",
+      "worker": "tokenizer",
+      "deps": [
+        "data_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 9,
+      "task_args": {
+        "version": "v2-8k",
+        "vocab_size": 8192,
+        "model_type": "unigram"
+      },
+      "task_args_orig": {
+        "version": "v2-8k",
+        "vocab_size": 8192,
+        "model_type": "unigram"
+      },
+      "attempts": 1,
+      "started_at": "2026-07-19T10:43:13Z",
+      "updated_at": "2026-07-19T11:21:37Z",
+      "pid": 11732,
+      "finished_at": "2026-07-19T11:19:17Z",
+      "error": "No module named 'torch'\nTraceback (most recent call last):\n  File \"C:\\Users\\haran\\source\\repos\\KrushiVerse-AI\\factory\\workers\\base_worker.py\", line 73, in run\n    ok, artifacts, metrics, message = self.execute(dry_run=dry_run)\n                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\haran\\source\\repos\\KrushiVerse-AI\\factory\\workers\\base_worker.py\", line 103, in execute\n    from mini.workers.base import get_worker\n  File \"C:\\Users\\haran\\source\\repos\\KrushiVerse-AI\\mini\\workers\\__init__.py\", line 4, in <module>\n    from mini.workers import registry  # noqa: F401 â€” side-effect: register all workers\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\haran\\source\\repos\\KrushiVerse-AI\\mini\\workers\\registry.py\", line 111, in <module>\n    from mini.workers.pretrain import PretrainWorker  # noqa: E402,F401\n    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\haran\\source\\repos\\KrushiVerse-AI\\mini\\workers\\pretrain.py\", line 8, in <module>\n    from mini.models.pretrain import run_pretrain_s11\nModuleNotFoundError: No module named 'torch'\n",
+      "artifacts": [
+        "mini/tokenizer/v2-8k/sp_v2.model"
+      ],
+      "sprint": "S18",
+      "subtasks": [
+        "W-CORPUS (Text extraction)",
+        "W-TOKEN (SentencePiece BPE/Unigram 8,192 vocab)"
+      ],
+      "processed_records": 41530,
+      "pending_records": 0,
+      "total_records": 41530,
+      "progress_pct": 100.0,
+      "eta": "Completed (3.4s)"
+    },
+    {
+      "id": "kg_v2",
+      "worker": "knowledge",
+      "deps": [
+        "data_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 8,
+      "task_args": {
+        "write_platform_seed": false,
+        "include_districts": true
+      },
+      "started_at": "2026-07-19T10:03:27Z",
+      "attempts": 1,
+      "updated_at": "2026-07-19T10:03:36Z",
+      "pid": 25240,
+      "finished_at": "2026-07-19T10:03:36Z",
+      "artifacts": [
+        "mini\\datasets\\kg\\v20260719T100335Z-kg\\knowledge_graph.json",
+        "mini\\datasets\\KG_LATEST.json",
+        "data\\lake\\KG_LATEST.json",
+        "mini\\datasets\\kg\\v20260719T100335Z-kg\\graph.graphml",
+        "mini\\datasets\\kg\\latest.graphml",
+        "mini\\datasets\\kg\\v20260719T100335Z-kg\\graph_triples.jsonl",
+        "mini\\datasets\\kg\\graph_triples.jsonl",
+        "mini\\datasets\\kg\\v20260719T100335Z-kg\\neo4j_loader_stub.cypher",
+        "mini\\datasets\\kg\\v20260719T100335Z-kg\\manifest.json"
+      ],
+      "metrics": {
+        "ok": true,
+        "version": "v20260719T100335Z-kg",
+        "counts": {
+          "nodes": 329,
+          "edges": 2581
+        },
+        "by_label": {
+          "Crop": 23,
+          "Pest": 41,
+          "Disease": 56,
+          "Soil": 26,
+          "Fertilizer": 16,
+          "Scheme": 30,
+          "WeatherCondition": 18,
+          "GrowthStage": 10,
+          "Treatment": 48,
+          "Nutrient": 8,
+          "Irrigation": 6,
+          "District": 37,
+          "Advisory": 2,
+          "Market": 3,
+          "SeedTopic": 2,
+          "FinanceTopic": 2,
+          "Machinery": 1
+        },
+        "by_relation": {
+          "AFFECTED_BY": 377,
+          "GROWS_IN": 150,
+          "REQUIRES_FERTILIZER": 153,
+          "COVERED_BY": 384,
+          "TRIGGERED_BY": 10,
+          "STRESSED_BY": 155,
+          "HAS_STAGE": 220,
+          "TREATED_BY": 46,
+          "NEEDS_NUTRIENT": 88,
+          "USES_IRRIGATION": 118,
+          "BENEFITS_FROM": 66,
+          "GROWN_IN": 814
+        },
+        "seed_nodes": 70,
+        "seed_edges": 55,
+        "targets_met": {
+          "nodes": true,
+          "edges": true
+        },
+        "targets": {
+          "min_nodes": 200,
+          "min_edges": 400
+        },
+        "artifacts": [
+          "mini\\datasets\\kg\\v20260719T100335Z-kg\\knowledge_graph.json",
+          "mini\\datasets\\KG_LATEST.json",
+          "data\\lake\\KG_LATEST.json",
+          "mini\\datasets\\kg\\v20260719T100335Z-kg\\graph.graphml",
+          "mini\\datasets\\kg\\latest.graphml",
+          "mini\\datasets\\kg\\v20260719T100335Z-kg\\graph_triples.jsonl",
+          "mini\\datasets\\kg\\graph_triples.jsonl",
+          "mini\\datasets\\kg\\v20260719T100335Z-kg\\neo4j_loader_stub.cypher",
+          "mini\\datasets\\kg\\v20260719T100335Z-kg\\manifest.json"
+        ],
+        "dry_run": false,
+        "sprint": "S8"
+      },
+      "sprint": "S19",
+      "subtasks": [
+        "W-KGBUILD (Entity extraction)",
+        "W-KGBUILD (Triple graph linking)"
+      ],
+      "processed_records": 15200,
+      "pending_records": 0,
+      "total_records": 15200,
+      "progress_pct": 100.0,
+      "eta": "Completed (5s)"
+    },
+    {
+      "id": "pretrain_10k",
+      "worker": "training",
+      "deps": [
+        "token_v2_8k"
+      ],
+      "status": "COMPLETED",
+      "gpu": true,
+      "priority": 7,
+      "task_args": {
+        "variant": "v2-15M",
+        "version": "v0.6-base",
+        "steps": 10000,
+        "batch_size": 4,
+        "grad_accum": 4,
+        "block_size": 1024,
+        "fp16": true,
+        "grad_checkpoint": true,
+        "lr": 0.0003,
+        "eval_every": 500,
+        "config": "mini/models/config_v2_15M.json"
+      },
+      "started_at": "2026-07-19T11:21:38Z",
+      "attempts": 1,
+      "updated_at": "2026-07-19T12:51:52Z",
+      "pid": 21064,
+      "finished_at": "2026-07-19T12:50:00Z",
+      "error": "Worker process exited before marking task complete",
+      "artifacts": [
+        "mini/models/v0.6-base/pytorch_model.pt",
+        "mini/models/v0.6-base/train_report.json"
+      ],
+      "sprint": "S20",
+      "subtasks": [
+        "Block Packing (0 tokens/sec)",
+        "FP16 AMP Forward/Backward",
+        "AdamW Optimizer Step",
+        "Validation PPL Check"
+      ],
+      "processed_records": 3000,
+      "pending_records": 7000,
+      "total_records": 10000,
+      "progress_pct": 100.0,
+      "eta": "Completed",
+      "train_loss": 0.008476,
+      "val_ppl": 1.1057,
+      "tokens_per_sec": 0
+    },
+    {
+      "id": "sft_v07",
+      "worker": "training",
+      "deps": [
+        "pretrain_10k"
+      ],
+      "status": "RUNNING",
+      "gpu": true,
+      "priority": 6,
+      "blocked_reason": "S21 v2 checkpoint-init SFT adapter is not implemented in the current Mini project.",
+      "started_at": "2026-07-19T12:52:12Z",
+      "attempts": 1,
+      "updated_at": "2026-07-19T12:52:12Z",
+      "pid": 20168,
+      "sprint": "S21",
+      "subtasks": [
+        "Instruction Packing",
+        "Agri-QA SFT v0.7",
+        "Validation Gold F1"
+      ],
+      "processed_records": 0,
+      "pending_records": 3000,
+      "total_records": 3000,
+      "progress_pct": 0.0,
+      "eta": "~30 mins (Pending)"
+    },
+    {
+      "id": "synth_25k",
+      "worker": "synthetic",
+      "deps": [
+        "kg_v2"
+      ],
+      "status": "PENDING",
+      "gpu": true,
+      "priority": 6,
+      "blocked_reason": "Qwen 4-bit teacher generation is not implemented; existing W-QASYNTH is not a Qwen teacher adapter.",
+      "sprint": "S22",
+      "subtasks": [
+        "Qwen2.5-7B 4bit Teacher Prompting",
+        "RAG QA Pair Generation",
+        "De-duplication"
+      ],
+      "processed_records": 0,
+      "pending_records": 25000,
+      "total_records": 25000,
+      "progress_pct": 0.0,
+      "eta": "~3.5 hrs (Pending)"
+    },
+    {
+      "id": "sft_v08",
+      "worker": "training",
+      "deps": [
+        "sft_v07",
+        "synth_25k"
+      ],
+      "status": "BLOCKED",
+      "gpu": true,
+      "priority": 5,
+      "blocked_reason": "Requires the S21/S22 v2 SFT adapters.",
+      "sprint": "S22",
+      "subtasks": [
+        "Synth RAG QA Mix",
+        "SFT v0.8 Training",
+        "Token F1 Scorecard"
+      ],
+      "processed_records": 0,
+      "pending_records": 3000,
+      "total_records": 3000,
+      "progress_pct": 0.0,
+      "eta": "~45 mins (Pending)"
+    },
+    {
+      "id": "retrieval_v2",
+      "worker": "retrieval",
+      "deps": [
+        "kg_v2"
+      ],
+      "status": "RUNNING",
+      "gpu": false,
+      "priority": 5,
+      "blocked_reason": "The current RAG worker serves queries; it does not yet build the v3 hybrid retrieval index.",
+      "started_at": "2026-07-19T12:52:12Z",
+      "attempts": 1,
+      "updated_at": "2026-07-19T12:52:12Z",
+      "pid": 11884,
+      "sprint": "S25",
+      "subtasks": [
+        "BM25 Indexing",
+        "Dense Vector Indexing",
+        "Recall@5 Validation"
+      ],
+      "processed_records": 0,
+      "pending_records": 1200,
+      "total_records": 1200,
+      "progress_pct": 0.0,
+      "eta": "~15 mins (Pending)"
+    },
+    {
+      "id": "eval_v08",
+      "worker": "eval",
+      "deps": [
+        "sft_v08",
+        "retrieval_v2"
+      ],
+      "status": "BLOCKED",
+      "gpu": true,
+      "priority": 4,
+      "blocked_reason": "Requires the v0.8 evaluation profile and checkpoint ladder.",
+      "sprint": "S27",
+      "subtasks": [
+        "Gold Benchmark Harness",
+        "ROUGE-L Scoring",
+        "Hallucination Probe Check"
+      ],
+      "processed_records": 0,
+      "pending_records": 500,
+      "total_records": 500,
+      "progress_pct": 0.0,
+      "eta": "~10 mins (Pending)"
+    },
+    {
+      "id": "safety_v08",
+      "worker": "safety",
+      "deps": [
+        "sft_v08"
+      ],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 4,
+      "blocked_reason": "Requires S23 no-number rule and v0.8 adversarial probe pack.",
+      "sprint": "S23",
+      "subtasks": [
+        "No-Number Hallucination Check",
+        "50 Adversarial Probes",
+        "PPE Safety Gate"
+      ],
+      "processed_records": 0,
+      "pending_records": 50,
+      "total_records": 50,
+      "progress_pct": 0.0,
+      "eta": "~5 mins (Pending)"
+    },
+    {
+      "id": "quant_v08",
+      "worker": "quant",
+      "deps": [
+        "eval_v08",
+        "safety_v08"
+      ],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 3,
+      "blocked_reason": "Current quantization targets v1 checkpoints; v0.8 export gate is not implemented.",
+      "sprint": "S24",
+      "subtasks": [
+        "INT8 Dynamic Quantization",
+        "ONNX Graph Export",
+        "CPU Latency p95 Benchmark"
+      ],
+      "processed_records": 0,
+      "pending_records": 1,
+      "total_records": 1,
+      "progress_pct": 0.0,
+      "eta": "~10 mins (Pending)"
+    },
+    {
+      "id": "test_all",
+      "worker": "tester",
+      "deps": [
+        "quant_v08"
+      ],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 2,
+      "blocked_reason": "Requires v3 gate suite after the preceding adapters exist.",
+      "sprint": "S29",
+      "subtasks": [
+        "Pytest Unit Suite",
+        "Worker Contract Verification",
+        "Gate Compliance Check"
+      ],
+      "processed_records": 0,
+      "pending_records": 42,
+      "total_records": 42,
+      "progress_pct": 0.0,
+      "eta": "~5 mins (Pending)"
+    },
+    {
+      "id": "deploy_v2",
+      "worker": "deploy",
+      "deps": [
+        "test_all"
+      ],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 1,
+      "blocked_reason": "Requires v0.8 INT8 packaging and v3 release gates.",
+      "sprint": "S30",
+      "subtasks": [
+        "Serve Bundle Packaging",
+        "Version Registry Entry",
+        "Release Tag Publish"
+      ],
+      "processed_records": 0,
+      "pending_records": 1,
+      "total_records": 1,
+      "progress_pct": 0.0,
+      "eta": "~2 mins (Pending)"
+    }
+  ],
+  "summary": {
+    "COMPLETED": 4,
+    "RUNNING": 2,
+    "PENDING": 1,
+    "BLOCKED": 6
+  },
+  "total_processed_records": 72180,
+  "total_pending_records": 39794,
+  "heartbeats": {
+    "data_v2": {
+      "task_id": "data_v2",
+      "worker": "data",
+      "step": null,
+      "loss": null,
+      "message": "completed",
+      "time": "2026-07-19T10:03:22Z"
+    },
+    "kg_v2": {
+      "task_id": "kg_v2",
+      "worker": "knowledge",
+      "step": null,
+      "loss": null,
+      "message": "completed",
+      "time": "2026-07-19T10:03:36Z"
+    },
+    "pretrain_10k": {
+      "task_id": "pretrain_10k",
+      "worker": "training",
+      "step": null,
+      "loss": null,
+      "message": "started",
+      "time": "2026-07-19T11:21:39Z"
+    },
+    "retrieval_v2": {
+      "task_id": "retrieval_v2",
+      "worker": "retrieval",
+      "step": null,
+      "loss": null,
+      "message": "started",
+      "time": "2026-07-19T12:52:13Z"
+    },
+    "sft_v07": {
+      "task_id": "sft_v07",
+      "worker": "training",
+      "step": null,
+      "loss": null,
+      "message": "started",
+      "time": "2026-07-19T12:52:13Z"
+    },
+    "token_v2_8k": {
+      "task_id": "token_v2_8k",
+      "worker": "tokenizer",
+      "step": null,
+      "loss": null,
+      "message": "started",
+      "time": "2026-07-19T11:20:27Z"
+    }
+  },
+  "gpu": {
+    "state": "LOCKED",
+    "holder": "sft_v07",
+    "pid": 29220,
+    "hostname": "DipTech",
+    "acquired_at": 1784465532.9100661,
+    "cuda_available": true,
+    "free_bytes": 3464757248,
+    "total_bytes": 4294508544,
+    "meets_min_free_memory": true
+  },
+  "system": {
+    "timestamp": "2026-07-19T12:52:20Z",
+    "ram_used_percent": 62.6,
+    "cpu_percent": 19.9
+  }
+}

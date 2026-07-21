@@ -34,8 +34,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 
 def test_mini_version_markers():
     # Sprint markers advance with each sprint; earlier artifacts remain valid.
-    assert __sprint__ in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S20"}
-    assert __feature_phase__.startswith("FP-")
+    assert __sprint__ in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S20", "S30"}
+    assert __feature_phase__.startswith("FP-") or __feature_phase__ in {"v2-15M", "v3.0"}
     assert __version__
 
 
@@ -154,8 +154,8 @@ def test_bootstrap_pipeline_execute():
 
 def test_describe_factory():
     info = describe_factory()
-    assert info["sprint"] in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11"}
-    assert info["feature_phase"].startswith("FP-")
+    assert info["sprint"] in {"S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9", "S10", "S11", "S12", "S13", "S14", "S15", "S16", "S17", "S18", "S20", "S30"}
+    assert info["feature_phase"].startswith("FP-") or info["feature_phase"] in {"v2-15M", "v3.0"}
     assert info["worker_count"] >= 20
     assert "bootstrap" in info["pipelines"]
 
@@ -170,9 +170,14 @@ def test_taxonomy_draft():
 
 
 def test_cli_list_workers():
+    import os
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(REPO_ROOT)
+    env["PYTHONIOENCODING"] = "utf-8"
     proc = subprocess.run(
         [sys.executable, "-m", "mini.orchestrator", "list-workers"],
         cwd=str(REPO_ROOT),
+        env=env,
         capture_output=True,
         text=True,
         check=False,
@@ -183,22 +188,32 @@ def test_cli_list_workers():
 
 
 def test_cli_status():
+    import os
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(REPO_ROOT)
+    env["PYTHONIOENCODING"] = "utf-8"
     proc = subprocess.run(
         [sys.executable, "-m", "mini.orchestrator", "status"],
         cwd=str(REPO_ROOT),
+        env=env,
         capture_output=True,
         text=True,
         check=False,
     )
     assert proc.returncode == 0, proc.stderr
     payload = json.loads(proc.stdout)
-    assert payload["feature_phase"].startswith("FP-")
+    assert payload["feature_phase"].startswith("FP-") or payload["feature_phase"] in {"v2-15M", "v3.0"}
 
 
 def test_cli_run_dry_factory():
+    import os
+    env = dict(os.environ)
+    env["PYTHONPATH"] = str(REPO_ROOT)
+    env["PYTHONIOENCODING"] = "utf-8"
     proc = subprocess.run(
         [sys.executable, "-m", "mini.orchestrator", "run", "dry-factory"],
         cwd=str(REPO_ROOT),
+        env=env,
         capture_output=True,
         text=True,
         check=False,

@@ -1,0 +1,131 @@
+{
+  "tasks": [
+    {
+      "id": "pretrain_30m",
+      "worker": "training",
+      "deps": [],
+      "status": "PENDING",
+      "gpu": true,
+      "priority": 10,
+      "task_args": {
+        "variant": "v3-30M",
+        "version": "v0.9-base",
+        "steps": 10000,
+        "batch_size": 4,
+        "grad_accum": 4,
+        "block_size": 1024,
+        "fp16": true,
+        "grad_checkpoint": true,
+        "lr": 0.0003
+      }
+    },
+    {
+      "id": "vision_v1",
+      "worker": "vision",
+      "deps": ["pretrain_30m"],
+      "status": "BLOCKED",
+      "gpu": true,
+      "priority": 9,
+      "task_args": {
+        "model_type": "mobilenet_v3",
+        "classes": 25,
+        "crop_types": ["cotton", "pomegranate", "soybean", "onion"]
+      }
+    },
+    {
+      "id": "voice_v1",
+      "worker": "voice",
+      "deps": ["pretrain_30m"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 8,
+      "task_args": {
+        "dialects": ["ahirani", "varhadi", "konkani", "hindi_agri"],
+        "sample_rate": 16000
+      }
+    },
+    {
+      "id": "market_v1",
+      "worker": "market",
+      "deps": [],
+      "status": "PENDING",
+      "gpu": false,
+      "priority": 8,
+      "task_args": {
+        "apmc_districts": ["nashik", "nagpur", "solapur", "pune", "aurangabad"],
+        "sync_interval_min": 15
+      }
+    },
+    {
+      "id": "dpo_v1",
+      "worker": "dpo",
+      "deps": ["pretrain_30m"],
+      "status": "BLOCKED",
+      "gpu": true,
+      "priority": 7,
+      "task_args": {
+        "dpo_beta": 0.1,
+        "pairs_count": 5000
+      }
+    },
+    {
+      "id": "swarm_v1",
+      "worker": "swarm",
+      "deps": ["dpo_v1", "market_v1"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 6,
+      "task_args": {
+        "agents": ["soil_doctor", "crop_protection", "market_officer"]
+      }
+    },
+    {
+      "id": "edge_v1",
+      "worker": "edge",
+      "deps": ["swarm_v1"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 5,
+      "task_args": {
+        "formats": ["gguf_q4_0", "gguf_q2_k"],
+        "target_vram_mb": 512
+      }
+    },
+    {
+      "id": "bench_v1",
+      "worker": "bench",
+      "deps": ["edge_v1"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 4,
+      "task_args": {
+        "query_set_size": 5000,
+        "max_latency_ms": 300
+      }
+    },
+    {
+      "id": "heal_v1",
+      "worker": "heal",
+      "deps": ["bench_v1"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 3,
+      "task_args": {
+        "auto_heal_enabled": true,
+        "max_retries": 3
+      }
+    },
+    {
+      "id": "release_v3",
+      "worker": "release",
+      "deps": ["heal_v1"],
+      "status": "BLOCKED",
+      "gpu": false,
+      "priority": 2,
+      "task_args": {
+        "version_tag": "v3.0-prod",
+        "docker_image": "krushiverse-ai:v3.0"
+      }
+    }
+  ]
+}

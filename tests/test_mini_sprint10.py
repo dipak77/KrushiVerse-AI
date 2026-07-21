@@ -63,9 +63,9 @@ def test_run_pretrain_skeleton():
 
 
 def test_worker_execute_s10():
-    res = get_worker("W-PRETRAIN").run(dry_run=False, overfit_steps=25, batch_size=4, seq_len=32)
+    res = get_worker("W-PRETRAIN").run(dry_run=False, overfit_steps=25, batch_size=4, seq_len=64)
     assert res.ok is True
-    assert res.metrics["in_range"] is True
+    assert (res.metrics.get("in_range") or (res.metrics.get("domain") or {}).get("in_range")) is True
 
 
 def test_sprint10_pipeline_registered():
@@ -74,7 +74,7 @@ def test_sprint10_pipeline_registered():
 
 
 def test_api_pretrain():
-    r = client.post("/api/lake/pretrain?execute=true&steps=20")
+    r = client.post("/api/lake/pretrain?execute=true&steps=20&block_size=64")
     assert r.status_code == 200
     body = r.json()
     assert body["ok"] is True

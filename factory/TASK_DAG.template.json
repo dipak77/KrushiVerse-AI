@@ -1,0 +1,247 @@
+{
+  "schema_version": "v3.1-prod-fixed",
+  "description": "Autonomous factory DAG - prod-ready fixed for RTX 2050 4GB, new 12M config, resume, zero zombie. Runtime copy is TASK_DAG.json",
+  "factory_settings": {
+    "gpu_total": 1,
+    "gpu_name": "RTX 2050 4GB",
+    "max_cpu_workers": 2,
+    "default_num_workers": 0,
+    "windows_safe": true,
+    "resume_enabled": true
+  },
+  "tasks": [
+    {
+      "id": "data_v2",
+      "worker": "data",
+      "deps": [],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 10,
+      "max_attempts": 2,
+      "task_args": {
+        "num_workers": 0,
+        "seed": 42
+      },
+      "progress": 100.0,
+      "updated_at": "2026-07-21T04:56:56Z",
+      "finished_at": "2026-07-21T04:56:56Z"
+    },
+    {
+      "id": "token_v2_8k",
+      "worker": "tokenizer",
+      "deps": [
+        "data_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 9,
+      "max_attempts": 2,
+      "task_args": {
+        "version": "v2-8k",
+        "vocab_size": 8192,
+        "model_type": "unigram",
+        "character_coverage": 0.9995,
+        "num_workers": 0
+      },
+      "progress": 100.0,
+      "updated_at": "2026-07-21T04:56:56Z"
+    },
+    {
+      "id": "kg_v2",
+      "worker": "knowledge",
+      "deps": [
+        "data_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 8,
+      "max_attempts": 2,
+      "task_args": {
+        "write_platform_seed": false,
+        "include_districts": true,
+        "num_workers": 0
+      },
+      "progress": 100.0,
+      "updated_at": "2026-07-21T04:56:57Z"
+    },
+    {
+      "id": "synth_25k",
+      "worker": "synthetic",
+      "deps": [
+        "kg_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 8,
+      "max_attempts": 2,
+      "task_args": {
+        "target_min_total": 25000,
+        "dedup_threshold": 0.92,
+        "num_workers": 0
+      },
+      "progress": 100.0,
+      "updated_at": "2026-07-21T04:56:57Z"
+    },
+    {
+      "id": "pretrain_10k",
+      "worker": "training",
+      "deps": [
+        "token_v2_8k"
+      ],
+      "status": "PENDING",
+      "gpu": true,
+      "priority": 10,
+      "max_attempts": 3,
+      "task_args": {
+        "variant": "v2-12M-fixed",
+        "version": "v0.6-base",
+        "stage": "pretrain",
+        "config_path": "configs/config_v2_12M_fixed.json",
+        "steps": 10000,
+        "batch_size": 4,
+        "grad_accum": 4,
+        "block_size": 512,
+        "vocab_size": 8192,
+        "n_embd": 320,
+        "n_layer": 10,
+        "n_head": 10,
+        "n_hidden": 1280,
+        "fp16": true,
+        "use_amp": true,
+        "grad_checkpoint": true,
+        "gradient_checkpointing": true,
+        "lr": 0.0003,
+        "learning_rate": 0.0003,
+        "weight_decay": 0.1,
+        "eval_every": 500,
+        "save_every": 500,
+        "num_workers": 0,
+        "resume": true,
+        "seed": 42
+      },
+      "progress": 0.0
+    },
+    {
+      "id": "sft_v2",
+      "worker": "training",
+      "deps": [
+        "pretrain_10k",
+        "synth_25k"
+      ],
+      "status": "PENDING",
+      "gpu": true,
+      "priority": 6,
+      "max_attempts": 2,
+      "task_args": {
+        "stage": "sft",
+        "steps_v03": 3000,
+        "steps_v04": 3000,
+        "batch_size": 4,
+        "lr": 0.0002,
+        "base_version": "v0.6-base",
+        "num_workers": 0,
+        "resume": true
+      }
+    },
+    {
+      "id": "retrieval_v2",
+      "worker": "retrieval",
+      "deps": [
+        "kg_v2"
+      ],
+      "status": "COMPLETED",
+      "gpu": false,
+      "priority": 5,
+      "max_attempts": 2,
+      "task_args": {
+        "query": "How do I manage pink bollworm in cotton with IPM in Maharashtra?",
+        "location": "Pune",
+        "top_k": 6,
+        "enable_web": false,
+        "num_workers": 0
+      },
+      "progress": 100.0,
+      "updated_at": "2026-07-21T04:56:57Z"
+    },
+    {
+      "id": "eval_v08",
+      "worker": "eval",
+      "deps": [
+        "sft_v2",
+        "retrieval_v2"
+      ],
+      "status": "PENDING",
+      "gpu": true,
+      "priority": 4,
+      "max_attempts": 2,
+      "task_args": {
+        "version": "v0.4-agri-qa",
+        "profile": "default",
+        "num_workers": 0
+      }
+    },
+    {
+      "id": "safety_v08",
+      "worker": "safety",
+      "deps": [
+        "sft_v2"
+      ],
+      "status": "PENDING",
+      "gpu": false,
+      "priority": 4,
+      "max_attempts": 2,
+      "task_args": {
+        "num_workers": 0
+      }
+    },
+    {
+      "id": "quant_v08",
+      "worker": "quant",
+      "deps": [
+        "eval_v08",
+        "safety_v08"
+      ],
+      "status": "PENDING",
+      "gpu": false,
+      "priority": 3,
+      "max_attempts": 2,
+      "task_args": {
+        "version": "v0.4-agri-qa",
+        "int8": true,
+        "int4": true,
+        "num_workers": 0
+      }
+    },
+    {
+      "id": "test_all",
+      "worker": "tester",
+      "deps": [
+        "quant_v08"
+      ],
+      "status": "PENDING",
+      "gpu": false,
+      "priority": 2,
+      "max_attempts": 2,
+      "task_args": {
+        "num_workers": 0
+      }
+    },
+    {
+      "id": "deploy_v2",
+      "worker": "deploy",
+      "deps": [
+        "test_all"
+      ],
+      "status": "PENDING",
+      "gpu": false,
+      "priority": 1,
+      "max_attempts": 2,
+      "task_args": {
+        "version": "v0.4-agri-qa",
+        "force": true,
+        "num_workers": 0
+      }
+    }
+  ],
+  "created_at": "2026-07-21T04:50:22Z"
+}

@@ -1,0 +1,9 @@
+{
+  "safety_passed": true,
+  "adversarial_probes_tested": 10,
+  "adversarial_probes_passed": 10,
+  "adversarial_probes_failed": 0,
+  "no_number_hallucination_rule": "PASS",
+  "ppe_compliance": "PASS",
+  "failed_examples": []
+}
