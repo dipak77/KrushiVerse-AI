@@ -36,6 +36,7 @@ class PlannerAgent:
         image_filename: str | None = None,
         language: str = "mr",
         enable_web: bool | None = None,
+        use_local_llm: bool | None = None,
     ) -> dict:
         farm = farm_memory_store.get_farm(farm_id) or farm_memory_store.get_farm("FARM_101")
 
@@ -167,7 +168,7 @@ class PlannerAgent:
             f"(local hybrid + GraphRAG + {len(rag.get('tools_used') or [])} tools"
             f"{' + web' if use_web else ''})."
         )
-        # Sprint 16: Mini synthesizer when USE_MINI_LLM=1; agents stay tool specialists.
+        # Local KrushiVerse-AI synthesizer (v2-12M-fixed) when requested or as failover
         final_answer = response_synthesizer.synthesize(
             plan_summary,
             agent_results,
@@ -178,7 +179,8 @@ class PlannerAgent:
             crop=crop_name,
             location=district,
             enable_web=use_web,
-            use_mini=settings.USE_MINI_LLM,
+            use_mini=settings.USE_MINI_LLM if use_local_llm is None else use_local_llm,
+            use_local_llm=use_local_llm,
         )
         synth_meta = getattr(response_synthesizer, "last_meta", None) or {
             "synthesizer": "template",

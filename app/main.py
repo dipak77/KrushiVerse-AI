@@ -54,6 +54,7 @@ class QueryRequest(BaseModel):
     farm_id: Optional[str] = "FARM_101"
     language: Optional[str] = "mr"  # "mr" for Marathi, "en" for English
     enable_web: Optional[bool] = None
+    use_local_llm: Optional[bool] = None  # True to force local KrushiVerse-AI model (v2-12M-fixed)
 
 class MiniChatRequest(BaseModel):
     query: str
@@ -103,7 +104,8 @@ def api_health():
         "platform": settings.APP_NAME,
         "version": settings.VERSION,
         "status": "Online",
-        "architecture": "Multi-Agent GraphRAG + Dense RAG (Qdrant/local) + data.gov.in/Agmarknet + Web Tools + Predictive AI",
+        "local_model": "v2-12M-fixed (10 layers, 8192 vocab, 512 block)",
+        "architecture": "Multi-Agent GraphRAG + KrushiVerse-AI Local LLM + Dense RAG (Qdrant/local) + data.gov.in/Agmarknet + Web Tools + Predictive AI",
         "supported_languages": ["mr (Marathi)", "en (English)", "hi (Hindi)"],
         "embeddings": embedding_provider.info(),
         "opendata": opendata_client.status(),
@@ -121,13 +123,14 @@ def read_root():
 
 @app.post("/api/query")
 def process_farmer_query(request: QueryRequest):
-    """Main Agentic Assistant query pipeline handling Multi-Agent planning and Marathi answer synthesis."""
+    """Main Agentic Assistant query pipeline handling Multi-Agent planning and answer synthesis."""
     try:
         response = planner_agent.plan_and_execute(
             query=request.query,
             farm_id=request.farm_id,
             language=request.language,
             enable_web=request.enable_web,
+            use_local_llm=request.use_local_llm,
         )
         return response
     except Exception as e:

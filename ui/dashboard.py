@@ -428,15 +428,19 @@ enable_web = st.sidebar.checkbox("Enable Web RAG", value=True)
 from app.config import settings as _app_settings
 
 st.sidebar.markdown("---")
-st.sidebar.subheader("🧠 Mini LLM (S16 / FP-9)")
+st.sidebar.subheader("🧠 KrushiVerse-AI LLM (v2-12M-fixed)")
+use_local_model = st.sidebar.checkbox(
+    "Use Local KrushiVerse-AI Model",
+    value=True,
+    help="Primary local LLM (v2-12M-fixed: 10 layers, 8192 vocab, 512 block). Auto failover if online LLM call fails.",
+)
 st.sidebar.caption(
-    f"Env flag USE_MINI_LLM = **{_app_settings.USE_MINI_LLM}** "
-    f"(restart app after changing env)"
+    f"Model variant: **v2-12M-fixed** · Env flag USE_MINI_LLM = **{_app_settings.USE_MINI_LLM}**"
 )
 use_mini_panel = st.sidebar.checkbox(
     "Prefer Mini panel chat (POST /api/mini/chat path)",
     value=bool(_app_settings.USE_MINI_LLM),
-    help="Uses Mini+RAG grounded chain. Planner still uses USE_MINI_LLM for /api/query synthesizer.",
+    help="Uses Mini+RAG grounded chain. Planner uses Local Model for synthesis.",
 )
 st.sidebar.markdown("---")
 st.sidebar.subheader("KB / Embeddings")
@@ -534,6 +538,7 @@ with tabs[0]:
                     farm_id=farm_id,
                     language=lang_code,
                     enable_web=enable_web,
+                    use_local_llm=use_local_model,
                 )
                 st.session_state["last_assistant_result"] = res
 

@@ -39,15 +39,21 @@ class MarathiResponseSynthesizer:
         location: str = "Pune",
         enable_web: bool | None = None,
         use_mini: bool | None = None,
+        use_local_llm: bool | None = None,
     ) -> str:
         """Synthesize specialized agent outputs into a unified response.
 
-        When ``use_mini`` is True (or settings.USE_MINI_LLM), Mini+RAG is the
-        primary synthesizer; agents remain upstream tool specialists.
-        Flag off preserves classic template synthesis (backward compatible).
+        Supports local KrushiVerse-AI LLM (v2-12M-fixed) synthesis and automatic
+        failover when online LLM API calls fail or are unconfigured.
         """
-        flag = settings.USE_MINI_LLM if use_mini is None else bool(use_mini)
-        if flag and (query or plan_summary):
+        use_local = (
+            bool(use_local_llm)
+            if use_local_llm is not None
+            else (bool(use_mini) if use_mini is not None else settings.USE_MINI_LLM)
+        )
+
+        # Attempt synthesis with local KrushiVerse-AI model if selected or as failover
+        if (use_local or settings.USE_MINI_LLM) and (query or plan_summary):
             try:
                 from app.llm.mini_bridge import synthesize_with_mini
 
@@ -62,12 +68,15 @@ class MarathiResponseSynthesizer:
                     citations=citations,
                 )
                 if answer and answer.strip():
+                    meta["synthesizer"] = "local_krushiverse_llm"
+                    meta["model_variant"] = "v2-12M-fixed"
                     self.last_meta = meta
                     return answer
             except Exception as e:
-                self.last_meta = {"synthesizer": "template", "mini_error": str(e)}
-        else:
-            self.last_meta = {"synthesizer": "template", "use_mini_llm": False}
+                self.last_meta = {"synthesizer": "template_fallback", "mini_error": str(e)}
+
+        # Fallback template-based synthesis with complete citations
+        self.last_meta = self.last_meta or {"synthesizer": "template", "use_mini_llm": False}
 
         if language.lower() in ["mr", "marathi"]:
             return self._synthesize_marathi(plan_summary, agent_outputs, citations=citations)

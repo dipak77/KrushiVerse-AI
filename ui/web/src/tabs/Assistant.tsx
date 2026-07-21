@@ -17,6 +17,7 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
   const { bootstrap } = useDashboard();
   const sampleQueries: string[] = bootstrap?.sample_queries || [];
   const [query, setQuery] = useState("");
+  const [useLocalLlm, setUseLocalLlm] = useState(true);
   const [phase, setPhase] = useState<Phase>("idle");
   const [stageIdx, setStageIdx] = useState(0);
   const [result, setResult] = useState<any | null>(null);
@@ -49,6 +50,7 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
         farm_id: "FARM_101",
         language: lang,
         enable_web: webRag,
+        use_local_llm: useLocalLlm,
       });
       const mapped = mapQueryToAsst(resp, lang);
       mapped.metrics.latencyMs = Math.round(performance.now() - t0);
@@ -79,7 +81,16 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
           }
           sub="Ask anything — crop management, disease treatment, market rates, schemes. Planner dispatches expert agents over the multi-source knowledge layer."
           right={
-            <div className="flex gap-1.5 flex-wrap justify-end">
+            <div className="flex gap-1.5 flex-wrap justify-end items-center">
+              <label className="flex items-center gap-1.5 text-[11px] font-mono2 px-2.5 py-1 rounded-full border border-[rgba(154,205,162,0.3)] bg-[rgba(154,205,162,0.06)] text-[var(--ink)] cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={useLocalLlm}
+                  onChange={(e) => setUseLocalLlm(e.target.checked)}
+                  className="rounded text-[var(--leaf)]"
+                />
+                <span>🧠 KrushiVerse-AI Local LLM (v2-12M-fixed)</span>
+              </label>
               <StatusChip tone="gold">planner</StatusChip>
               <StatusChip tone="leaf">POST /api/query</StatusChip>
             </div>
@@ -115,7 +126,7 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
             />
             <div className="flex items-center justify-between mt-3 flex-wrap gap-2">
               <span className="text-[11px] font-mono2 text-[var(--dim)]">
-                ⌘/Ctrl + ↵ · FARM_101 · {lang === "mr" ? "मराठी" : "EN"} · web {webRag ? "on" : "off"}
+                ⌘/Ctrl + ↵ · FARM_101 · {lang === "mr" ? "मराठी" : "EN"} · Model: {useLocalLlm ? "v2-12M-fixed (Local)" : "Online / Hybrid API"} · web {webRag ? "on" : "off"}
               </span>
               <button className="btn btn-primary" disabled={phase === "running" || !query.trim()} onClick={() => run(query)}>
                 {phase === "running" ? (

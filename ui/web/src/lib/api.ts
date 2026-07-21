@@ -64,6 +64,7 @@ export const api = {
     farm_id?: string;
     language?: string;
     enable_web?: boolean;
+    use_local_llm?: boolean;
   }) => jsonPost("/api/query", body),
 
   visionDiagnose: async (file?: File, cropHint = "Pomegranate") => {
