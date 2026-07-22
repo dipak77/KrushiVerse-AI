@@ -150,48 +150,15 @@ export function Assistant({ lang, webRag = true }: { lang: "mr" | "en"; webRag?:
           </div>
         )}
 
-        {phase !== "idle" && (
+        {phase === "running" && (
           <Reveal delay={40}>
-            <Card className="p-4 mt-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="eyebrow">Planner pipeline</span>
-                <span className="font-mono2 text-[11px] text-[var(--dim)]">
-                  {Math.min(stageIdx, PIPELINE_STAGES.length)}/{PIPELINE_STAGES.length} stages
+            <Card className="p-3.5 mt-4 border-[rgba(244,192,75,0.25)] flex items-center justify-between bg-[rgba(244,192,75,0.04)]">
+              <div className="flex items-center gap-3">
+                <span className="w-2.5 h-2.5 rounded-full bg-[var(--gold)] animate-pulse flex-none" />
+                <span className="font-mono2 text-[13px] text-[var(--gold)] font-medium">
+                  🧠 Thinker Mode: {PIPELINE_STAGES[Math.min(stageIdx, PIPELINE_STAGES.length - 1)]}
                 </span>
               </div>
-              <div className="prog mb-3">
-                <i
-                  style={{
-                    width: `${(Math.min(stageIdx, PIPELINE_STAGES.length) / PIPELINE_STAGES.length) * 100}%`,
-                    background: "linear-gradient(90deg,var(--gold2),var(--gold))",
-                  }}
-                />
-              </div>
-              <ol className="space-y-2">
-                {PIPELINE_STAGES.map((s, i) => {
-                  const done = stageIdx > i;
-                  const active = stageIdx === i;
-                  return (
-                    <li
-                      key={s}
-                      className="flex items-center gap-3 text-[13px] transition-opacity duration-300"
-                      style={{ opacity: done || active ? 1 : 0.35 }}
-                    >
-                      <span
-                        className="w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold flex-none"
-                        style={{
-                          background: done ? "var(--leaf)" : active ? "rgba(244,192,75,0.2)" : "transparent",
-                          border: `1.5px solid ${done ? "var(--leaf)" : active ? "var(--gold)" : "var(--line2)"}`,
-                          color: done ? "#08130a" : "var(--dim)",
-                        }}
-                      >
-                        {done ? "✓" : active ? <span className="w-[7px] h-[7px] rounded-full bg-[var(--gold)] animate-pulse" /> : i + 1}
-                      </span>
-                      <span className={done ? "text-[var(--mut)]" : active ? "text-[var(--ink)]" : "text-[var(--dim)]"}>{s}</span>
-                    </li>
-                  );
-                })}
-              </ol>
             </Card>
           </Reveal>
         )}

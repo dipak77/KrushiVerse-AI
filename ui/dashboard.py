@@ -90,6 +90,40 @@ h1, h2, h3 {
     letter-spacing: -0.01em;
 }
 
+/* ---------- Thinker Mode Banner ---------- */
+.thinker-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: linear-gradient(90deg, rgba(79, 70, 229, 0.12) 0%, rgba(245, 158, 11, 0.08) 100%);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-left: 4px solid var(--saffron);
+    border-radius: 14px;
+    padding: 0.85rem 1.2rem;
+    margin: 0.8rem 0;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12);
+}
+.thinker-pulse {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--saffron);
+    box-shadow: 0 0 0 rgba(245, 158, 11, 0.7);
+    animation: thinkerPulse 1.4s infinite;
+    flex-shrink: 0;
+}
+@keyframes thinkerPulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+}
+.thinker-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
 /* ---------- Hero ---------- */
 .hero {
     background: linear-gradient(120deg, var(--ink) 0%, var(--indigo-dark) 55%, var(--indigo) 100%);
@@ -513,37 +547,54 @@ tabs = st.tabs([
 # TAB 1: AI Krushi Assistant
 with tabs[0]:
     st.header("💬 AI Krushi Assistant / एआय कृषी मित्र संभाषण")
-    st.write("Ask any question regarding crop management, disease treatment, market rates, or government schemes.")
+    st.markdown("##### 💡 Quick Suggestions / नमुना प्रश्न सुचवणी (1-Click Pill Selection)")
 
-    sample_queries = [
-        "डाळिंबावरील तेल्या रोगासाठी कोणते औषध फवारावे? बाजारात काय भाव चालू आहे?",
-        "What fertilizers should I apply for Cotton in black soil?",
-        "कपाशीवरील गुलाबी बोंड अळीचे नियंत्रण कसे करावे आणि पीक विमा कसा मिळेल?",
-        "What are the top government schemes for drip irrigation subsidy in Maharashtra?",
-        "Latest soybean mandi price in Maharashtra",
+    sample_options = [
+        "🔴 डाळिंब तेल्या रोगासाठी कोणते औषध फवारावे?",
+        "🌾 ऊसासाठी हवामान व सेंद्रिय खत सल्ला",
+        "🧅 कांदा जांभळा करपा नियंत्रण उपाय",
+        "🌿 कपाशीवरील गुलाबी बोंड अळी नियंत्रण व पीक विमा",
+        "💧 ठिबक सिंचन शासकीय अनुदान व योजना लाभ",
     ]
 
-    selected_sample = st.selectbox("Sample Queries / नमुना प्रश्न:", ["-- Select a sample query --"] + sample_queries)
+    selected_pill = st.pills(
+        "नमुना प्रश्न निवड:",
+        options=sample_options,
+        selection_mode="single",
+        label_visibility="collapsed",
+    )
+
     query_input = st.text_area(
         "Your Query / तुमचा प्रश्न:",
-        value="" if selected_sample == "-- Select a sample query --" else selected_sample,
+        value=selected_pill if selected_pill else "",
+        placeholder="उदा. डाळिंबावरील तेल्या रोगासाठी कोणते औषध फवारावे?...",
         height=90,
     )
 
     if st.button("🚀 Ask AI Krushi Assistant / उत्तर मिळवा", type="primary"):
         if query_input.strip():
-            with st.spinner("Planner + multi-agent network + multi-source RAG..."):
-                res = planner_agent.plan_and_execute(
-                    query=query_input,
-                    farm_id=farm_id,
-                    language=lang_code,
-                    enable_web=enable_web,
-                    use_local_llm=use_local_model,
-                )
-                st.session_state["last_assistant_result"] = res
+            thinker_placeholder = st.empty()
+            thinker_placeholder.markdown(
+                """
+                <div class="thinker-banner">
+                    <span class="thinker-pulse"></span>
+                    <span class="thinker-title">🧠 Thinker Mode: Multi-Source RAG & Agent Network Coordinating...</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            res = planner_agent.plan_and_execute(
+                query=query_input,
+                farm_id=farm_id,
+                language=lang_code,
+                enable_web=enable_web,
+                use_local_llm=use_local_model,
+            )
+            st.session_state["last_assistant_result"] = res
+            thinker_placeholder.empty()
 
             field_divider()
-            st.markdown("### 📝 Synthesized Marathi/English Response:")
             st.markdown(res["synthesized_answer"])
 
             kl = res.get("knowledge_layer") or {}
