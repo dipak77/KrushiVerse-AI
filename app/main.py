@@ -892,3 +892,82 @@ def serve_ui_assets(asset_path: str):
     if index.exists():
         return FileResponse(index)
     raise HTTPException(404, "UI asset not found")
+
+
+# --- Bulk QA Architect API Endpoints ---
+class BulkQARequest(BaseModel):
+    queries: Optional[list[dict]] = None
+    fast_mode: Optional[bool] = True
+    location: Optional[str] = "Pune"
+
+@app.post("/api/bulk-qa")
+def run_bulk_qa_api(payload: BulkQARequest = Body(default={})):
+    """Run bulk benchmark queries using KrushiBulkTester and export reports."""
+    from bulk_tester_master import KrushiBulkTester, json, os
+
+    input_queries = payload.queries
+    if not input_queries:
+        if os.path.exists("bulk_queries.json"):
+            with open("bulk_queries.json", "r", encoding="utf-8") as f:
+                input_queries = json.load(f)
+        else:
+            raise HTTPException(400, "No queries provided and bulk_queries.json not found")
+
+    tester = KrushiBulkTester(fast_mode=payload.fast_mode)
+    results = tester.run_bulk(input_queries)
+
+    html_file = tester.generate_html(results, "bulk_report.html")
+    csv_file = tester.generate_csv(results, "bulk_report.csv")
+
+    total = len(results)
+    passed = sum(1 for r in results if r["status"] == "PASS")
+    pass_rate = (passed / total * 100.0) if total > 0 else 0.0
+    avg_score = sum(r["final_score"] for r in results) / total if total > 0 else 0.0
+
+    return {
+        "ok": True,
+        "total_queries": total,
+        "passed": passed,
+        "pass_rate_pct": round(pass_rate, 2),
+        "avg_score": round(avg_score, 4),
+        "html_report": f"/api/bulk-qa/report.html",
+        "csv_report": f"/api/bulk-qa/report.csv",
+        "results": results,
+    }
+
+@app.get("/api/bulk-qa/latest")
+def get_latest_bulk_qa():
+    """Fetch latest cached bulk evaluation results or return error."""
+    from pathlib import Path
+    import json
+    csv_path = Path("bulk_report.csv")
+    json_path = Path("bulk_queries.json")
+    if not csv_path.exists() or not json_path.exists():
+        raise HTTPException(404, "No recent bulk report found. Run POST /api/bulk-qa first.")
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        queries = json.load(f)
+
+    return {
+        "status": "ready",
+        "total_queries": len(queries),
+        "html_report": "/api/bulk-qa/report.html",
+        "csv_report": "/api/bulk-qa/report.csv",
+    }
+
+@app.get("/api/bulk-qa/report.html")
+def download_bulk_qa_html():
+    from pathlib import Path
+    p = Path("bulk_report.html")
+    if p.exists():
+        return FileResponse(p, media_type="text/html")
+    raise HTTPException(404, "bulk_report.html not found")
+
+@app.get("/api/bulk-qa/report.csv")
+def download_bulk_qa_csv():
+    from pathlib import Path
+    p = Path("bulk_report.csv")
+    if p.exists():
+        return FileResponse(p, media_type="text/csv", filename="bulk_report.csv")
+    raise HTTPException(404, "bulk_report.csv not found")
+

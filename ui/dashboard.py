@@ -542,6 +542,7 @@ tabs = st.tabs([
     "🧪 Soil & Fertilizer Planner",
     "🕸️ GraphRAG Knowledge Explorer",
     "📊 Predictive AI & Workflows",
+    "🧪 Bulk QA Architect & Benchmarking",
 ])
 
 # TAB 1: AI Krushi Assistant
@@ -1158,3 +1159,117 @@ with tabs[9]:
         st.write("Automated Actions Triggered:")
         for act in wf_res["triggered_workflows"]:
             st.warning(f"🚨 **{act['trigger']}** — {act['message_mr']}")
+
+# TAB 10: Bulk QA Architect & Benchmarking
+with tabs[10]:
+    st.header("🧪 Bulk QA Architect & Benchmark Suite")
+    st.write(
+        "Run bulk evaluation benchmarks across crop resolution, intent detection, "
+        "checklist cleanliness, section integrity, grounding, and latency."
+    )
+
+    import json as _bjson
+    from pathlib import Path
+    import streamlit.components.v1 as components
+    from bulk_tester_master import KrushiBulkTester
+
+    col_bq1, col_bq2, col_bq3 = st.columns([2, 1, 1])
+
+    with col_bq1:
+        uploaded_bfile = st.file_uploader("Upload bulk_queries.json (Optional)", type=["json"])
+        fast_mode_toggle = st.checkbox("Fast Mode (Skip token F1 for 10x speed)", value=True)
+
+    with col_bq2:
+        st.write("")
+        st.write("")
+        run_bulk_btn = st.button("🚀 Run Bulk Benchmark", type="primary", use_container_width=True)
+
+    with col_bq3:
+        st.write("")
+        st.write("")
+        csv_p = Path("bulk_report.csv")
+        if csv_p.exists():
+            st.download_button(
+                "📥 Download CSV Report",
+                data=csv_p.read_bytes(),
+                file_name="bulk_report.csv",
+                mime="text/csv",
+                use_container_width=True,
+            )
+
+    if run_bulk_btn:
+        queries_to_run = []
+        if uploaded_bfile:
+            queries_to_run = _bjson.loads(uploaded_bfile.read().decode("utf-8"))
+        elif Path("bulk_queries.json").exists():
+            queries_to_run = _bjson.loads(Path("bulk_queries.json").read_text(encoding="utf-8"))
+
+        if not queries_to_run:
+            st.error("No test queries found. Upload a file or ensure bulk_queries.json exists.")
+        else:
+            with st.spinner(f"Running bulk evaluation on {len(queries_to_run)} queries..."):
+                tester = KrushiBulkTester(fast_mode=fast_mode_toggle)
+                b_results = tester.run_bulk(queries_to_run)
+                tester.generate_html(b_results, "bulk_report.html")
+                tester.generate_csv(b_results, "bulk_report.csv")
+                st.session_state["bulk_qa_results"] = b_results
+            st.success(f"Bulk Benchmark Complete for {len(queries_to_run)} queries!")
+
+    # Display KPI Cards & Results if report exists
+    csv_p = Path("bulk_report.csv")
+    if csv_p.exists() or "bulk_qa_results" in st.session_state:
+        df_bulk = pd.read_csv(csv_p) if csv_p.exists() else pd.DataFrame(st.session_state["bulk_qa_results"])
+
+        field_divider()
+        total_q = len(df_bulk)
+        passed_q = len(df_bulk[df_bulk["status"] == "PASS"]) if "status" in df_bulk.columns else 0
+        pass_rate = (passed_q / total_q * 100.0) if total_q > 0 else 0.0
+        avg_score = df_bulk["final_score"].mean() if "final_score" in df_bulk.columns else 0.0
+        avg_lat = df_bulk["latency_ms"].mean() if "latency_ms" in df_bulk.columns else 0.0
+        crop_acc = (df_bulk["crop_match"].sum() / total_q * 100.0) if "crop_match" in df_bulk.columns else 0.0
+        intent_acc = (df_bulk["intent_match"].sum() / total_q * 100.0) if "intent_match" in df_bulk.columns else 0.0
+        checklist_ok_pct = (df_bulk["checklist_ok"].sum() / total_q * 100.0) if "checklist_ok" in df_bulk.columns else 0.0
+
+        render_stat_cards([
+            {"icon": "📋", "label": "Total Queries", "value": total_q, "accent": "indigo"},
+            {"icon": "✅", "label": "Pass Rate", "value": f"{pass_rate:.1f}%", "accent": "leaf" if pass_rate >= 80 else "terracotta"},
+            {"icon": "🌾", "label": "Crop Accuracy", "value": f"{crop_acc:.1f}%", "accent": "leaf"},
+            {"icon": "🎯", "label": "Intent Accuracy", "value": f"{intent_acc:.1f}%", "accent": "saffron"},
+            {"icon": "🧹", "label": "Checklist Clean", "value": f"{checklist_ok_pct:.1f}%", "accent": "leaf"},
+            {"icon": "⭐", "label": "Avg Score", "value": f"{avg_score:.2f}", "accent": "indigo"},
+            {"icon": "⏱️", "label": "Avg Latency", "value": f"{avg_lat:.0f}ms", "accent": "saffron"},
+        ])
+
+        field_divider()
+        st.subheader("📊 Interactive Benchmark Results Table")
+
+        col_f1, col_f2 = st.columns([1, 3])
+        with col_f1:
+            status_filter = st.radio("Filter Status", ["ALL", "PASS", "FAIL"], horizontal=True)
+        with col_f2:
+            search_query = st.text_input("🔍 Search Query or Crop", "")
+
+        df_filtered = df_bulk.copy()
+        if status_filter != "ALL" and "status" in df_filtered.columns:
+            df_filtered = df_filtered[df_filtered["status"] == status_filter]
+        if search_query:
+            df_filtered = df_filtered[
+                df_filtered["query"].astype(str).str.contains(search_query, case=False)
+                | df_filtered["predicted_crop"].astype(str).str.contains(search_query, case=False)
+            ]
+
+        st.dataframe(
+            df_filtered[[
+                col for col in [
+                    "id", "query", "expected_crop", "predicted_crop", "predicted_intent",
+                    "keyword_hit", "checklist_ok", "section_ok", "latency_ms", "final_score", "status"
+                ] if col in df_filtered.columns
+            ]],
+            use_container_width=True,
+        )
+
+        # Embedded HTML Viewer
+        html_p = Path("bulk_report.html")
+        if html_p.exists():
+            with st.expander("🖼️ View Standalone HTML Benchmark Dashboard"):
+                components.html(html_p.read_text(encoding="utf-8"), height=750, scrolling=True)
