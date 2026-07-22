@@ -66,6 +66,7 @@ def stem_mr_token(token: str) -> str:
     if t.startswith("बटाट्या"): return "बटाटा"
     if t.startswith("सोयाबीन"): return "सोयाबीन"
     if t.startswith("केळी"): return "केळी"
+    if t.startswith("ऊसा"): return "ऊस"
 
     for suf in MR_SUFFIXES:
         if t.endswith(suf) and len(t) > len(suf) + 2:
