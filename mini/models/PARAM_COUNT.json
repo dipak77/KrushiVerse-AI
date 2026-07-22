@@ -1,6 +1,6 @@
 {
   "sprint": "S10",
-  "created_at": "2026-07-21T14:51:55Z",
+  "created_at": "2026-07-22T11:25:40Z",
   "config": {
     "vocab_size": 8192,
     "n_embd": 320,
