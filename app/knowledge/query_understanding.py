@@ -57,6 +57,7 @@ class QueryPlan:
     needs_live_tools: bool = False
     language_hint: str = "en"
     categories: list[str] = field(default_factory=list)
+    location: str | None = None
 
 
 class QueryUnderstanding:
@@ -65,10 +66,13 @@ class QueryUnderstanding:
         lower = normalized.lower()
         crops = self.extract_crops(lower)
         if not crops and default_crop:
-            # resolve default through taxonomy when possible
             from mini.taxonomy.aliases import resolve_crop_name
 
             crops = [resolve_crop_name(default_crop) or default_crop]
+
+        from mini.taxonomy.regions import resolve_district
+        dist_info = resolve_district(normalized)
+        extracted_location = dist_info.get("district") if dist_info else None
 
         intents = [
             name for name, kws in INTENT_KEYWORDS.items() if any(k.lower() in lower for k in kws)
@@ -88,7 +92,6 @@ class QueryUnderstanding:
         needs_live = any(i in intents for i in ("weather", "market")) or needs_web
 
         if re.search(r"[\u0900-\u097F]", normalized):
-            # Devanagari — prefer mr; could refine hi later via word lists
             lang = "mr"
         else:
             lang = "en"
@@ -103,6 +106,7 @@ class QueryUnderstanding:
             needs_live_tools=needs_live,
             language_hint=lang,
             categories=categories,
+            location=extracted_location,
         )
 
     def extract_crops(self, text_lower: str) -> list[str]:
