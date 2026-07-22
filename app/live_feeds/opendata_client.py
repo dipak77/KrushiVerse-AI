@@ -12,7 +12,7 @@ from typing import Any
 import httpx
 
 from app.config import settings
-from app.knowledge.dataset_loader import kb_loader
+
 
 
 class DataGovInClient:
@@ -180,6 +180,7 @@ class DataGovInClient:
         commodity: str | None,
         reason: str,
     ) -> dict:
+        from app.knowledge.dataset_loader import kb_loader
         markets = kb_loader.market_prices.get("markets", [])
         rows = []
         for m in markets:

@@ -1,4 +1,3 @@
-from app.knowledge.dataset_loader import kb_loader
 from app.live_feeds.opendata_client import opendata_client
 
 
@@ -6,7 +5,14 @@ class MarketFeedProvider:
     """Agmarknet / data.gov.in market price provider with local open KB fallback."""
 
     def __init__(self):
-        self.prices_db = kb_loader.market_prices.get("markets", [])
+        self._prices_db = None
+
+    @property
+    def prices_db(self) -> list[dict]:
+        if self._prices_db is None:
+            from app.knowledge.dataset_loader import kb_loader
+            self._prices_db = kb_loader.market_prices.get("markets", [])
+        return self._prices_db
 
     def get_market_prices(self, crop: str | None = None, district: str | None = None) -> list[dict]:
         # Prefer live open-data when available
@@ -21,8 +27,16 @@ class MarketFeedProvider:
 
         results = []
         for m in self.prices_db:
-            crop_match = crop is None or crop.lower() in m["crop"].lower() or crop in m.get("crop_mr", "")
-            dist_match = district is None or district.lower() in m["district"].lower()
+            m_crop = (m.get("crop") or m.get("crop_en") or "").lower()
+            m_dist = (m.get("district") or m.get("market_name") or "").lower()
+
+            crop_match = (
+                crop is None
+                or crop.lower() in m_crop
+                or crop in m.get("crop_mr", "")
+                or crop in m.get("crop_en", "")
+            )
+            dist_match = district is None or district.lower() in m_dist
 
             if crop_match and dist_match:
                 results.append(m)

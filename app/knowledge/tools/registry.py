@@ -4,12 +4,6 @@ from __future__ import annotations
 
 from typing import Any, Callable
 
-import httpx
-
-from app.live_feeds.weather_feed import weather_feed
-from app.live_feeds.market_feed import market_feed
-from app.live_feeds.opendata_client import opendata_client
-from app.knowledge.dataset_loader import kb_loader
 from app.knowledge.web_search import web_search_provider
 
 
@@ -143,6 +137,7 @@ class ExternalToolRegistry:
                 "raw": live,
             }
         else:
+            from app.live_feeds.weather_feed import weather_feed
             fb = weather_feed.get_weather(location)
             data = {**fb, "provider": "Local weather fallback (Open-Meteo unavailable)"}
 
@@ -162,6 +157,7 @@ class ExternalToolRegistry:
         return {"data": data, "documents": [doc]}
 
     def local_weather(self, params: dict) -> dict:
+        from app.live_feeds.weather_feed import weather_feed
         location = params.get("location", "Pune")
         data = weather_feed.get_weather(location)
         doc = {
@@ -179,6 +175,8 @@ class ExternalToolRegistry:
         return {"data": data, "documents": [doc]}
 
     def market_prices(self, params: dict) -> dict:
+        from app.live_feeds.market_feed import market_feed
+        from app.knowledge.dataset_loader import kb_loader
         crop = params.get("crop")
         district = params.get("district")
         data = market_feed.get_market_prices(crop=crop, district=district)
@@ -215,6 +213,7 @@ class ExternalToolRegistry:
         return {"data": data, "documents": docs[:12]}
 
     def agmarknet_opendata(self, params: dict) -> dict:
+        from app.live_feeds.opendata_client import opendata_client
         crop = params.get("crop")
         district = params.get("district")
         state = params.get("state") or "Maharashtra"
@@ -242,6 +241,7 @@ class ExternalToolRegistry:
         return {"data": hits, "documents": docs}
 
     def schemes_tool(self, params: dict) -> dict:
+        from app.knowledge.dataset_loader import kb_loader
         query = (params.get("query") or "").lower()
         schemes = kb_loader.government_schemes.get("schemes", [])
         matched = []
@@ -267,6 +267,7 @@ class ExternalToolRegistry:
         return {"data": matched[:8], "documents": docs}
 
     def catalog_tool(self, params: dict) -> dict:
+        from app.knowledge.dataset_loader import kb_loader
         sources = kb_loader.open_source_catalog.get("sources", [])
         docs = [{
             "id": f"tool_catalog_{i}",
@@ -279,6 +280,7 @@ class ExternalToolRegistry:
         return {"data": sources, "documents": docs}
 
     def crop_tool(self, params: dict) -> dict:
+        from app.knowledge.dataset_loader import kb_loader
         crop = (params.get("crop") or "").lower()
         docs = []
         data = {"crops": [], "diseases": [], "fertilizer": []}

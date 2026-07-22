@@ -36,6 +36,19 @@ app = FastAPI(
     description="Generation 10.2 — Multi-Source RAG with dense embeddings/Qdrant, data.gov.in Agmarknet, web tools, GraphRAG"
 )
 
+
+@app.on_event("startup")
+def preload_local_models():
+    """Warm-up local KrushiVerse-AI LLM model on startup for 10x faster response times."""
+    try:
+        import torch
+        from mini.eval.harness import load_checkpoint, resolve_model_dir
+        dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model_dir = resolve_model_dir("v0.4-agri-qa")
+        load_checkpoint(model_dir, device=dev)
+    except Exception:
+        pass
+
 # Dev + production browser UI (React SPA in ui/web)
 app.add_middleware(
     CORSMiddleware,

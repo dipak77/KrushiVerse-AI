@@ -15,16 +15,18 @@ class Settings(BaseModel):
 
     # Advanced RAG / web tools
     ENABLE_WEB_RAG: bool = _env_bool("ENABLE_WEB_RAG", "true")
-    ENABLE_TOOL_RAG: bool = _env_bool("ENABLE_TOOL_RAG", "true")
+    ENABLE_TOOL_RAG: bool = _env_bool("ENABLE_TOOL_RAG", "false")
     WEB_CACHE_TTL_SEC: int = int(os.getenv("WEB_CACHE_TTL_SEC", "300"))
-    RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "8"))
+    RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "4"))
 
     # Mini LLM product integration (Sprint 16 / FP-9)
-    # Default OFF so existing planner behavior is unchanged unless explicitly enabled.
-    USE_MINI_LLM: bool = _env_bool("USE_MINI_LLM", "false")
-    MINI_DEFAULT_MODE: str = os.getenv("MINI_DEFAULT_MODE", "grounded")
-    MINI_MAX_NEW_TOKENS: int = int(os.getenv("MINI_MAX_NEW_TOKENS", "40"))
-    MINI_MODEL_VERSION: str = os.getenv("MINI_MODEL_VERSION", "auto")
+    # Default ON so all API and UI calls use local model by default
+    USE_MINI_LLM: bool = _env_bool("USE_MINI_LLM", "true")
+    MINI_DEFAULT_MODE: str = os.getenv("MINI_DEFAULT_MODE", "instruct")
+    MINI_MAX_NEW_TOKENS: int = int(os.getenv("MINI_MAX_NEW_TOKENS", "256"))
+    MINI_MODEL_VERSION: str = os.getenv("MINI_MODEL_VERSION", "v0.4-agri-qa")
+    MINI_TEMPERATURE: float = float(os.getenv("MINI_TEMPERATURE", "0.7"))
+    MINI_TOP_P: float = float(os.getenv("MINI_TOP_P", "0.9"))
 
     # Embeddings + Qdrant
     # backend: auto | hash | minilm | openai
