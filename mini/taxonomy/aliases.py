@@ -46,6 +46,8 @@ CATEGORY_ALIASES: dict[str, list[str]] = {
     "scheme": ["scheme", "subsidy", "योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे"],
 }
 
+import functools
+
 # Longest suffix first — for smart split
 MR_SUFFIXES = sorted([
     "ावरील", "ांवरील", "ाच्या", "ांच्या", "ासाठी", "ापेक्षा", "ामध्ये", "ातून",
@@ -54,8 +56,9 @@ MR_SUFFIXES = sorted([
     "ची", "चा", "चे", "च्या", "ला", "ने", "त", "वर", "मधील", "ना"
 ], key=len, reverse=True)
 
+@functools.lru_cache(maxsize=2048)
 def stem_mr_token(token: str) -> str:
-    """Smart stem: सोयाबीनला -> सोयाबीन, कापसाला -> कापूस, मुगाला -> मूग"""
+    """Smart stem with LRU cache: सोयाबीनला -> सोयाबीन, कापसाला -> कापूस, मुगाला -> मूग"""
     t = token.lower().strip()
     if not t:
         return t
@@ -95,10 +98,11 @@ for canon, phrase_list in BASE_ALIASES.items():
 PHRASES_SORTED = sorted([p for p in BASE_LOOKUP.keys() if " " in p], key=len, reverse=True)
 MAX_PHRASE_WORDS = max((len(p.split()) for p in PHRASES_SORTED), default=1)
 
-def resolve_crops_smart(text: str) -> list[str]:
-    """Smart crop extractor with multi-word phrase matching and inflected stemmer."""
+@functools.lru_cache(maxsize=2048)
+def _resolve_crops_smart_cached(text: str) -> tuple[str, ...]:
+    """LRU cached core extractor returning tuple of canonical crop names."""
     if not text:
-        return []
+        return ()
 
     t_low = text.lower()
     found: list[str] = []
@@ -113,7 +117,7 @@ def resolve_crops_smart(text: str) -> list[str]:
                 found.append(canon)
 
     if found:
-        return found
+        return tuple(found)
 
     # 2. N-gram sliding window over tokens for inflected multi-word: "नागपूर संत्र्याला"
     tokens = tokenize(text)
@@ -133,7 +137,7 @@ def resolve_crops_smart(text: str) -> list[str]:
                     break
 
     if found:
-        return found
+        return tuple(found)
 
     # 3. Single token + split postposition logic (सोयाबीनला)
     for tok, stem_tok in zip(tokens, stemmed_tokens):
@@ -154,14 +158,20 @@ def resolve_crops_smart(text: str) -> list[str]:
                     found.append(canon)
                 break
 
-    return found
+    return tuple(found)
+
+def resolve_crops_smart(text: str) -> list[str]:
+    """Smart crop extractor backed by LRU cache."""
+    return list(_resolve_crops_smart_cached(text))
 
 def resolve_crops_in_text(text: str) -> list[str]:
     return resolve_crops_smart(text)
 
+@functools.lru_cache(maxsize=1024)
 def resolve_crop_name(name: str) -> str:
     return get_crop_canonical_name(name)
 
+@functools.lru_cache(maxsize=1024)
 def get_crop_canonical_name(name: str) -> str:
     res = resolve_crops_smart(name)
     return res[0] if res else name

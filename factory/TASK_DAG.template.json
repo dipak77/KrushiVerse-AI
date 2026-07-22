@@ -156,7 +156,8 @@
       "task_args": {
         "query": "How do I manage pink bollworm in cotton with IPM in Maharashtra?",
         "location": "Pune",
-        "top_k": 6,
+        "top_k": 2,
+        "enable_checklist_filter": true,
         "enable_web": false,
         "num_workers": 0
       },
