@@ -122,9 +122,9 @@ def template_synthesize(
 
     if any(k in q_low for k in ("भाव", "दर", "मंडी", "बाजार", "market", "price", "apmc", "rate")) or "market" in intent_low:
         intent_type = "market"
-    elif any(k in q_low for k in ("योजना", "अनुदान", "शेततळे", "scheme", "subsidy", "मागेल", "pm-kisan", "ड्रोन", "माती", "नोंदणी", "प्रयोगशाळा")) or "scheme" in intent_low:
-        intent_type = "scheme"
-    elif any(k in q_low for k in ("खत", "खते", "fertilizer", "mop", "dap", "urea", "npk", "मात्रा", "13:00:45", "19:19:19", "शेणखत")) or "fertilizer" in intent_low:
+    elif any(k in q_low for k in ("योजना", "अनुदान", "शेततळे", "scheme", "subsidy", "मागेल", "pm-kisan", "ड्रोन", "माती", "नोंदणी", "प्रयोगशाळा", "sri", "तंत्रज्ञान")) or "scheme" in intent_low or "innovation" in intent_low:
+        intent_type = "scheme" if any(k in q_low for k in ("योजना", "अनुदान", "सबसिडी", "मागेल", "pm-kisan", "नोंदणी")) else "innovation"
+    elif any(k in q_low for k in ("खत", "खते", "fertilizer", "mop", "dap", "urea", "npk", "मात्रा", "कॅल्शियम", "13:00:45", "19:19:19", "शेणखत", "डोस", "अन्नद्रव्ये")) or "fertilizer" in intent_low:
         intent_type = "fertilizer"
     elif any(k in q_low for k in ("ठिबक", "drip", "सिंचन", "irrigation", "पाणी", "तास", "पाण्या", "पाण्याची")) or "irrigation" in intent_low:
         intent_type = "irrigation"

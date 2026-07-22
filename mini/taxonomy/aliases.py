@@ -39,11 +39,12 @@ BASE_ALIASES: dict[str, list[str]] = {
 CROP_ALIASES = BASE_ALIASES # backwards compat
 
 CATEGORY_ALIASES: dict[str, list[str]] = {
-    "disease": ["disease", "pest", "रोग", "कीड", "अळी", "करपा", "तांबेरा", "भुरी", "विषाणू", "बुरशी"],
+    "disease": ["disease", "pest", "रोग", "कीड", "अळी", "करपा", "तांबेरा", "भुरी", "विषाणू", "बुरशी", "औषध", "फवारणी"],
     "irrigation": ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन"],
-    "fertilizer": ["fertilizer", "dosing", "khata", "खत", "मात्रा", "युरिया", "npk"],
+    "fertilizer": ["fertilizer", "dosing", "khata", "खत", "मात्रा", "युरिया", "npk", "कॅल्शियम", "डोस", "अन्नद्रव्ये"],
     "market": ["market", "mandi", "price", "rate", "बाजारभाव", "दर", "भाव"],
-    "scheme": ["scheme", "subsidy", "योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे"],
+    "scheme": ["scheme", "subsidy", "योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे", "ड्रोन", "sri", "तंत्रज्ञान", "आंतरपीक"],
+    "innovation": ["innovation", "ड्रोन", "sri", "तंत्रज्ञान", "आंतरपीक", "जैविक", "सेंद्रिय"],
 }
 
 import functools

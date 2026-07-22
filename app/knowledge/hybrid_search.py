@@ -94,33 +94,57 @@ class HybridRAGSearch:
         # Dense semantic channel slightly higher weight when available
         add_list(dense_results, weight=1.15)
 
-        # Smart crop relevance boost to prevent cross-crop document leakage
+        # Smart crop & intent relevance boost
         from mini.taxonomy.aliases import resolve_crops_smart
 
-        detected_query_crops = resolve_crops_smart(query)
-        if detected_query_crops:
-            q_crops_low = [c.lower() for c in detected_query_crops]
-            for doc_id, score in list(rrf_scores.items()):
-                doc = doc_map[doc_id]
-                d_crop = (doc.get("crop") or "").lower()
-                d_title = (doc.get("title") or "").lower()
-                doc_text = f"{d_title} {d_crop}"
-                doc_crops = [c.lower() for c in resolve_crops_smart(doc_text)]
+        q_low = query.lower()
+        is_market = any(k in q_low for k in ("price", "mandi", "market", "rate", "भाव", "दर", "बाजारभाव", "मंडी"))
+        is_fertilizer = any(k in q_low for k in ("खत", "खते", "मात्रा", "कॅल्शियम", "युरिया", "npk", "dap", "fertilizer", "dosing", "कधी द्यावे"))
+        is_scheme = any(k in q_low for k in ("योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे", "ड्रोन", "sri", "माती", "नोंदणी"))
 
+        detected_query_crops = resolve_crops_smart(query)
+        q_crops_low = [c.lower() for c in detected_query_crops] if detected_query_crops else []
+
+        for doc_id, score in list(rrf_scores.items()):
+            doc = doc_map[doc_id]
+            d_crop = (doc.get("crop") or "").lower()
+            d_title = (doc.get("title") or "").lower()
+
+            # Skip all checklist stage docs
+            if "checklist" in d_title or "checklist" in doc_id.lower():
+                rrf_scores[doc_id] = 0.0
+                continue
+
+            doc_text = f"{d_title} {d_crop}"
+            doc_crops = [c.lower() for c in resolve_crops_smart(doc_text)]
+
+            # Crop matching boost/penalty
+            if q_crops_low:
                 if any(qc in doc_crops or qc in doc_text for qc in q_crops_low):
-                    rrf_scores[doc_id] = score * 2.0
+                    score *= 2.0
                 elif doc_crops and not any(qc in doc_crops for qc in q_crops_low):
-                    rrf_scores[doc_id] = score * 0.1
+                    score *= 0.1
+
+            # Intent category boost (Mandi Price, Fertilizer Guide, Government Scheme)
+            if is_market and ("mandi price" in d_title or "apmc" in d_title or "market" in d_title):
+                score *= 5.0
+            elif is_fertilizer and ("fertilizer guide" in d_title or "fertilizer" in d_title):
+                score *= 5.0
+            elif is_scheme and ("government scheme" in d_title or "scheme" in d_title or "subsidy" in d_title):
+                score *= 5.0
+
+            rrf_scores[doc_id] = score
 
         sorted_docs = sorted(rrf_scores.items(), key=lambda x: x[1], reverse=True)
 
         final_results = []
         for doc_id, score in sorted_docs[:top_k]:
-            final_results.append({
-                "rrf_score": score,
-                "doc": doc_map[doc_id],
-                "origins": origins.get(doc_id, []),
-            })
+            if score > 0.0:
+                final_results.append({
+                    "rrf_score": score,
+                    "doc": doc_map[doc_id],
+                    "origins": origins.get(doc_id, []),
+                })
 
         return final_results
 
