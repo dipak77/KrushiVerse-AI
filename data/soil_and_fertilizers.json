@@ -307,10 +307,25 @@
       "top_dressing_mr": "फळधारणेत पालाश.",
       "micronutrients": "Zn and B for flower retention.",
       "source": "IIVR PoP"
+    },
+    {
+      "crop_en": "Ginger",
+      "crop_mr": "आले",
+      "recommended_npk_kg_per_acre": {
+        "N": 30,
+        "P": 20,
+        "K": 25
+      },
+      "basal_dose": "Apply 20-25 tonnes well-decomposed Farmyard Manure (FYM) per acre during field preparation.",
+      "basal_dose_mr": "जमीन तयार करताना प्रति एकर २०-२५ टन चांगले कुजलेले शेणखत (FYM) मिसळा.",
+      "top_dressing": "Apply 30 kg N in 2 split doses at 45 and 90 days after planting.",
+      "top_dressing_mr": "लागवडीनंतर ४५ आणि ९० दिवसांनी ३० किलो नत्र दोन हप्त्यांत द्या.",
+      "micronutrients": "Zinc sulfate @ 5 kg/acre + Trichoderma for rhizome rot prevention.",
+      "source": "SAU PoP Ginger Advisory"
     }
   ],
   "meta": {
     "soils": 6,
-    "fert_recs": 15
+    "fert_recs": 16
   }
 }

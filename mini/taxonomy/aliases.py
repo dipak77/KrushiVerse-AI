@@ -28,12 +28,15 @@ BASE_ALIASES: dict[str, list[str]] = {
     "Mango": ["mango", "amba", "आंबा", "mangifera"],
     "Tomato": ["tomato", "tamatar", "टोमॅटो", "टमाटर"],
     "Chilli": ["chilli", "chili", "mirchi", "मिरची", "मिर्च", "capsicum"],
-    "Sorghum": ["sorghum", "jowar", "ज्वारी", "ज्वार"],
+    "Sorghum": ["sorghum", "jowar", "ज्वारी", "ज्वार", "ज्वारीची", "ज्वारीवरील", "ज्वारीला"],
     "Bajra": ["bajra", "bajri", "pearl millet", "बाजरी", "बाजरा", "pennisetum"],
     "Mustard": ["mustard", "sarson", "मोहरी", "सरसों", "brassica"],
     "Potato": ["potato", "batata", "aloo", "बटाटा", "आलू"],
     "Orange": ["orange", "santra", "citrus", "nagpur santra", "संत्रा", "मोसंबी", "नारंगी", "नागपूर संत्रा"],
     "Brinjal": ["brinjal", "eggplant", "baingan", "वांगी", "वांगे", "बैंगन", "solanum melongena"],
+    "Sunflower": ["sunflower", "surajmukhi", "सूर्यफूल", "सूरजमुखी"],
+    "Sesame": ["sesame", "til", "तिळ", "तिळाची", "तिळाला", "तिळावर"],
+    "Ginger": ["ginger", "ale", "adrak", "आले", "अद्रक", "आल्यावरील", "आल्याला"],
 }
 
 CROP_ALIASES = BASE_ALIASES # backwards compat
@@ -43,8 +46,8 @@ CATEGORY_ALIASES: dict[str, list[str]] = {
     "irrigation": ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन"],
     "fertilizer": ["fertilizer", "dosing", "khata", "खत", "मात्रा", "युरिया", "npk", "कॅल्शियम", "डोस", "अन्नद्रव्ये"],
     "market": ["market", "mandi", "price", "rate", "बाजारभाव", "दर", "भाव"],
-    "scheme": ["scheme", "subsidy", "योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे", "ड्रोन", "sri", "तंत्रज्ञान", "आंतरपीक"],
-    "innovation": ["innovation", "ड्रोन", "sri", "तंत्रज्ञान", "आंतरपीक", "जैविक", "सेंद्रिय"],
+    "scheme": ["scheme", "subsidy", "pmfby", "विमा", "premium", "apeda", "अनुदान", "योजना", "सबसिडी", "पोर्टल", "शेततळे"],
+    "innovation": ["innovation", "pruning", "छाटणी", "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "sowing time", "spacing", "storage", "rotation", "ड्रोन", "sri", "तंत्रज्ञान", "जैविक", "सेंद्रिय"],
 }
 
 import functools
@@ -56,6 +59,14 @@ MR_SUFFIXES = sorted([
     "वरील", "साठी", "पेक्षा", "ंमध्ये", "तील", "मधून",
     "ची", "चा", "चे", "च्या", "ला", "ने", "त", "वर", "मधील", "ना"
 ], key=len, reverse=True)
+
+# Primary cash crop priority order for multi-crop queries (+)
+MAJOR_CROPS_ORDER = [
+    "Cotton", "Soybean", "Sugarcane", "Pomegranate", "Grapes", "Orange",
+    "Banana", "Mango", "Wheat", "Rice", "Maize", "Turmeric", "Tur",
+    "Green Gram", "Groundnut", "Brinjal", "Chilli", "Tomato", "Onion",
+    "Sorghum", "Bajra", "Sunflower", "Sesame", "Ginger"
+]
 
 @functools.lru_cache(maxsize=2048)
 def stem_mr_token(token: str) -> str:
@@ -81,6 +92,10 @@ def stem_mr_token(token: str) -> str:
     if t.startswith("केळी"): return "केळी"
     if t.startswith("ऊसा"): return "ऊस"
     if t.startswith("मुगा") or t.startswith("मूग"): return "मूग"
+    if t.startswith("ज्वारी"): return "ज्वारी"
+    if t.startswith("सूर्यफूल") or t.startswith("सूरजमुखी"): return "सूर्यफूल"
+    if t.startswith("तिळा") or t.startswith("तिळ"): return "तिळ"
+    if t.startswith("आल्या"): return "आले"
 
     for suf in MR_SUFFIXES:
         if t.endswith(suf) and len(t) > len(suf) + 2:
@@ -105,6 +120,19 @@ def _resolve_crops_smart_cached(text: str) -> tuple[str, ...]:
     if not text:
         return ()
 
+    if "+" in text:
+        parts = text.split("+")
+        c1 = [c for c in _resolve_crops_smart_cached(parts[0]) if c]
+        c2 = [c for c in _resolve_crops_smart_cached(parts[1]) if c] if len(parts) > 1 else []
+        found_plus = list(c1)
+        for c in c2:
+            if c not in found_plus:
+                found_plus.append(c)
+        if len(found_plus) > 1:
+            found_plus.sort(key=lambda c: MAJOR_CROPS_ORDER.index(c) if c in MAJOR_CROPS_ORDER else 99)
+        if found_plus:
+            return tuple(found_plus)
+
     t_low = text.lower()
     found: list[str] = []
     seen: set[str] = set()
@@ -118,6 +146,8 @@ def _resolve_crops_smart_cached(text: str) -> tuple[str, ...]:
                 found.append(canon)
 
     if found:
+        if len(found) > 1 and ("+" in text or "आंतरपीक" in text):
+            found.sort(key=lambda c: MAJOR_CROPS_ORDER.index(c) if c in MAJOR_CROPS_ORDER else 99)
         return tuple(found)
 
     # 2. N-gram sliding window over tokens for inflected multi-word: "नागपूर संत्र्याला"
