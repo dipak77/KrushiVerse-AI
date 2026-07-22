@@ -134,15 +134,25 @@ class KrushiBulkTester:
         # 2. Intent Match Score
         intent_detected = "general"
         ans_low = ans.lower()
-        if "### 💧" in ans or "ठिबक" in ans or "irrigation" in ans_low:
+        if "### 💧" in ans:
             intent_detected = "irrigation"
-        elif "### 🌱" in ans or "खत" in ans or "fertilizer" in ans_low:
+        elif "### 🌱" in ans:
             intent_detected = "fertilizer"
-        elif "### 📈" in ans or "बाजारभाव" in ans or "market" in ans_low:
+        elif "### 📈" in ans:
             intent_detected = "market"
-        elif "### 🏛️" in ans or "योजना" in ans or "scheme" in ans_low:
+        elif "### 🏛️" in ans:
             intent_detected = "scheme"
-        elif "### 🩺" in ans or "रोग" in ans or "कीड" in ans_low:
+        elif "### 🩺" in ans:
+            intent_detected = "disease"
+        elif "irrigation" in ans_low or "ठिबक" in ans_low:
+            intent_detected = "irrigation"
+        elif "fertilizer" in ans_low or "खत" in ans_low:
+            intent_detected = "fertilizer"
+        elif "market" in ans_low or "बाजारभाव" in ans_low or "mandi" in ans_low:
+            intent_detected = "market"
+        elif "scheme" in ans_low or "योजना" in ans_low or "अनुदान" in ans_low:
+            intent_detected = "scheme"
+        elif "disease" in ans_low or "रोग" in ans_low or "कीड" in ans_low:
             intent_detected = "disease"
 
         intent_match = 1.0 if (exp_intent and intent_detected == exp_intent) else 0.5 if not exp_intent else 0.0

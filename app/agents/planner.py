@@ -13,6 +13,7 @@ from app.knowledge.advanced_rag import advanced_rag
 from app.knowledge.query_understanding import query_understanding
 from app.memory.farm_memory import farm_memory_store
 from app.llm.generator import response_synthesizer
+from mini.taxonomy.aliases import resolve_crops_smart
 
 
 class PlannerAgent:
@@ -45,8 +46,15 @@ class PlannerAgent:
         soil_profile = farm.get("soil_profile", {})
 
         qplan = query_understanding.understand(query, default_crop=farm_crop)
-        # Prefer crop and location mentioned in query over farm defaults
-        crop_name = qplan.crops[0] if qplan.crops else farm_crop
+        # Prefer crop mentioned in query; if generic non-crop query, use Generic instead of farm default
+        q_crops = resolve_crops_smart(query)
+        if q_crops:
+            crop_name = q_crops[0]
+        elif any(k in query.lower() for k in ("योजना", "अनुदान", "सबसिडी", "ड्रोन", "माती", "प्रयोगशाळा", "पात्रता", "नोंदणी", "pm-kisan", "मागेल")):
+            crop_name = "Generic"
+        else:
+            crop_name = qplan.crops[0] if qplan.crops else farm_crop
+
         district = getattr(qplan, "location", None) or farm_district
 
         agent_context = {

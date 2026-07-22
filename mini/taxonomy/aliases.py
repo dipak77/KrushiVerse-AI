@@ -1,6 +1,6 @@
 """Canonical crop / entity aliases (EN / MR / HI) with smart Marathi stemmer + multi-word.
 
-Handles: सोयाबीनला -> सोयाबीन + ला, कापसाला -> कापूस, pigeon pea, nagpur santra
+Handles: सोयाबीनला -> सोयाबीन + ला, कापसाला -> कापूस, pigeon pea, nagpur santra, green gram -> Green Gram
 Canonical English names match platform KB crop name_en (simple, no brackets).
 """
 
@@ -20,6 +20,7 @@ BASE_ALIASES: dict[str, list[str]] = {
     "Maize": ["maize", "corn", "maka", "मका", "मक्का", "zea mays"],
     "Tur": ["tur", "toor", "arhar", "pigeon pea", "red gram", "तूर", "अरहर", "तूर डाळ", "cajanus", "pigeonpea"],
     "Gram": ["gram", "chickpea", "chana", "harbhara", "हरभरा", "चना", "cicer"],
+    "Green Gram": ["green gram", "moong", "mung", "मूग", "मुगाला", "मुगावर", "मूग डाळ", "विघ्न मूग"],
     "Groundnut": ["groundnut", "peanut", "bhuimug", "भुईमूग", "मूंगफली", "arachis"],
     "Turmeric": ["turmeric", "halad", "हळद", "हल्दी", "curcuma"],
     "Grapes": ["grape", "grapes", "draksh", "द्राक्ष", "अंगूर", "vitis"],
@@ -37,16 +38,24 @@ BASE_ALIASES: dict[str, list[str]] = {
 
 CROP_ALIASES = BASE_ALIASES # backwards compat
 
+CATEGORY_ALIASES: dict[str, list[str]] = {
+    "disease": ["disease", "pest", "रोग", "कीड", "अळी", "करपा", "तांबेरा", "भुरी", "विषाणू", "बुरशी"],
+    "irrigation": ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन"],
+    "fertilizer": ["fertilizer", "dosing", "khata", "खत", "मात्रा", "युरिया", "npk"],
+    "market": ["market", "mandi", "price", "rate", "बाजारभाव", "दर", "भाव"],
+    "scheme": ["scheme", "subsidy", "योजना", "अनुदान", "सबसिडी", "पोर्टल", "शेततळे"],
+}
+
 # Longest suffix first — for smart split
 MR_SUFFIXES = sorted([
     "ावरील", "ांवरील", "ाच्या", "ांच्या", "ासाठी", "ापेक्षा", "ामध्ये", "ातून",
     "ाची", "ाचा", "ाचे", "ाला", "ाने", "ात", "ास",
-    "वरील", "साठी", "पेक्षा", "मध्ये", "तील", "मधून",
+    "वरील", "साठी", "पेक्षा", "ंमध्ये", "तील", "मधून",
     "ची", "चा", "चे", "च्या", "ला", "ने", "त", "वर", "मधील", "ना"
 ], key=len, reverse=True)
 
 def stem_mr_token(token: str) -> str:
-    """Smart stem: सोयाबीनला -> सोयाबीन, कापसाला -> कापूस"""
+    """Smart stem: सोयाबीनला -> सोयाबीन, कापसाला -> कापूस, मुगाला -> मूग"""
     t = token.lower().strip()
     if not t:
         return t
@@ -67,6 +76,7 @@ def stem_mr_token(token: str) -> str:
     if t.startswith("सोयाबीन"): return "सोयाबीन"
     if t.startswith("केळी"): return "केळी"
     if t.startswith("ऊसा"): return "ऊस"
+    if t.startswith("मुगा") or t.startswith("मूग"): return "मूग"
 
     for suf in MR_SUFFIXES:
         if t.endswith(suf) and len(t) > len(suf) + 2:
@@ -78,30 +88,19 @@ def tokenize(text: str) -> list[str]:
 
 # Lookup maps
 BASE_LOOKUP: dict[str, str] = {}
-for canon, aliases in BASE_ALIASES.items():
-    for a in aliases:
-        k = a.lower().strip()
-        if k: BASE_LOOKUP[k] = canon
-    BASE_LOOKUP[canon.lower()] = canon
+for canon, phrase_list in BASE_ALIASES.items():
+    for p in phrase_list:
+        BASE_LOOKUP[p.lower()] = canon
 
-# Multi-word phrases sorted by word-count then length (longest first)
-PHRASES_SORTED = sorted(
-    [k for k in BASE_LOOKUP.keys() if " " in k],
-    key=lambda x: (-len(x.split()), -len(x))
-)
-
+PHRASES_SORTED = sorted([p for p in BASE_LOOKUP.keys() if " " in p], key=len, reverse=True)
 MAX_PHRASE_WORDS = max((len(p.split()) for p in PHRASES_SORTED), default=1)
 
 def resolve_crops_smart(text: str) -> list[str]:
-    """
-    Smarter multi-word + Marathi inflection handler.
-    1. Phrase match (nagpur santra, pigeon pea) longest first
-    2. Token + stem + split postposition: सोयाबीनला -> [सोयाबीन, ला] -> सोयाबीन
-    """
+    """Smart crop extractor with multi-word phrase matching and inflected stemmer."""
     if not text:
         return []
 
-    t_low = f" {text.lower()} " # pad for boundary checks
+    t_low = text.lower()
     found: list[str] = []
     seen: set[str] = set()
 
@@ -140,9 +139,8 @@ def resolve_crops_smart(text: str) -> list[str]:
     for tok, stem_tok in zip(tokens, stemmed_tokens):
         candidates = {tok, stem_tok}
 
-        # Split postposition: try removing suffix and check remainder
         for suf in MR_SUFFIXES:
-            if tok.endswith(suf) and len(tok) > len(suf)+2:
+            if tok.endswith(suf) and len(tok) > len(suf) + 2:
                 rem = tok[:-len(suf)]
                 if rem:
                     candidates.add(rem)
@@ -158,35 +156,12 @@ def resolve_crops_smart(text: str) -> list[str]:
 
     return found
 
-# Backwards compat wrappers — single definition only
-def resolve_crop_name(text: str) -> str | None:
-    crops = resolve_crops_smart(text)
-    return crops[0] if crops else None
-
 def resolve_crops_in_text(text: str) -> list[str]:
     return resolve_crops_smart(text)
 
-def build_alias_lookup(aliases: dict[str, list[str]] | None = None) -> dict[str, str]:
-    src = aliases or CROP_ALIASES
-    lookup = {}
-    for canon, alist in src.items():
-        for a in alist:
-            k = a.lower().strip()
-            if k: lookup[k] = canon
-        lookup[canon.lower()] = canon
-    return lookup
+def resolve_crop_name(name: str) -> str:
+    return get_crop_canonical_name(name)
 
-ALIAS_LOOKUP = build_alias_lookup()
-
-# Category aliases (unchanged)
-CATEGORY_ALIASES: dict[str, list[str]] = {
-    "soil": ["soil", "माती", "मिट्टी", "ph", "soil health"],
-    "weather": ["weather", "rain", "humidity", "हवामान", "पाऊस", "temperature"],
-    "crop": ["crop", "पीक", "फसल", "sowing", "harvest", "variety"],
-    "disease": ["disease", "blight", "virus", "fungal", "रोग", "करपा", "तेल्या", "बुरशी", "कीड", "अळी", "डाग", "कुज", "मर"],
-    "pest": ["pest", "insect", "worm", "thrips", "bollworm", "कीड", "अळी"],
-    "fertilizer": ["fertilizer", "manure", "urea", "dap", "mop", "खत", "युरिया", "डीएपी"],
-    "irrigation": ["irrigation", "drip", "सिंचन", "ठिबक", "सिंचाई"],
-    "scheme": ["scheme", "subsidy", "yojana", "योजना", "अनुदान"],
-    "market": ["market", "mandi", "price", "msp", "भाव", "बाजार", "दर"],
-}
+def get_crop_canonical_name(name: str) -> str:
+    res = resolve_crops_smart(name)
+    return res[0] if res else name

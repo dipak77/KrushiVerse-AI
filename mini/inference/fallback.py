@@ -27,9 +27,11 @@ CROP_MARATHI_MAP = {
     "turmeric": "हळद",
     "mango": "आंबा",
     "papaya": "पपई",
-    "potato": "बटाटा",
-    "citrus": "संत्रा/मोसंबी",
     "ginger": "आले",
+    "green gram": "मूग",
+    "gram": "हरभरा",
+    "orange": "संत्रा",
+    "brinjal": "वांगी",
 }
 
 
@@ -103,30 +105,29 @@ def template_synthesize(
         crop = crop_canon
         crop_mr = CROP_MARATHI_MAP.get(crop_canon.lower(), crop_canon)
     else:
-        crop = crops[0] if crops else "पीक"
+        crop = crops[0] if crops else "कृषी"
         crop_low = crop.lower()
-        crop_mr = "पीक"
-        for k, v in CROP_MARATHI_MAP.items():
-            if k in crop_low or v in query:
-                crop_mr = v
-                break
+        if any(k in query.lower() for k in ("योजना", "pm-kisan", "माती", "ड्रोन", "अनुदान", "तंत्रज्ञान", "अन्नद्रव्ये")):
+            crop_mr = "कृषी"
+        else:
+            crop_mr = CROP_MARATHI_MAP.get(crop_low, "पीक")
 
     loc_str = f" ({location})" if location else ""
 
-    primary_cites = _filter_relevant_citations(citations, query=query)
+    primary_cites = _filter_relevant_citations(citations, query=query)[:2]
 
-    # Extract topic header dynamically
-    intent_low = (intent or "").lower()
+    # Intent detection priority hierarchy
     q_low = query.lower()
+    intent_low = (intent or "").lower()
 
-    if any(k in q_low for k in ("ठिबक", "drip", "सिंचन", "irrigation", "पाणी", "तास", "पाण्या", "पाण्याची")) or "irrigation" in intent_low:
-        intent_type = "irrigation"
-    elif any(k in q_low for k in ("खत", "fertilizer", "mop", "dap", "urea", "npk", "मात्रा", "13:00:45", "19:19:19", "शेणखत")) or "fertilizer" in intent_low:
-        intent_type = "fertilizer"
-    elif any(k in q_low for k in ("भाव", "दर", "मंडी", "बाजार", "market", "price", "apmc")) or "market" in intent_low:
+    if any(k in q_low for k in ("भाव", "दर", "मंडी", "बाजार", "market", "price", "apmc", "rate")) or "market" in intent_low:
         intent_type = "market"
-    elif any(k in q_low for k in ("योजना", "अनुदान", "शेततळे", "scheme", "subsidy", "मागेल")) or "scheme" in intent_low:
+    elif any(k in q_low for k in ("योजना", "अनुदान", "शेततळे", "scheme", "subsidy", "मागेल", "pm-kisan", "ड्रोन", "माती", "नोंदणी", "प्रयोगशाळा")) or "scheme" in intent_low:
         intent_type = "scheme"
+    elif any(k in q_low for k in ("खत", "खते", "fertilizer", "mop", "dap", "urea", "npk", "मात्रा", "13:00:45", "19:19:19", "शेणखत")) or "fertilizer" in intent_low:
+        intent_type = "fertilizer"
+    elif any(k in q_low for k in ("ठिबक", "drip", "सिंचन", "irrigation", "पाणी", "तास", "पाण्या", "पाण्याची")) or "irrigation" in intent_low:
+        intent_type = "irrigation"
     else:
         intent_type = "disease"
 
@@ -297,6 +298,24 @@ def template_synthesize(
             parts.append("**2. Foliar Spray:** 19:19:19 @ 5g/L; 13:00:45 @ 10g/L during fruit set.\n")
             parts.append(f"**3. Weather Advisory:** {temp}°C, {hum}% RH — Apply fertilizer 2 days after rain stops.\n")
             parts.append("**4. Safety:** Follow label rate, avoid over-dosing.\n")
+            parts.append(f"**Source:** {doc_title}")
+            body = "\n".join(parts)
+        elif intent_type == "market":
+            parts = [f"### 📈 **{crop} - Market Rate & APMC Advisory{loc_str}**\n"]
+            parts.append(f"**Reference:** {doc_title}\n")
+            parts.append("**1. Current APMC Price Range:** ₹8,500 to ₹14,500 / quintal (grade-based).\n")
+            parts.append("**2. Market Strategy:** Grade product before sending to APMC. Sell in batches if supply is high.\n")
+            parts.append(f"**3. Weather Impact:** {temp}°C, {hum}% RH — Harvest and transport in dry weather.\n")
+            parts.append("**4. Safety:** Verify official rates on Agmarknet / data.gov.in before selling.\n")
+            parts.append(f"**Source:** {doc_title}")
+            body = "\n".join(parts)
+        elif intent_type == "scheme":
+            parts = [f"### 🏛️ **{crop} - Government Scheme Advisory{loc_str}**\n"]
+            parts.append(f"**Reference:** {doc_title}\n")
+            parts.append("**1. Schemes & Benefits:** MIDH / Magel Tyala Shettale / PMKSY.\n")
+            parts.append("**2. Eligibility & Application:** Apply online on MahaDBT portal with 7/12 & 8-A documents.\n")
+            parts.append(f"**3. Weather Impact:** {temp}°C, Rain {rain}mm — Utilize drip & farm pond subsidies.\n")
+            parts.append("**4. Safety:** Apply exclusively through official MahaDBT portal (mahadbt.maharashtra.gov.in).\n")
             parts.append(f"**Source:** {doc_title}")
             body = "\n".join(parts)
         else:

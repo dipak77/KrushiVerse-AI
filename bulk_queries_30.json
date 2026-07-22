@@ -1,0 +1,244 @@
+[
+  {
+    "id": "q001",
+    "query": "उन्हाळ्यात कापसाला ठिबक किती तास?",
+    "expected_crop": "Cotton",
+    "expected_intent": "irrigation",
+    "expected_keywords": ["ठिबक", "२-३ तास"],
+    "location": "Pune"
+  },
+  {
+    "id": "q002",
+    "query": "सोयाबीनला खत कोणते द्यावे?",
+    "expected_crop": "Soybean",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["सोयाबीन", "खत"],
+    "location": "Latur"
+  },
+  {
+    "id": "q003",
+    "query": "वांगी शेंडा व फळ पोखरणारी अळी?",
+    "expected_crop": "Brinjal",
+    "expected_intent": "disease",
+    "expected_keywords": ["वांगी", "अळी"],
+    "not_expected": ["डाळिंब"],
+    "location": "Nashik"
+  },
+  {
+    "id": "q004",
+    "query": "केळी सिगाटोका रोग?",
+    "expected_crop": "Banana",
+    "expected_intent": "disease",
+    "expected_keywords": ["केळी", "सिगाटोका"],
+    "location": "Jalgaon"
+  },
+  {
+    "id": "q005",
+    "query": "द्राक्षावरील भुरी रोग उपाय?",
+    "expected_crop": "Grapes",
+    "expected_intent": "disease",
+    "expected_keywords": ["द्राक्ष", "भुरी"],
+    "location": "Nashik"
+  },
+  {
+    "id": "q006",
+    "query": "pigeon pea price in Latur mandi",
+    "expected_crop": "Tur",
+    "expected_intent": "market",
+    "expected_keywords": ["Tur"],
+    "location": "Latur"
+  },
+  {
+    "id": "q007",
+    "query": "nagpur santra market rate",
+    "expected_crop": "Orange",
+    "expected_intent": "market",
+    "expected_keywords": ["Orange"],
+    "location": "Nagpur"
+  },
+  {
+    "id": "q008",
+    "query": "तूर डाळीला किती पाणी?",
+    "expected_crop": "Tur",
+    "expected_intent": "irrigation",
+    "expected_keywords": ["तूर", "सिंचन"],
+    "location": "Akola"
+  },
+  {
+    "id": "q009",
+    "query": "डाळिंबाला खत मात्रा?",
+    "expected_crop": "Pomegranate",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["डाळिंब", "खत"],
+    "location": "Solapur"
+  },
+  {
+    "id": "q010",
+    "query": "कापसावरील बोंड अळी नियंत्रण?",
+    "expected_crop": "Cotton",
+    "expected_intent": "disease",
+    "expected_keywords": ["कापूस", "अळी"],
+    "location": "Yavatmal"
+  },
+  {
+    "id": "q011",
+    "query": "वांग्यावरील शेंडा अळी?",
+    "expected_crop": "Brinjal",
+    "expected_intent": "disease",
+    "expected_keywords": ["वांगी", "अळी"],
+    "location": "Pune"
+  },
+  {
+    "id": "q012",
+    "query": "सोयाबीनसाठी ठिबक किती?",
+    "expected_crop": "Soybean",
+    "expected_intent": "irrigation",
+    "expected_keywords": ["सोयाबीन", "ठिबक"],
+    "location": "Nanded"
+  },
+  {
+    "id": "q013",
+    "query": "मिरचीवरील विषाणू रोग उपाय?",
+    "expected_crop": "Chilli",
+    "expected_intent": "disease",
+    "expected_keywords": ["मिरची", "विषाणू"],
+    "not_expected": ["तेल्या रोग"],
+    "location": "Guntur"
+  },
+  {
+    "id": "q014",
+    "query": "ऊसासाठी शासकीय अनुदान योजना?",
+    "expected_crop": "Sugarcane",
+    "expected_intent": "scheme",
+    "expected_keywords": ["योजना", "अनुदान"],
+    "location": "Kolhapur"
+  },
+  {
+    "id": "q015",
+    "query": "टोमॅटो करपा रोग औषध?",
+    "expected_crop": "Tomato",
+    "expected_intent": "disease",
+    "expected_keywords": ["टोमॅटो", "करपा"],
+    "location": "Pune"
+  },
+  {
+    "id": "q016",
+    "query": "मुगावर पिवळा मोझॅक रोग उपाय?",
+    "expected_crop": "Green Gram",
+    "expected_intent": "disease",
+    "expected_keywords": ["मूग", "विषाणू"],
+    "location": "Latur"
+  },
+  {
+    "id": "q017",
+    "query": "कांद्याला खत व्यवस्थापन वेळापत्रक?",
+    "expected_crop": "Onion",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["कांदा", "खत"],
+    "location": "Nashik"
+  },
+  {
+    "id": "q018",
+    "query": "कृषी ड्रोन फवारणी शासकीय सबसिडी योजना?",
+    "expected_crop": "Generic",
+    "expected_intent": "scheme",
+    "expected_keywords": ["योजना", "अनुदान"],
+    "location": "Pune"
+  },
+  {
+    "id": "q019",
+    "query": "गव्हावरील तांबेरा रोग नियंत्रण?",
+    "expected_crop": "Wheat",
+    "expected_intent": "disease",
+    "expected_keywords": ["गहू", "तांबेरा"],
+    "location": "Pune"
+  },
+  {
+    "id": "q020",
+    "query": "भातावरील तुडतुडे कीड औषध?",
+    "expected_crop": "Rice",
+    "expected_intent": "disease",
+    "expected_keywords": ["भात", "तुडतुडे"],
+    "location": "Bhandara"
+  },
+  {
+    "id": "q021",
+    "query": "हळदीला ठिबक पाणी किती तास?",
+    "expected_crop": "Turmeric",
+    "expected_intent": "irrigation",
+    "expected_keywords": ["हळद", "ठिबक"],
+    "location": "Sangli"
+  },
+  {
+    "id": "q022",
+    "query": "मक्यावरील लष्करी अळी उपाय?",
+    "expected_crop": "Maize",
+    "expected_intent": "disease",
+    "expected_keywords": ["मका", "अळी"],
+    "location": "Satara"
+  },
+  {
+    "id": "q023",
+    "query": "द्राक्षाला एनपीके खत मात्रा?",
+    "expected_crop": "Grapes",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["द्राक्ष", "खत"],
+    "location": "Nashik"
+  },
+  {
+    "id": "q024",
+    "query": "भुईमुगावरील टिक्का रोग उपाय?",
+    "expected_crop": "Groundnut",
+    "expected_intent": "disease",
+    "expected_keywords": ["भुईमूग", "टिक्का"],
+    "location": "Dhule"
+  },
+  {
+    "id": "q025",
+    "query": "आंब्यावरील तुडतुडे नियंत्रण?",
+    "expected_crop": "Mango",
+    "expected_intent": "disease",
+    "expected_keywords": ["आंबा", "तुडतुडे"],
+    "location": "Ratnagiri"
+  },
+  {
+    "id": "q026",
+    "query": "सोयाबीन मंडी बाजारभाव किती?",
+    "expected_crop": "Soybean",
+    "expected_intent": "market",
+    "expected_keywords": ["सोयाबीन", "बाजारभाव"],
+    "location": "Latur"
+  },
+  {
+    "id": "q027",
+    "query": "मागेल त्याला शेततळे अर्ज कसा करावा?",
+    "expected_crop": "Generic",
+    "expected_intent": "scheme",
+    "expected_keywords": ["योजना", "शेततळे"],
+    "location": "Ahmednagar"
+  },
+  {
+    "id": "q028",
+    "query": "green gram moong market rate?",
+    "expected_crop": "Green Gram",
+    "expected_intent": "market",
+    "expected_keywords": ["मूग"],
+    "location": "Akola"
+  },
+  {
+    "id": "q029",
+    "query": "कापूस बोंड अळी जैविक नियंत्रण?",
+    "expected_crop": "Cotton",
+    "expected_intent": "disease",
+    "expected_keywords": ["कापूस", "नियंत्रण"],
+    "location": "Nagpur"
+  },
+  {
+    "id": "q030",
+    "query": "माती परीक्षण प्रयोगशाळा नोंदणी?",
+    "expected_crop": "Generic",
+    "expected_intent": "scheme",
+    "expected_keywords": ["माती", "योजना"],
+    "location": "Pune"
+  }
+]
