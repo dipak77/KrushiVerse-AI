@@ -214,14 +214,29 @@ def template_synthesize(
             parts.append(f"**स्रोत:** {doc_title}")
             body = "\n".join(parts)
         elif intent_type == "fertilizer":
+            from app.knowledge.reasoning_engine import agri_reasoning_engine
+            dosage_res = agri_reasoning_engine.calculate_fertilizer_dosage(query)
+            acres = dosage_res.acres
+
             weather_line = f"{temp}°C, आर्द्रता {hum}%, पाऊस {rain}mm — पाऊस थांबल्यावर २ दिवसांनी खत द्या, ठिबक सिंचनाचा वापर करा."
             parts = [f"### 🌱 **{crop_mr} - {topic_title}{loc_str}**\n"]
             parts.append(f"**मार्गदर्शन संदर्भ:** {doc_title}\n")
-            parts.append(
-                f"**१. खत वेळापत्रक व बहार मात्रा (Bahar Schedule):**\n"
-                f"• मुख्य बहार मात्रा: शेणखत २०-२५ किलो/झाड + युरिया ५०० ग्रॅम + SSP १ किलो + MOP ५०० ग्रॅम प्रति झाड/एकर द्या.\n"
-                f"• फवारणी खते: १९:१९:१९ ५ ग्रॅम/लिटर (१० लिटर पाण्यात ५० ग्रॅम) व फळधारणेच्या वेळी १३:००:४५ १० ग्रॅम/लिटर फवारा.\n"
-            )
+            
+            if acres > 1.0 or "एकर" in query.lower() or "acre" in query.lower():
+                parts.append(
+                    f"**१. खत वेळापत्रक व गणितीय डोस मात्रा ({acres} एकर):**\n"
+                    f"• युरिया (Urea): {dosage_res.urea_kg} किलो\n"
+                    f"• सिंगल सुपर फॉस्फेट (SSP): {dosage_res.ssp_kg} किलो\n"
+                    f"• म्युरिएट ऑफ पोटॅश (MOP): {dosage_res.mop_kg} किलो\n"
+                    f"• सेंद्रिय शेणखत (FYM): {dosage_res.fym_tonnes} टन\n"
+                )
+            else:
+                parts.append(
+                    f"**१. खत वेळापत्रक व बहार मात्रा (Bahar Schedule):**\n"
+                    f"• मुख्य बहार मात्रा: शेणखत २०-२५ किलो/झाड + युरिया ५०० ग्रॅम + SSP १ किलो + MOP ५०० ग्रॅम प्रति झाड/एकर द्या.\n"
+                    f"• फवारणी खते: १९:१९:१९ ५ ग्रॅम/लिटर (१० लिटर पाण्यात ५० ग्रॅम) व फळधारणेच्या वेळी १३:००:४५ १० ग्रॅम/लिटर फवारा.\n"
+                )
+
             parts.append(
                 f"**२. रासायनिक व सेंद्रिय अन्नद्रव्ये व्यवस्थापन:**\n"
                 f"• सूक्ष्म अन्नद्रव्ये: झिंक, बोरॉन व फेरस सल्फेट प्रति एकर ५ किलो ठिबकने द्या. PSB व KMB जिवाणू खते शेणखतात मिसळून द्या.\n"
