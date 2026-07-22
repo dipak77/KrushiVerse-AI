@@ -167,6 +167,10 @@ def template_synthesize(
             elif primary_cites:
                 doc_title = primary_cites[0].get("title") or "रोग नियंत्रण"
                 diag_text = f"{doc_title}"
+                doc_content = primary_cites[0].get("content") or ""
+                formatted_treatment = doc_content[:150] if doc_content else "बाधित भाग काढून नष्ट करा, बुरशीनाशक किंवा कीटकनाशकाची योग्य प्रमाणात फवारणी करा."
+        if not formatted_treatment:
+            formatted_treatment = "कॉपर ऑक्सिक्लोराईड २.५ ग्रॅम/लिटर किंवा मँकोझेब २ ग्रॅम/लिटर (१० लिटर पाण्यात २५ ग्रॅम) सकाळी फवारा."
     elif intent_type == "irrigation":
         topic_title = "ठिबक सिंचन वेळापत्रक"
     elif intent_type == "fertilizer":
@@ -317,3 +321,91 @@ def template_synthesize(
         "reason": reason,
         "citations": primary_cites,
     }
+
+
+if __name__ == "__main__":
+    import argparse
+    import json
+    import sys
+    import io
+
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+    parser = argparse.ArgumentParser(description="Test Fallback Template Synthesizer with JSON test cases")
+    parser.add_argument("--test-cases", type=str, required=True, help="Path to test cases JSON file")
+    args = parser.parse_args()
+
+    with open(args.test_cases, "r", encoding="utf-8") as f:
+        cases = json.load(f)
+
+    from app.agents.planner import planner_agent
+    from mini.taxonomy.aliases import resolve_crops_smart
+
+    print(f"\n=======================================================")
+    print(f"  RUNNING {len(cases)} TEST CASES FROM {args.test_cases}")
+    print(f"=======================================================\n")
+
+    passed_count = 0
+    failed_count = 0
+
+    for idx, c in enumerate(cases, 1):
+        q = c["query"]
+        exp_crop = c.get("expected_crop")
+        exp_intent = c.get("expected_intent")
+        exp_contains = c.get("expected_contains", [])
+        exp_not = c.get("expected_not", [])
+
+        # 1. Stem / Smart alias check
+        res_crops = resolve_crops_smart(q)
+        actual_crop = res_crops[0] if res_crops else None
+
+        # 2. Plan and execute
+        res = planner_agent.plan_and_execute(
+            query=q,
+            farm_id="FARM_101",
+            language="mr" if any("\u0900" <= char <= "\u097f" for char in q) else "en",
+            enable_web=False,
+            use_local_llm=True,
+        )
+
+        ans = res.get("synthesized_answer", "")
+        cites = res.get("knowledge_layer", {}).get("citations", [])
+
+        # Validations
+        errors = []
+        if exp_crop and actual_crop != exp_crop and res.get("crop") != exp_crop:
+            errors.append(f"Crop Mismatch: expected '{exp_crop}', got resolved='{actual_crop}', planner='{res.get('crop')}'")
+
+        if any("checklist" in (cite.get("title") or "").lower() for cite in cites):
+            errors.append("Checklist Leakage: Citation titles contain 'checklist'")
+
+        if len(cites) > 4: # local_hybrid citations block
+            pass
+
+        for text_sub in exp_contains:
+            if text_sub not in ans:
+                errors.append(f"Missing expected substring: '{text_sub}'")
+
+        for not_sub in exp_not:
+            if not_sub in ans:
+                errors.append(f"Found forbidden substring: '{not_sub}'")
+
+        status_str = "✅ PASSED" if not errors else "❌ FAILED"
+        if not errors:
+            passed_count += 1
+        else:
+            failed_count += 1
+
+        print(f"Case {idx:02d}: {status_str} | Query: '{q}'")
+        print(f"         Resolved Crop: {actual_crop} (Expected: {exp_crop})")
+        if errors:
+            for err in errors:
+                print(f"         ⚠️ {err}")
+        print("-" * 65)
+
+    print(f"\n=======================================================")
+    print(f"  RESULTS SUMMARY: {passed_count}/{len(cases)} PASSED ({failed_count} FAILED)")
+    print(f"=======================================================\n")
+    if failed_count > 0:
+        sys.exit(1)
+

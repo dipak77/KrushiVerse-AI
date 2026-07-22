@@ -72,7 +72,7 @@ class AdvancedRAG:
         )
 
         context_blocks = self._build_context_blocks(fused)
-        citations = self._citations(fused, web_hits, tool_pack)
+        citations = self._citations(fused, web_hits, tool_pack, query=query)
 
         return {
             "query": query,
@@ -334,9 +334,36 @@ class AdvancedRAG:
             )
         return blocks
 
-    def _citations(self, fused: list[dict], web_hits: list[dict], tool_pack: dict) -> list[dict]:
+    def _citations(self, fused: list[dict], web_hits: list[dict], tool_pack: dict, query: str = "") -> list[dict]:
+        from mini.taxonomy.aliases import resolve_crops_smart
+
+        query_crops = resolve_crops_smart(query) if query else []
+        query_crop_canon = query_crops[0] if query_crops else None
+
         cites = []
+        seen = set()
+
         for d in fused:
+            title = (d.get("title") or "").lower()
+            d_id = (d.get("id") or "").lower()
+            d_crop = (d.get("crop") or "").lower()
+
+            # Skip all stage checklists & GraphRAG node headers unconditionally
+            if "checklist" in title or "checklist" in d_id or title.startswith("graphrag:"):
+                continue
+
+            # Smart crop match verification
+            if query_crop_canon:
+                doc_text = f"{title} {d_crop}"
+                doc_crops = resolve_crops_smart(doc_text)
+                if doc_crops and query_crop_canon not in doc_crops:
+                    continue
+
+            key = title[:40]
+            if key in seen:
+                continue
+            seen.add(key)
+
             cites.append({
                 "title": d.get("title"),
                 "origin": d.get("origin"),
@@ -344,7 +371,16 @@ class AdvancedRAG:
                 "url": d.get("url") or (d.get("metadata") or {}).get("url") or (d.get("metadata") or {}).get("portal"),
                 "score": d.get("fusion_score"),
             })
-        return cites
+            if len(cites) >= 2:
+                break
+
+        return cites[:2] if cites else [{
+            "title": d.get("title"),
+            "origin": d.get("origin"),
+            "source": d.get("source"),
+            "url": d.get("url") or (d.get("metadata") or {}).get("url"),
+            "score": d.get("fusion_score"),
+        } for d in fused if "checklist" not in (d.get("title") or "").lower()][:1]
 
 
 advanced_rag = AdvancedRAG()

@@ -106,23 +106,20 @@ def resolve_crops_smart(text: str) -> list[str]:
 
     # 1. Multi-word phrase match with word boundaries (handles English + Marathi)
     for phrase in PHRASES_SORTED:
-        # Use simple containment with spaces to avoid \b issues for Devanagari
         if f" {phrase} " in t_low or t_low.startswith(phrase+" ") or t_low.endswith(" "+phrase) or phrase == t_low.strip():
             canon = BASE_LOOKUP[phrase]
             if canon not in seen:
                 seen.add(canon)
                 found.append(canon)
-        # Also try stemmed phrase: "तूर डाळीला" -> "तूर डाळ"
-        else:
-            # stem each word in phrase query?
-            pass
+
+    if found:
+        return found
 
     # 2. N-gram sliding window over tokens for inflected multi-word: "नागपूर संत्र्याला"
     tokens = tokenize(text)
-    # Pre-stem all tokens
     stemmed_tokens = [stem_mr_token(t) for t in tokens]
 
-    for n in range(min(MAX_PHRASE_WORDS, len(tokens)), 0, -1):
+    for n in range(min(MAX_PHRASE_WORDS, len(tokens)), 1, -1):
         for i in range(len(tokens) - n + 1):
             orig_ngram = " ".join(tokens[i:i+n])
             stem_ngram = " ".join(stemmed_tokens[i:i+n])
@@ -134,6 +131,9 @@ def resolve_crops_smart(text: str) -> list[str]:
                         seen.add(canon)
                         found.append(canon)
                     break
+
+    if found:
+        return found
 
     # 3. Single token + split postposition logic (सोयाबीनला)
     for tok, stem_tok in zip(tokens, stemmed_tokens):

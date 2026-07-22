@@ -1,0 +1,71 @@
+[
+  {
+    "query": "उन्हाळ्यात कापसाला ठिबक किती तास?",
+    "expected_crop": "Cotton",
+    "expected_intent": "irrigation",
+    "expected_not": ["Pomegranate", "checklist", "रोग व कीड"],
+    "expected_contains": ["कापूस - ठिबक", "२-३ तास आड दिवशी", "पाऊस १२ मिमी असल्यामुळे पुढील २ दिवस ठिबक बंद"]
+  },
+  {
+    "query": "सोयाबीनला खत कोणते द्यावे?",
+    "expected_crop": "Soybean",
+    "expected_intent": "fertilizer",
+    "expected_contains": ["सोयाबीन", "खत"]
+  },
+  {
+    "query": "वांगी शेंडा व फळ पोखरणारी अळी?",
+    "expected_crop": "Brinjal",
+    "expected_intent": "disease",
+    "expected_not": ["डाळिंब", "Pomegranate Fruit Rot"],
+    "expected_contains": ["वांगी", "शेंडा"]
+  },
+  {
+    "query": "केळी सिगाटोका रोग?",
+    "expected_crop": "Banana",
+    "expected_intent": "disease",
+    "expected_contains": ["केळी", "सिगाटोका", "रासायनिक व सेंद्रिय नियंत्रण"],
+    "expected_not": ["१. ... ३. (missing २)"]
+  },
+  {
+    "query": "द्राक्षावरील भुरी रोग उपाय?",
+    "expected_crop": "Grapes",
+    "expected_contains": ["द्राक्ष", "भुरी"]
+  },
+  {
+    "query": "pigeon pea price in Latur?",
+    "expected_crop": "Tur",
+    "expected_intent": "market",
+    "expected_multiword": "pigeon pea -> Tur"
+  },
+  {
+    "query": "nagpur santra market rate?",
+    "expected_crop": "Orange",
+    "expected_multiword": "nagpur santra -> Orange"
+  },
+  {
+    "query": "तूर डाळीला किती पाणी?",
+    "expected_crop": "Tur",
+    "expected_contains": ["तूर"],
+    "test_stem": "तूर डाळीला -> तूर डाळ -> Tur"
+  },
+  {
+    "query": "डाळिंबाला खत मात्रा?",
+    "expected_crop": "Pomegranate",
+    "expected_stem": "डाळिंबाला -> डाळिंब"
+  },
+  {
+    "query": "कापसावरील बोंड अळी नियंत्रण?",
+    "expected_crop": "Cotton",
+    "expected_stem": "कापसावरील -> कापूस"
+  },
+  {
+    "query": "वांग्यावरील शेंडा अळी?",
+    "expected_crop": "Brinjal",
+    "expected_stem": "वांग्यावरील -> वांगी"
+  },
+  {
+    "query": "सोयाबीनसाठी ठिबक किती?",
+    "expected_crop": "Soybean",
+    "expected_stem": "सोयाबीनसाठी -> सोयाबीन"
+  }
+]
