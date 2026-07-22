@@ -1,0 +1,112 @@
+{
+  "version": "2.0.0",
+  "name": "KrushiVerse-AI Truth Sources Whitelist",
+  "last_updated": "2026-07-22",
+  "whitelist_domains": [
+    {
+      "category": "Grapes",
+      "name": "ICAR-NRCG Pune",
+      "url": "https://nrcgrapes.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Powdery Mildew", "Downy Mildew", "Anthracnose", "Bacterial Spot"]
+    },
+    {
+      "category": "Pomegranate",
+      "name": "ICAR-NRCP Solapur",
+      "url": "https://nrcp.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Bacterial Blight", "Wilt", "Anthracnose", "Fruit Rot"]
+    },
+    {
+      "category": "Vegetables",
+      "name": "ICAR-IIVR Varanasi",
+      "url": "https://iivr.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Chilli Leaf Curl", "Tomato Blight", "Brinjal Borer", "Vegetable IPM"]
+    },
+    {
+      "category": "Horticulture",
+      "name": "ICAR-IIHR Bangalore",
+      "url": "https://iihr.res.in",
+      "truth_level": 1,
+      "trusted_topics": ["Mango Anthracnose", "Banana Sigatoka", "Papaya Ring Spot"]
+    },
+    {
+      "category": "Mustard",
+      "name": "ICAR-DRMR Bharatpur",
+      "url": "https://drmr.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Mustard Aphid", "Alternaria Blight", "White Rust"]
+    },
+    {
+      "category": "Groundnut",
+      "name": "ICAR-DGR Junagadh",
+      "url": "https://dgr.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Tikka Leaf Spot", "Groundnut Rust", "Stem Rot"]
+    },
+    {
+      "category": "Pulses",
+      "name": "ICAR-IIPR Kanpur",
+      "url": "https://iipr.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Tur Pod Borer", "Wilt", "Chickpea Dry Root Rot"]
+    },
+    {
+      "category": "Cotton",
+      "name": "ICAR-CICR Nagpur",
+      "url": "https://cicr.org.in",
+      "truth_level": 1,
+      "trusted_topics": ["Pink Bollworm", "Whitefly", "Leaf Curl Virus"]
+    },
+    {
+      "category": "Soybean",
+      "name": "ICAR-IISR Indore",
+      "url": "https://iisr.icar.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Yellow Mosaic", "Soybean Rust", "Girdle Beetle"]
+    },
+    {
+      "category": "State Agricultural Universities",
+      "name": "MPKV Rahuri / VNMKV / PDKV / BSKKV",
+      "url": "https://mpkv.ac.in",
+      "truth_level": 1,
+      "trusted_topics": ["Kharif Package", "Rabi Package", "Horticulture Package"]
+    },
+    {
+      "category": "Government Open Data",
+      "name": "Agmarknet / data.gov.in",
+      "url": "https://api.data.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["APMC Mandi Prices", "Soil Health", "Weather"]
+    },
+    {
+      "category": "Weather",
+      "name": "IMD Pune",
+      "url": "https://mausam.imd.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Agro-met Advisories", "Rainfall", "Temperature"]
+    },
+    {
+      "category": "Government Schemes",
+      "name": "Ministry of Agriculture & Farmers Welfare",
+      "url": "https://agriwelfare.gov.in",
+      "truth_level": 1,
+      "trusted_topics": ["Magel Tyala Shettale", "MIDH", "PM-Kisan", "PMFBY"]
+    },
+    {
+      "category": "Research Papers",
+      "name": "Krishikosh ICAR Repository",
+      "url": "https://krishikosh.egranth.ac.in",
+      "truth_level": 2,
+      "trusted_topics": ["ICAR Theses", "Package of Practices", "Open Access Papers"]
+    }
+  ],
+  "blacklist_patterns": [
+    "random_blogs",
+    "youtube",
+    "quora",
+    "unverified_pdf",
+    "private_sales_site"
+  ]
+}

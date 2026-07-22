@@ -1,0 +1,23 @@
+{
+  "status": "COMPLETED",
+  "worker": "SuperQualityWorker",
+  "coverage_pct": 100.0,
+  "category_counts": {
+    "Advisory": 153,
+    "Disease": 91,
+    "Market": 22,
+    "Crop": 22,
+    "Soil": 6,
+    "Fertilizer": 0,
+    "Scheme": 15,
+    "Seed Variety": 12,
+    "Irrigation": 8,
+    "Climate Zone": 6
+  },
+  "knowledge_graph": {
+    "nodes": 72,
+    "edges": 55
+  },
+  "dedup_threshold": 0.92,
+  "verified_tests": "PASSED (10/10)"
+}

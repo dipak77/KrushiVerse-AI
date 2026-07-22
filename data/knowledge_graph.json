@@ -393,6 +393,22 @@
       "id": "Frost Risk",
       "label": "WeatherCondition",
       "properties": {}
+    },
+    {
+      "id": "node_grapes_powdery_mildew",
+      "label": "Disease",
+      "properties": {
+        "name_en": "Grapes Powdery Mildew",
+        "name_mr": "द्राक्षावरील भुरी रोग"
+      }
+    },
+    {
+      "id": "node_chilli_leaf_curl",
+      "label": "Disease",
+      "properties": {
+        "name_en": "Chilli Leaf Curl Virus",
+        "name_mr": "मिरची पान आकुंचन विषाणू रोग"
+      }
     }
   ],
   "edges": [

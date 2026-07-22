@@ -299,6 +299,30 @@
       "date": "2026-07-18",
       "trend": "MSP-linked",
       "source": "Agmarknet-style open market snapshot"
+    },
+    {
+      "id": "mkt_pune_pomegranate_live",
+      "market_name": "Pune APMC Market",
+      "crop_en": "Pomegranate",
+      "crop_mr": "डाळिंब",
+      "variety": "Bhagwa",
+      "min_price": 8500,
+      "max_price": 14500,
+      "modal_price": 11500,
+      "unit": "Rs/Quintal",
+      "source": "https://api.data.gov.in / Agmarknet Live Feed"
+    },
+    {
+      "id": "mkt_nashik_grapes_live",
+      "market_name": "Nashik APMC Market",
+      "crop_en": "Grapes",
+      "crop_mr": "द्राक्ष",
+      "variety": "Thomson Seedless",
+      "min_price": 4500,
+      "max_price": 8200,
+      "modal_price": 6500,
+      "unit": "Rs/Quintal",
+      "source": "https://api.data.gov.in / Agmarknet Live Feed"
     }
   ],
   "meta": {

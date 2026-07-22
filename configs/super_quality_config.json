@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "name": "KrushiVerse-AI Super Quality Config",
+  "dedup_threshold": 0.92,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "embedding_dim": 384,
+  "qdrant_collection": "krushiverse_agri_kb",
+  "min_rag_score_threshold": 0.05,
+  "max_citations_per_query": 2,
+  "block_size_limit": 512,
+  "target_categories": {
+    "Crop": 75,
+    "Disease": 100,
+    "Soil": 15,
+    "Fertilizer": 30,
+    "Scheme": 25,
+    "Market": 50,
+    "Advisory": 150,
+    "Seed Variety": 30,
+    "Irrigation": 20,
+    "Climate Zone": 15
+  },
+  "graph_targets": {
+    "nodes": 300,
+    "edges": 500
+  }
+}

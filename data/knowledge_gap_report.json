@@ -1,0 +1,281 @@
+{
+  "total_crops": 22,
+  "total_existing_disease_records": 91,
+  "total_advisories": 153,
+  "checklist_count": 50,
+  "disease_advisories_count": 75,
+  "crop_coverage": {
+    "Grapes": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Grape Downy Mildew",
+        "Grapes Powdery Mildew (Bhuri)",
+        "Grapes Downy Mildew (Kewda)",
+        "Grapes Anthracnose (Black Spot / Karpa)",
+        "Grapes Bacterial Leaf Spot"
+      ]
+    },
+    "Pomegranate": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Bacterial Blight (Telyat)",
+        "Pomegranate Wilt (Mar)",
+        "Pomegranate Fruit Rot / Anthracnose"
+      ]
+    },
+    "Chilli": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Chilli Leaf Curl Virus (Murda / Bokadya)",
+        "Chilli Thrips",
+        "Chilli Thrips (Fulside)",
+        "Chilli Powdery Mildew",
+        "Chilli Anthracnose (Fal Sad)",
+        "Chilli Anthracnose (फळ सड)"
+      ]
+    },
+    "Cotton": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Pink Bollworm",
+        "Cotton Whitefly & Leaf Curl Virus",
+        "Cotton Spotted Bollworm"
+      ]
+    },
+    "Tomato": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Tomato Leaf Curl Virus",
+        "Tomato Late Blight (Ushira Karpa)",
+        "Tomato Leaf Curl Virus (ToLCV)",
+        "Tomato Early Blight (Lavkar Karpa)",
+        "Tomato Bacterial Wilt (Jivanujanya Mar)",
+        "Tomato Early Blight (लवकर करपा)",
+        "Tomato Bacterial Wilt"
+      ]
+    },
+    "Soybean": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Yellow Mosaic Virus",
+        "Soybean Rust (Tambera)",
+        "Soybean Girdle Beetle (Chakri Bhunga)",
+        "Soybean Tobacco Caterpillar (Spodoptera)",
+        "Soybean Tobacco Caterpillar"
+      ]
+    },
+    "Mustard": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Mustard Aphid",
+        "Mustard Alternaria Blight",
+        "Mustard White Rust",
+        "Mustard White Rust (पांढरा तांबेरा)"
+      ]
+    },
+    "Banana": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Banana Sigatoka",
+        "Banana Bunchy Top Virus",
+        "Banana Sigatoka Leaf Spot",
+        "Banana Panama Wilt",
+        "Banana Sigatoka Leaf Spot (सिगाटोका)",
+        "Banana Panama Wilt (पनामा मर)"
+      ]
+    },
+    "Groundnut": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Groundnut Leaf Spot (Tikra)",
+        "Groundnut Stem Rot (Khod Kuj)",
+        "Groundnut Tikka Leaf Spot",
+        "Groundnut Rust",
+        "Groundnut Tikka Leaf Spot (टिका)",
+        "Groundnut Rust (तांबेरा)"
+      ]
+    },
+    "Pigeonpea (Tur)": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Tur Wilt (Mar)",
+        "Tur Sterility Mosaic Virus",
+        "Pigeonpea Pod Borer (घाटे अळी)",
+        "Tur Sterility Mosaic Virus (वांझपणा)"
+      ]
+    },
+    "Onion": {
+      "required": 4,
+      "found_count": 4,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Purple Blotch",
+        "Onion Downy Mildew",
+        "Onion Stemphylium Blight",
+        "Onion Thrips (Fulside)",
+        "Onion Thrips (फुलकिडे)"
+      ]
+    },
+    "Wheat": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Wheat Rust",
+        "Wheat Rust (Tambera)",
+        "Wheat Loose Smut (Kajali)",
+        "Wheat Karnal Bunt"
+      ]
+    },
+    "Rice": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Rice Blast",
+        "Rice Bacterial Leaf Blight (BLB)",
+        "Rice Brown Plant Hopper (BPH)",
+        "Rice Brown Plant Hopper (तुडतुडे)"
+      ]
+    },
+    "Maize": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Fall Armyworm",
+        "Maize Maydis Leaf Blight",
+        "Maize Downy Mildew"
+      ]
+    },
+    "Chickpea": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Chickpea Wilt (Mar)",
+        "Chickpea Pod Borer (घाटे अळी)",
+        "Chickpea Dry Root Rot"
+      ]
+    },
+    "Sugarcane": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Sugarcane Red Rot",
+        "Sugarcane Red Rot (Tambora)",
+        "Sugarcane Smut (Chabuk Kani)",
+        "Sugarcane Grassy Shoot Disease"
+      ]
+    },
+    "Turmeric": {
+      "required": 2,
+      "found_count": 2,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Turmeric Rhizome Rot",
+        "Turmeric Leaf Blotch"
+      ]
+    },
+    "Mango": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Mango Hopper",
+        "Mango Powdery Mildew (Bhuri)",
+        "Mango Anthracnose (Karpa)"
+      ]
+    },
+    "Papaya": {
+      "required": 2,
+      "found_count": 2,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Papaya Ring Spot Virus (PRSV)",
+        "Papaya Foot Rot (Khod Kuj)"
+      ]
+    },
+    "Potato": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Potato Late Blight",
+        "Potato Early Blight (Lavkar Karpa)",
+        "Potato Black Scurf"
+      ]
+    },
+    "Citrus": {
+      "required": 3,
+      "found_count": 3,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Citrus Canker (Kanker)",
+        "Citrus Dieback (Diaback)",
+        "Citrus Greening"
+      ]
+    },
+    "Ginger": {
+      "required": 2,
+      "found_count": 2,
+      "missing_count": 0,
+      "coverage_pct": 100.0,
+      "found": [
+        "Ginger Soft Rot / Rhizome Rot",
+        "Ginger Leaf Spot",
+        "Ginger Rhizome Rot / Soft Rot (मऊ कुज)"
+      ]
+    }
+  },
+  "missing_diseases": {},
+  "summary": {
+    "overall_disease_coverage_pct": 100.0,
+    "fully_covered_crops": 22,
+    "total_crops_audited": 22,
+    "total_required_diseases": 70,
+    "total_found_diseases": 70
+  }
+}
