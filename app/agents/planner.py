@@ -41,12 +41,13 @@ class PlannerAgent:
         farm = farm_memory_store.get_farm(farm_id) or farm_memory_store.get_farm("FARM_101")
 
         farm_crop = farm["current_crop"].get("crop_name", "Pomegranate")
-        district = farm["location"].get("district", "Pune")
+        farm_district = farm["location"].get("district", "Pune")
         soil_profile = farm.get("soil_profile", {})
 
         qplan = query_understanding.understand(query, default_crop=farm_crop)
-        # Prefer crop mentioned in the farmer query over farm memory default
+        # Prefer crop and location mentioned in query over farm defaults
         crop_name = qplan.crops[0] if qplan.crops else farm_crop
+        district = getattr(qplan, "location", None) or farm_district
 
         agent_context = {
             "query": query,
@@ -162,12 +163,7 @@ class PlannerAgent:
             "knowledge_stats": rag.get("knowledge_stats"),
         }
 
-        plan_summary = (
-            f"Processed farmer query '{query}' for {crop_name} in {district}. "
-            f"Coordinated {len(active_agents)} specialized sub-agents with Advanced Multi-Source RAG "
-            f"(local hybrid + GraphRAG + {len(rag.get('tools_used') or [])} tools"
-            f"{' + web' if use_web else ''})."
-        )
+        plan_summary = f"{crop_name} कृषी सल्ला व व्यवस्थापन मार्गदर्शन ({district})"
         # Local KrushiVerse-AI synthesizer (v2-12M-fixed) when requested or as failover
         final_answer = response_synthesizer.synthesize(
             plan_summary,
@@ -203,6 +199,7 @@ class PlannerAgent:
             "farm_id": farm["farm_id"],
             "farmer_name": farm["farmer_name"],
             "crop": crop_name,
+            "location": district,
             "language": language,
             "active_agent_names": [ag.name for ag in active_agents],
             "knowledge_layer": {

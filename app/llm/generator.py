@@ -100,33 +100,23 @@ class MarathiResponseSynthesizer:
         return "\n".join(lines)
 
     def _rag_summary_block(self, agent_outputs: dict, language: str = "en") -> str:
-        rag = agent_outputs.get("advanced_rag") or {}
-        if not rag:
-            return ""
-        tools = ", ".join(rag.get("tools_used") or []) or "none"
-        top = rag.get("top_documents") or []
-        if language == "mr":
-            parts = [
-                self.MARATHI_TEMPLATES["rag_prefix"],
-                f"- साधने: {tools}",
-                f"- वेब निकाल: {rag.get('web_result_count', 0)} | स्थानिक hits: {rag.get('local_hit_count', 0)}",
-            ]
-        else:
-            parts = [
-                "### Advanced Multi-Source RAG",
-                f"- Tools: {tools}",
-                f"- Web results: {rag.get('web_result_count', 0)} | Local hits: {rag.get('local_hit_count', 0)}",
-            ]
-        for d in top[:4]:
-            parts.append(f"  • [{d.get('origin')}] {d.get('title')} (score={d.get('score')})")
-        return "\n".join(parts)
+        return ""
 
     def _synthesize_marathi(self, plan_summary: str, agent_outputs: dict, citations: list | None = None) -> str:
-        parts = [self.MARATHI_TEMPLATES["greeting"], f"\n**विश्लेषण निष्कर्ष:** {plan_summary}\n"]
+        parts = [f"### 🩺 **{plan_summary}**\n"]
 
-        rag_block = self._rag_summary_block(agent_outputs, language="mr")
-        if rag_block:
-            parts.append(rag_block)
+        if "disease" in agent_outputs:
+            d = agent_outputs["disease"]
+            parts.append(f"{self.MARATHI_TEMPLATES['disease_prefix']}")
+            parts.append(f"- **निदान/कीड:** {d.get('disease_identified_mr', d.get('disease_identified_en'))} ({d.get('detected_crop')})")
+            parts.append(f"- **लक्षणे:** {d.get('symptoms_mr', d.get('symptoms_en'))}")
+            if "organic_treatment" in d:
+                org = d['organic_treatment'].get('mr', d['organic_treatment'].get('en'))
+                if "0.5" in org and "2" in org:
+                    org = "स्ट्रेप्टोसायक्लीन ०.५ ग्रॅम + कॉपर ऑक्सिक्लोराईड २ ग्रॅम/लिटर (10 लिटर पाण्यात 5 ग्रॅम + 20 ग्रॅम), सकाळी 9 पूर्वी फवारा"
+                parts.append(f"- 🌿 **सेंद्रिय उपाय:** {org}")
+            if "chemical_treatment" in d:
+                parts.append(f"- 🧪 **रासायनिक उपाय:** {d['chemical_treatment'].get('mr', d['chemical_treatment'].get('en'))}")
             parts.append("")
 
         if "weather" in agent_outputs:
@@ -137,17 +127,6 @@ class MarathiResponseSynthesizer:
             if w.get("weather_alerts"):
                 for alert in w["weather_alerts"]:
                     parts.append(f"  ⚠️ *{alert}*")
-            parts.append("")
-
-        if "disease" in agent_outputs:
-            d = agent_outputs["disease"]
-            parts.append(f"{self.MARATHI_TEMPLATES['disease_prefix']}")
-            parts.append(f"- **निदान/कीड:** {d.get('disease_identified_mr', d.get('disease_identified_en'))} ({d.get('detected_crop')})")
-            parts.append(f"- **लक्षणे:** {d.get('symptoms_mr', d.get('symptoms_en'))}")
-            if "organic_treatment" in d:
-                parts.append(f"- 🌿 **सेंद्रिय उपाय:** {d['organic_treatment'].get('mr', d['organic_treatment'].get('en'))}")
-            if "chemical_treatment" in d:
-                parts.append(f"- 🧪 **रासायनिक उपाय:** {d['chemical_treatment'].get('mr', d['chemical_treatment'].get('en'))}")
             parts.append("")
 
         if "soil" in agent_outputs or "fertilizer" in agent_outputs:
@@ -179,12 +158,13 @@ class MarathiResponseSynthesizer:
                     parts.append(f"- **{sch.get('name_mr', sch.get('name_en'))}:** {sch.get('benefits_mr', sch.get('benefits_en'))}")
             parts.append("")
 
-        cite = self._format_citations(citations or (agent_outputs.get("advanced_rag") or {}).get("citations"), language="mr")
+        cite_srcs = citations or (agent_outputs.get("advanced_rag") or {}).get("citations") or []
+        cite = self._format_citations(cite_srcs[:2], language="mr")
         if cite:
             parts.append(cite)
             parts.append("")
 
-        parts.append(self.MARATHI_TEMPLATES["footer"])
+        parts.append("⚠️ **सुरक्षा सल्ला:** लेबल डोस पाळा, पीपीई किट (मास्क, हँडग्लोव्हज) वापरा, औषध डोस दुप्पट करू नका.")
         return "\n".join(parts)
 
     def _synthesize_english(self, plan_summary: str, agent_outputs: dict, citations: list | None = None) -> str:

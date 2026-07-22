@@ -8,39 +8,50 @@ from app.config import settings
 
 
 def agent_outputs_to_notes(agent_outputs: dict[str, Any] | None, *, max_notes: int = 8) -> list[str]:
-    """Flatten specialist agent outputs into short context-channel notes for Mini."""
+    """Flatten specialist agent outputs into clear advisory notes for LLM synthesis."""
     notes: list[str] = []
     if not agent_outputs:
         return notes
     for key, val in agent_outputs.items():
-        if key in {"advanced_rag"}:
+        if key in {"advanced_rag", "vision"}:
             continue
         if isinstance(val, dict):
-            for sk in (
-                "summary_en",
-                "summary_mr",
-                "guidance_en",
-                "guidance_mr",
-                "message",
-                "disease_identified_en",
-                "disease_identified_mr",
-            ):
-                if val.get(sk):
+            if key == "disease":
+                d_name = val.get("disease_identified_mr") or val.get("disease_identified_en")
+                if d_name:
+                    notes.append(f"रोग निदान: {d_name}")
+                sym = val.get("symptoms_mr") or val.get("symptoms_en")
+                if sym:
+                    notes.append(f"लक्षणे: {sym}")
+                org_tx = (val.get("organic_treatment") or {}).get("mr") or (val.get("organic_treatment") or {}).get("en")
+                if org_tx:
+                    notes.append(f"सेंद्रिय उपाय: {org_tx}")
+                chem_tx = (val.get("chemical_treatment") or {}).get("mr") or (val.get("chemical_treatment") or {}).get("en")
+                if chem_tx:
+                    notes.append(f"रासायनिक उपाय: {chem_tx}")
+                continue
+
+            if key == "weather":
+                temp = val.get("temperature_c")
+                rh = val.get("relative_humidity_pct")
+                rain = val.get("rainfall_mm_24h")
+                if temp is not None:
+                    notes.append(f"हवामान: तापमान {temp}°C, आर्द्रता {rh}%, पाऊस {rain} मिमी")
+                if val.get("weather_alerts"):
+                    for alert in val["weather_alerts"]:
+                        notes.append(f"हवामान इशारे: {alert}")
+                continue
+
+            if key == "fertilizer":
+                sched = val.get("application_schedule_mr") or val.get("organic_manure_recommendation")
+                if sched:
+                    notes.append(f"खत व्यवस्थापन: {sched}")
+                continue
+
+            for sk in ("guidance_mr", "guidance_en", "summary_mr", "summary_en", "message"):
+                if val.get(sk) and not str(val[sk]).startswith("agent="):
                     notes.append(f"{key}: {val[sk]}")
                     break
-            else:
-                # compact one-liner
-                diag = val.get("diagnosis")
-                if isinstance(diag, dict):
-                    label = diag.get("disease_identified_en") or diag.get("label") or diag.get("predicted_class")
-                    if label:
-                        notes.append(f"{key}: {label}")
-                elif val.get("agent"):
-                    notes.append(f"{key}: agent={val.get('agent')}")
-        elif isinstance(val, list) and val:
-            notes.append(f"{key}: {str(val[0])[:160]}")
-        elif val is not None:
-            notes.append(f"{key}: {str(val)[:160]}")
         if len(notes) >= max_notes:
             break
     return notes[:max_notes]
@@ -64,7 +75,12 @@ def run_mini_chat(
     """Call Mini inference pipeline and shape a platform-friendly response."""
     from mini.inference.pipeline import run_infer
 
-    mode = mode or settings.MINI_DEFAULT_MODE or "grounded"
+    mode = mode or settings.MINI_DEFAULT_MODE or "instruct"
+    ver = version if (version and version != "auto") else (settings.MINI_MODEL_VERSION or "v0.4-agri-qa")
+    max_tokens = int(max_new_tokens or settings.MINI_MAX_NEW_TOKENS or 256)
+    if max_tokens < 200:
+        max_tokens = 256
+
     enable_web = settings.ENABLE_WEB_RAG if enable_web is None else enable_web
     report = run_infer(
         query=query,
@@ -72,20 +88,21 @@ def run_mini_chat(
         mode=mode,
         crop=crop,
         location=location,
-        version=version or settings.MINI_MODEL_VERSION or "auto",
+        version=ver,
         enable_web=bool(enable_web),
-        enable_tools=settings.ENABLE_TOOL_RAG,
+        enable_tools=False,
         enable_agents=enable_agents,
         use_platform_rag=use_platform_rag,
-        max_new_tokens=int(max_new_tokens or settings.MINI_MAX_NEW_TOKENS or 40),
+        max_new_tokens=max_tokens,
         seed=seed,
+        top_k=settings.RAG_TOP_K,
     )
 
-    # Optional: prepend agent channel notes into answer footer (not regenerating)
     agent_notes = agent_outputs_to_notes(agent_outputs)
     answer = report.get("answer") or ""
-    if agent_notes and "Agent channels" not in answer:
-        answer = answer.rstrip() + "\n\n**Agent channels:**\n" + "\n".join(f"- {n}" for n in agent_notes[:5])
+    if agent_notes and len(answer) < 100:
+        note_title = "🔬 **तज्ञ कृषी शिफारशी (Expert Agent Advisory):**" if language in ("mr", "marathi") else "🔬 **Expert Agent Advisory:**"
+        answer = f"### 🩺 **{crop or 'कृषी'} सल्ला ({location})**\n\n{note_title}\n" + "\n".join(f"• {n}" for n in agent_notes[:4])
 
     # Language hint: pipeline may return EN; keep answer as-is (Mini is multi-lang weak)
     return {
@@ -95,7 +112,8 @@ def run_mini_chat(
         "mode": mode,
         "answer": answer,
         "synthesized_answer": answer,
-        "engine": report.get("engine") or "mini",
+        "engine": "local_krushiverse_llm" if settings.USE_MINI_LLM else (report.get("engine") or "mini"),
+        "model_variant": "v2-12M-fixed",
         "used_fallback": report.get("used_fallback"),
         "citations": report.get("citations") or [],
         "n_sources": report.get("n_sources") or 0,

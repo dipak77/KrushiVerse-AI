@@ -17,7 +17,8 @@ class DiseaseAgent(BaseAgriAgent):
 
         diagnosis = vision_classifier.diagnose_image(
             filename=context.get("image_filename", "sample.jpg"),
-            crop_hint=crop
+            crop_hint=crop,
+            query=query
         )
 
         risk = pest_outbreak_model.calculate_outbreak_risk(crop, temp, humidity, rainfall)
