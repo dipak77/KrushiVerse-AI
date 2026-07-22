@@ -61,11 +61,18 @@ def resolve_model_dir(version: str = "auto") -> Path:
     return VERSION_DIRS["v0.4"]
 
 
+_MODEL_CACHE: dict[str, tuple[MiniLM, DomainTokenizer, MiniConfig, dict[str, Any]]] = {}
+
+
 def load_checkpoint(
     model_dir: Path,
     *,
     device: torch.device,
 ) -> tuple[MiniLM, DomainTokenizer, MiniConfig, dict[str, Any]]:
+    cache_key = f"{model_dir}_{device}"
+    if cache_key in _MODEL_CACHE:
+        return _MODEL_CACHE[cache_key]
+
     cfg_path = model_dir / "config.json"
     ckpt_path = model_dir / "pytorch_model.pt"
     tok_path = model_dir / "tokenizer.json"
@@ -88,7 +95,8 @@ def load_checkpoint(
         model.eval()
         meta["loaded"] = True
         meta["checkpoint"] = relative_to_repo(ckpt_path)
-        return model, tok, cfg, meta
+        _MODEL_CACHE[cache_key] = (model, tok, cfg, meta)
+        return _MODEL_CACHE[cache_key]
     # Fallback: random Mini (eval still produces a report; gates may fail)
     cfg = MiniConfig(vocab_size=4096)
     tok = DomainTokenizer(vocab_size=4096)
@@ -117,6 +125,8 @@ def generate_answer(
     system: str = SYSTEM_INSTRUCT,
     max_new_tokens: int = 32,
     temperature: float = 0.7,
+    top_p: float = 0.9,
+    do_sample: bool = True,
 ) -> tuple[str, float]:
     text = format_sft_example(system=system, user=question, assistant="")
     # strip empty assistant trailing if any
@@ -131,7 +141,7 @@ def generate_answer(
     t = Timer()
     idx = torch.tensor([pids], dtype=torch.long, device=device)
     try:
-        out = model.generate(idx, max_new_tokens=max_new_tokens, temperature=temperature)
+        out = model.generate(idx, max_new_tokens=max_new_tokens, temperature=temperature, top_p=top_p, do_sample=do_sample)
         gen = tokenizer.decode(out[0, len(pids) :].tolist())
         if not gen or not gen.strip():
             gen = tokenizer.decode(out[0].tolist())

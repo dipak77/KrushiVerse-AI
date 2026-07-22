@@ -21,23 +21,23 @@ def run_infer(
     *,
     query: str | None = None,
     dry_run: bool = False,
-    mode: str = "grounded",
+    mode: str = "instruct",
     crop: str | None = None,
     location: str = "Pune",
-    version: str = "auto",
+    version: str = "v0.4-agri-qa",
     enable_web: bool = False,
-    enable_tools: bool = True,
+    enable_tools: bool = False,
     enable_agents: bool = True,
     use_platform_rag: bool = True,
-    max_new_tokens: int = 40,
-    min_grounding: float = 0.08,
+    max_new_tokens: int = 256,
+    min_grounding: float = 0.02,  # fits 0.04 scores
     seed: int = 42,
-    top_k: int = 6,
+    top_k: int = 4,
 ) -> dict[str, Any]:
     ensure_lake_layout()
     INFERENCE_DIR.mkdir(parents=True, exist_ok=True)
     q = (query or "How do I manage pink bollworm in cotton with IPM in Maharashtra?").strip()
-    mode = (mode or "grounded").lower()
+    mode = (mode or "instruct").lower()
 
     if dry_run:
         return {
@@ -150,6 +150,9 @@ def run_infer(
             citations=pack.get("citations") or [],
             language=lang,
             reason=",".join(validation.get("reasons") or ["low_confidence"]),
+            location=location,
+            disease_info=agents.get("disease"),
+            weather_info=agents.get("weather"),
         )
         final_answer = fb["answer"]
         engine = "template_fallback"

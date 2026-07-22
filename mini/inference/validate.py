@@ -69,6 +69,42 @@ def banned_hits(answer: str) -> list[dict[str, str]]:
     return hits
 
 
+def is_degenerate_answer(answer: str) -> list[str]:
+    """Detect token degeneration, repetitive loops, or junk text."""
+    text = (answer or "").strip()
+    if not text:
+        return ["empty_answer"]
+
+    words = text.split()
+    if len(words) < 2:
+        return []
+
+    # Check consecutive word repetitions (e.g. "ensure ensure ensure ensure")
+    reps = 0
+    for i in range(1, len(words)):
+        w_curr = words[i].lower()
+        w_prev = words[i - 1].lower()
+        if w_curr == w_prev and len(w_curr) > 1:
+            reps += 1
+            if reps >= 2:
+                return ["repetitive_output"]
+        else:
+            reps = 0
+
+    # Check symbol / unk density
+    junk_tokens = sum(1 for w in words if w in ("<unk>", "&", "?", ";") or len(w) == 1 and not w.isalnum())
+    if len(words) >= 4 and (junk_tokens / len(words)) > 0.25:
+        return ["junk_output"]
+
+    # Check unique word ratio for short outputs
+    if len(words) >= 4:
+        unique_ratio = len(set(w.lower() for w in words)) / len(words)
+        if unique_ratio < 0.35:
+            return ["repetitive_output"]
+
+    return []
+
+
 def validate_answer(
     *,
     answer: str,
@@ -81,6 +117,7 @@ def validate_answer(
     mode = (mode or "grounded").lower()
     citations = citations or []
     banned = banned_hits(answer)
+    degen = is_degenerate_answer(answer)
     ground = grounding_score(answer, context, citations)
     reasons: list[str] = []
     ok = True
@@ -88,6 +125,10 @@ def validate_answer(
     if not (answer or "").strip():
         ok = False
         reasons.append("empty_answer")
+
+    if degen:
+        ok = False
+        reasons.extend(degen)
 
     if mode == "grounded":
         if not citations:

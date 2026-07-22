@@ -195,7 +195,7 @@ class MiniLM(nn.Module):
         return logits, loss
 
     @torch.no_grad()
-    def generate(self, idx: torch.Tensor, max_new_tokens: int = 32, temperature: float = 1.0, top_p: float | None = None):
+    def generate(self, idx: torch.Tensor, max_new_tokens: int = 32, temperature: float = 1.0, top_p: float | None = None, do_sample: bool = True, **kwargs):
         # Efficient generate with caching of last block only (no KV cache for simplicity but optimized)
         for _ in range(max_new_tokens):
             idx_cond = idx[:, -self.config.block_size:]
