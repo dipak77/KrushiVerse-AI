@@ -3,7 +3,7 @@ import functools
 from typing import List
 
 # Marathi postpositions to strip from end of crop tokens
-MR_POST = ["ला", "साठी", "वरील", "वर", "चा", "ची", "चे", "ने", "च्या", "मधून", "मध्ये"]
+MR_POST = ["ला", "साठी", "वरील", "वर", "चा", "ची", "चे", "ने", "च्या", "मधून", "ंमध्ये"]
 
 # Oblique rules: source → base (singular)
 MR_OBLIQUE = {
@@ -39,8 +39,8 @@ INNOVATION_HINTS = {
     "drone", "sri", "intercrop", "biofertilizer", "drip",
     "precision", "sensor", "iot", "aerosol", "spray drone",
     "मेडामा", "शेती", "सर्वसमावेशक", "द्राक्षे", "छाटणी", "प्रुनिंग",
-    "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "sowing time", "spacing", "storage", "rotation",
-    "बोर्डो", "पेस्ट", "अंतर किती", "तापमान किती", "ठेवावे"
+    "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "आंतरपीकात", "sowing time", "spacing", "storage", "rotation",
+    "बोर्डो", "पेस्ट", "अंतर किती", "तापमान किती", "ठेवावे", "हवा खेळती"
 }
 
 CROP_NAME_MAP = {
@@ -129,12 +129,12 @@ def detect_intent(text: str) -> str:
         return "market"
     if any(k in t for k in ["scheme", "subsidy", "yojana", "योजना", "सबसिडी", "pmfby", "विमा", "मागेल", "प्रीमियम", "योजनेत", "अनुदान", "पोर्टल", "शेततळे", "apeda", "नोंदणी"]):
         return "scheme"
-    if any(k in t for k in ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन", "दिवसांनी", "तास", "खर्च"]):
-        return "irrigation"
     if any(k in t for k in ["fertilizer", "खत", "npk", "urea", "dap", "mop", "19:19:19", "जिप्सम", "शेणखत", "डोस", "अन्नद्रव्ये"]):
         return "fertilizer"
     if detect_innovation(text):
         return "innovation"
+    if any(k in t for k in ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन", "दिवसांनी", "तास", "खर्च"]):
+        return "irrigation"
     if any(k in t for k in ["soil test", "माती तपासणी", "soil health", "माती"]):
         return "soil"
     if any(k in t for k in ["pest", "disease", "रोग", "कीड", "symptom", "अळी", "करपा", "भुंगा", "नेक्रोसिस", "कुज", "विषाणू", "तुडतुडे", "बोंड अळी", "सापळा"]):

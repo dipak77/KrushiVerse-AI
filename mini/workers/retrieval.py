@@ -97,9 +97,18 @@ class KrushiRetriever:
     ) -> List[Dict]:
         qset = set(split_tokens(query))
         intent = detect_intent(query)
+
+        from mini.taxonomy.aliases import resolve_crops_smart
+        query_crops = resolve_crops_smart(query)
+        q_crop_canon = query_crops[0] if query_crops else None
+
         scored = []
         for d in self.docs:
             s = self._score(qset, d)
+            if q_crop_canon:
+                d_crop = resolve_crops_smart(d.get("title", "") + " " + d.get("crop", ""))
+                if d_crop and q_crop_canon in d_crop:
+                    s *= 4.0
             if intent == "market" and "Mandi Price" in d.get("title", ""):
                 s *= 3.0
             if intent == "scheme" and "Government Scheme" in d.get("category", ""):

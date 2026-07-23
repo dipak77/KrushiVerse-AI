@@ -195,8 +195,12 @@ def template_synthesize(
         topic_title = "खत व्यवस्थापन वेळापत्रक"
     elif intent_type == "market":
         topic_title = "बाजारभाव व मंडी सल्ला"
-    else:
+    elif intent_type == "innovation":
+        topic_title = "प्रगत शेती व तंत्रज्ञान (आंतरपीक/छाटणी/अंतर)"
+    elif intent_type == "scheme":
         topic_title = "शासकीय योजना व अनुदान माहिती"
+    else:
+        topic_title = "कृषी तज्ञ मार्गदर्शक सल्ला"
 
     # Actionable Weather Advice
     temp = 28.3
@@ -276,6 +280,22 @@ def template_synthesize(
             )
             parts.append(f"**३. हवामान प्रभाव:**\n• {weather_line}\n")
             parts.append("**४. सुरक्षा काळजी:** Agmarknet / data.gov.in अधिकृत दर तपासूनच विक्रीचा निर्णय घ्या.\n")
+            parts.append(f"**स्रोत:** {doc_title}")
+            body = "\n".join(parts)
+        elif intent_type == "innovation":
+            weather_line = f"{temp}°C, आर्द्रता {hum}% — हवामान अनुकूल असताना तांत्रिक कामे (छाटणी, लागवड अंतर, साठवणूक) करा."
+            parts = [f"### 💡 **{crop_mr} - {topic_title}{loc_str}**\n"]
+            parts.append(f"**मार्गदर्शन संदर्भ:** {doc_title}\n")
+            parts.append(
+                f"**१. प्रगत लागवड तंत्रज्ञान व अंतर/छाटणी नियोजन:**\n"
+                f"• {doc_title}: पिकातील हवा खेळती राहण्यासाठी व हवामान तणाव कमी करण्यासाठी योग्य अंतर (spacing) व वेळेवर छाटणी/फेरपालट करा.\n"
+            )
+            parts.append(
+                f"**२. एकात्मिक व्यवस्थापन (Integrated Crop Management):**\n"
+                f"• आंतरपीक व फेरपालट पद्धतीचा (Crop Rotation) वापर करून जमिनीची सुपीकता वाढवा आणि कीड-रोगाचा साखळी प्रादुर्भाव रोखा.\n"
+            )
+            parts.append(f"**३. हवामान अंदाज व नियोजन:**\n• {weather_line}\n")
+            parts.append("**४. सुरक्षा काळजी:** औजारे निर्जंतुक करा व शिफारशीत अंतर व साठवणूक नियमांचे पालन करा.\n")
             parts.append(f"**स्रोत:** {doc_title}")
             body = "\n".join(parts)
         elif intent_type == "scheme":

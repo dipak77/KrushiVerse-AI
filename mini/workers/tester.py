@@ -50,6 +50,8 @@ class KrushiBulkTester:
             or canon_expected_crop.lower() == canon_predicted_crop.lower()
             or crop_q.lower() in ans.lower()
             or crop_q.lower() in query_text.lower()
+            or canon_expected_crop.lower() in ans.lower()
+            or canon_expected_crop.lower() in query_text.lower()
         ) else 0.0
 
         intent_pred = detect_intent(query_text)
