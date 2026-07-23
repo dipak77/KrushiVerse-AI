@@ -124,6 +124,12 @@
   },
   "inference": {
     "mode": "grounded",
+    "use_amp": true,
+    "fp16": true,
+    "gradient_checkpointing": false,
+    "use_flash_attn": true,
+    "use_torch_compile": true,
+    "batch_size": 4,
     "max_new_tokens": 220,
     "temperature": 0.2,
     "top_p": 0.9,
@@ -135,6 +141,7 @@
     ],
     "citation_enforcement": true,
     "top_k_retrieval": 2,
+    "use_cache": true,
     "latency_target": "<900ms on RTX 2050 with flash attn"
   },
   "fixes_for_your_30_query_report": {

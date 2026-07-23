@@ -8,7 +8,7 @@ from mini.eval.gold_sets import load_all_gold
 from mini.inference.context import normalize_sources
 
 
-def _local_mini_hits(query: str, *, top_k: int = 6) -> list[dict[str, Any]]:
+def _local_mini_hits(query: str, *, top_k: int = 2) -> list[dict[str, Any]]:
     """Offline lexical retrieval over curated gold + simple agri facts."""
     q = (query or "").lower()
     q_tokens = set(q.replace("?", " ").split())

@@ -73,6 +73,7 @@ def _strip_mr_post(tok: str) -> str:
             return tok[:-len(p)]
     return tok
 
+@functools.lru_cache(maxsize=4096)
 def normalize(text: str) -> str:
     text = text.lower().strip()
     for src, tgt in EN_ALIAS.items():
@@ -83,16 +84,18 @@ def normalize(text: str) -> str:
             text = text.replace(src, tgt)
     return text
 
+@functools.lru_cache(maxsize=4096)
 def stem_token(tok: str) -> str:
     if tok in MR_OBLIQUE:
         return MR_OBLIQUE[tok]
     tok = _strip_mr_post(tok)
     return tok
 
-def split_tokens(text: str) -> List[str]:
-    """Longest-first multiword alias matching."""
-    text = normalize(text)
-    tokens = re.findall(r"[\u0900-\u097F]+|[a-zA-Z]+", text)
+@functools.lru_cache(maxsize=4096)
+def _split_tokens_tuple(text: str) -> tuple[str, ...]:
+    """Longest-first multiword alias matching returning cached tuple."""
+    norm = normalize(text)
+    tokens = re.findall(r"[\u0900-\u097F]+|[a-zA-Z]+", norm)
     out = []
     i = 0
     keys = sorted(EN_ALIAS.keys(), key=len, reverse=True)
@@ -108,12 +111,17 @@ def split_tokens(text: str) -> List[str]:
         if not matched:
             out.append(stem_token(tokens[i]))
             i += 1
-    return out
+    return tuple(out)
 
+def split_tokens(text: str) -> List[str]:
+    return list(_split_tokens_tuple(text))
+
+@functools.lru_cache(maxsize=4096)
 def detect_innovation(text: str) -> bool:
     t = text.lower()
     return any(h in t for h in INNOVATION_HINTS)
 
+@functools.lru_cache(maxsize=4096)
 def detect_intent(text: str) -> str:
     t = text.lower()
     # Explicit intent keyword routing hierarchy

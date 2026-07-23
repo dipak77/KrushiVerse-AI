@@ -32,7 +32,7 @@ def run_infer(
     max_new_tokens: int = 256,
     min_grounding: float = 0.02,  # fits 0.04 scores
     seed: int = 42,
-    top_k: int = 4,
+    top_k: int = 2,
 ) -> dict[str, Any]:
     ensure_lake_layout()
     INFERENCE_DIR.mkdir(parents=True, exist_ok=True)
