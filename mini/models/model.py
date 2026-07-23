@@ -249,3 +249,7 @@ def count_parameters(model: nn.Module, *, trainable_only: bool = True) -> dict:
         "unique_params": unique,
         "millions": round(unique / 1e6, 4),
     }
+
+
+from mini.model import MiniLMPro, ProConfig  # re-export for v3-18M Pro compatibility
+

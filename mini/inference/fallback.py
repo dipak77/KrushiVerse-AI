@@ -194,16 +194,16 @@ def template_synthesize(
 
     if language in {"mr", "marathi"}:
         if intent_type == "irrigation":
-            rain_val = float(rain) if weather_info else 12.0
-            rain_advice = "पाऊस १२ मिमी असल्यामुळे पुढील २ दिवस ठिबक बंद ठेवा, नंतर सुरू करा" if rain_val > 5.0 else "उन्हाळ्यात आड दिवशी २-३ तास ठिबक सिंचन चालवा"
-            weather_line = f"{temp}°C, आर्द्रता {hum}%, पाऊस {rain}mm — {rain_advice}."
+            from app.knowledge.reasoning_engine import agri_reasoning_engine
+            irrig_res = agri_reasoning_engine.calculate_irrigation_schedule(crop_mr, temp_c=temp, rainfall_mm=rain)
+            weather_line = f"{temp}°C, आर्द्रता {hum}%, पाऊस {rain}mm — {irrig_res.recommendation_mr}"
             
             parts = [f"### 💧 **{crop_mr} - {topic_title}{loc_str}**\n"]
             parts.append(f"**मार्गदर्शन संदर्भ:** {doc_title}\n")
             parts.append(
-                f"**१. ठिबक वेळापत्रक व कालावधी:**\n"
-                f"• उन्हाळ्यात: २-३ तास आड दिवशी (प्रति झाड ४-६ लिटर/दिवस), सकाळी ६ ते ९ वाजेच्या दरम्यान पाणी द्या, दुपारी १२ ते ४ टाळा.\n"
-                f"• हिवाळ्यात: १-२ तास प्रति ३ दिवस; पावसाळ्यात: पाऊस ५ मिमी पेक्षा जास्त असल्यास ठिबक बंद ठेवा.\n"
+                f"**१. ठिबक वेळापत्रक व भौतिकी गणित (Irrigation Physics):**\n"
+                f"• {irrig_res.recommendation_mr}\n"
+                f"• सिंचन कालावधी: दर आड दिवशी {irrig_res.drip_hours_per_day} तास (प्रति झाड {irrig_res.liters_per_plant_day} लिटर), सकाळी ६ ते ९ दरम्यान पाणी द्या.\n"
             )
             parts.append(
                 f"**२. सिंचन पद्धत व निगा:**\n"

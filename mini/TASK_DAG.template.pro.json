@@ -1,0 +1,125 @@
+{
+  "version": "v3-18M-pro",
+  "tasks": [
+    {
+      "id": "data_v2",
+      "deps": [],
+      "worker": "data_icar+gov+wiki+papers",
+      "target": "250+10k+15k+500 docs"
+    },
+    {
+      "id": "token_v2_8k",
+      "deps": [
+        "data_v2"
+      ],
+      "worker": "tokenizer",
+      "vocab": 8192,
+      "model_type": "unigram"
+    },
+    {
+      "id": "kg_v2",
+      "deps": [
+        "data_v2"
+      ],
+      "worker": "kg",
+      "fix_q006": true,
+      "fix_q030": true
+    },
+    {
+      "id": "synth_25k",
+      "deps": [
+        "kg_v2"
+      ],
+      "worker": "synthetic",
+      "total": 25000
+    },
+    {
+      "id": "pretrain_15k",
+      "deps": [
+        "token_v2_8k"
+      ],
+      "worker": "training.pretrain",
+      "block": 1024,
+      "batch": 8,
+      "accum": 4,
+      "fp16": true,
+      "flash": true,
+      "compile": true,
+      "gc": true,
+      "top_k": null,
+      "num_workers": 0,
+      "resume": true,
+      "seed": 42
+    },
+    {
+      "id": "sft_v2",
+      "deps": [
+        "pretrain_15k"
+      ],
+      "worker": "training.sft",
+      "stage1": 3000,
+      "stage2": 3000,
+      "stage3": 3000,
+      "top_k": 2,
+      "citation_enforce": true,
+      "assistant_only_loss": true,
+      "num_workers": 0,
+      "resume": true
+    },
+    {
+      "id": "retrieval_v2",
+      "deps": [
+        "kg_v2"
+      ],
+      "worker": "retrieval",
+      "top_k": 2,
+      "checklist_filter": true,
+      "intent_boost": {
+        "market": "Mandi Price",
+        "scheme": "Government Scheme",
+        "innovation": "Innovation"
+      }
+    },
+    {
+      "id": "eval",
+      "deps": [
+        "sft_v2",
+        "retrieval_v2"
+      ],
+      "worker": "tester",
+      "profile": "strict",
+      "latency_target_ms": 900
+    },
+    {
+      "id": "safety",
+      "deps": [
+        "eval"
+      ],
+      "worker": "safety"
+    },
+    {
+      "id": "quant",
+      "deps": [
+        "safety"
+      ],
+      "worker": "quant",
+      "format": "int8-onnx"
+    },
+    {
+      "id": "test_all",
+      "deps": [
+        "quant"
+      ],
+      "worker": "tester",
+      "suite": "bulk_30"
+    },
+    {
+      "id": "deploy",
+      "deps": [
+        "test_all"
+      ],
+      "worker": "deploy",
+      "target": "api+frontend"
+    }
+  ]
+}
