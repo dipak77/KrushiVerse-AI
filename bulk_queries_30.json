@@ -1,244 +1,302 @@
 [
   {
-    "id": "q001",
-    "query": "उन्हाळ्यात कापसाला ठिबक किती तास?",
+    "id": "q031",
+    "query": "कापूस पिकावर बोंड अळीसाठी निंबोळी अर्क किती प्रमाणात फवारावा?",
     "expected_crop": "Cotton",
-    "expected_intent": "irrigation",
-    "expected_keywords": ["ठिबक", "२-३ तास"],
-    "location": "Pune"
+    "expected_intent": "disease",
+    "expected_keywords": ["कापूस", "बोंड अळी", "निंबोळी अर्क", "5%", "सेंद्रिय"],
+    "not_expected": ["urea"],
+    "location": "Akola",
+    "test_type": "organic dose accuracy"
   },
   {
-    "id": "q002",
-    "query": "सोयाबीनला खत कोणते द्यावे?",
+    "id": "q032",
+    "query": "सोयाबीन चक्री भुंगा (Girdle Beetle) ओळख कशी करावी?",
     "expected_crop": "Soybean",
-    "expected_intent": "fertilizer",
-    "expected_keywords": ["सोयाबीन", "खत"],
-    "location": "Latur"
-  },
-  {
-    "id": "q003",
-    "query": "वांगी शेंडा व फळ पोखरणारी अळी?",
-    "expected_crop": "Brinjal",
     "expected_intent": "disease",
-    "expected_keywords": ["वांगी", "अळी"],
-    "not_expected": ["डाळिंब"],
-    "location": "Nashik"
+    "expected_keywords": ["सोयाबीन", "चक्री भुंगा", "ओळख", "लक्षण"],
+    "not_expected": ["Cotton"],
+    "location": "Latur",
+    "test_type": "pest identification"
   },
   {
-    "id": "q004",
-    "query": "केळी सिगाटोका रोग?",
-    "expected_crop": "Banana",
+    "id": "q033",
+    "query": "हरभरा घाटे अळी साठी HaNPV विषाणू किती मिली प्रति लिटर?",
+    "expected_crop": "Gram",
     "expected_intent": "disease",
-    "expected_keywords": ["केळी", "सिगाटोका"],
-    "location": "Jalgaon"
+    "expected_keywords": ["हरभरा", "घाटे अळी", "HaNPV", "ml"],
+    "not_expected": ["chemical only"],
+    "location": "Amravati",
+    "test_type": "bio-pesticide dose"
   },
   {
-    "id": "q005",
-    "query": "द्राक्षावरील भुरी रोग उपाय?",
+    "id": "q034",
+    "query": "ऊस पिकाला पाणी किती दिवसांनी द्यावे चिकण मातीत?",
+    "expected_crop": "Sugarcane",
+    "expected_intent": "irrigation",
+    "expected_keywords": ["ऊस", "पाणी", "चिकण माती", "दिवस"],
+    "not_expected": ["Cotton"],
+    "location": "Sangli",
+    "test_type": "soil-type irrigation"
+  },
+  {
+    "id": "q035",
+    "query": "द्राक्ष छाटणी (pruning) नंतर बोर्डो पेस्ट कशी लावावी?",
     "expected_crop": "Grapes",
-    "expected_intent": "disease",
-    "expected_keywords": ["द्राक्ष", "भुरी"],
-    "location": "Nashik"
+    "expected_intent": "innovation",
+    "expected_keywords": ["द्राक्ष", "छाटणी", "बोर्डो पेस्ट", "पद्धत"],
+    "not_expected": ["market rate"],
+    "location": "Nashik",
+    "test_type": "pruning technique"
   },
   {
-    "id": "q006",
-    "query": "pigeon pea price in Latur mandi",
-    "expected_crop": "Tur",
-    "expected_intent": "market",
-    "expected_keywords": ["Tur"],
-    "location": "Latur"
+    "id": "q036",
+    "query": "टोमॅटो रोपे लावताना दोन रोपातील अंतर किती ठेवावे?",
+    "expected_crop": "Tomato",
+    "expected_intent": "innovation",
+    "expected_keywords": ["टोमॅटो", "अंतर", "60x45", "रोपे"],
+    "not_expected": ["Cotton spacing"],
+    "location": "Pune",
+    "test_type": "planting geometry"
   },
   {
-    "id": "q007",
-    "query": "nagpur santra market rate",
-    "expected_crop": "Orange",
-    "expected_intent": "market",
-    "expected_keywords": ["Orange"],
-    "location": "Nagpur"
+    "id": "q037",
+    "query": "कांदा साठवणूक गृहात तापमान किती ठेवावे नुकसान टाळण्यासाठी?",
+    "expected_crop": "Onion",
+    "expected_intent": "innovation",
+    "expected_keywords": ["कांदा", "साठवणूक", "तापमान", "आर्द्रता"],
+    "not_expected": ["fertilizer dose"],
+    "location": "Lasalgaon",
+    "test_type": "post-harvest"
   },
   {
-    "id": "q008",
-    "query": "तूर डाळीला किती पाणी?",
-    "expected_crop": "Tur",
-    "expected_intent": "irrigation",
-    "expected_keywords": ["तूर", "सिंचन"],
-    "location": "Akola"
-  },
-  {
-    "id": "q009",
-    "query": "डाळिंबाला खत मात्रा?",
-    "expected_crop": "Pomegranate",
-    "expected_intent": "fertilizer",
-    "expected_keywords": ["डाळिंब", "खत"],
-    "location": "Solapur"
-  },
-  {
-    "id": "q010",
-    "query": "कापसावरील बोंड अळी नियंत्रण?",
+    "id": "q038",
+    "query": "PMFBY पीक विमा योजनेत कापूस साठी प्रीमियम किती?",
     "expected_crop": "Cotton",
-    "expected_intent": "disease",
-    "expected_keywords": ["कापूस", "अळी"],
-    "location": "Yavatmal"
+    "expected_intent": "scheme",
+    "expected_keywords": ["PMFBY", "कापूस", "प्रीमियम", "2%", "विमा"],
+    "not_expected": ["track imd"],
+    "location": "Yavatmal",
+    "test_type": "scheme math"
   },
   {
-    "id": "q011",
-    "query": "वांग्यावरील शेंडा अळी?",
-    "expected_crop": "Brinjal",
+    "id": "q039",
+    "query": "ज्वारी पिकात खोड माशी नियंत्रणासाठी पेरणी वेळ बदला?",
+    "expected_crop": "Jowar",
     "expected_intent": "disease",
-    "expected_keywords": ["वांगी", "अळी"],
-    "location": "Pune"
+    "expected_keywords": ["ज्वारी", "खोड माशी", "पेरणी वेळ", "उपाय"],
+    "not_expected": ["Cotton"],
+    "location": "Solapur",
+    "test_type": "cultural control reasoning"
   },
   {
-    "id": "q012",
-    "query": "सोयाबीनसाठी ठिबक किती?",
-    "expected_crop": "Soybean",
+    "id": "q040",
+    "query": "बाजरी पिकाला प्रति एकर DAP किती किलो द्यावे?",
+    "expected_crop": "Bajra",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["बाजरी", "DAP", "किलो", "एकर"],
+    "not_expected": ["urea only"],
+    "location": "Beed",
+    "test_type": "fertilizer dose accuracy"
+  },
+  {
+    "id": "q041",
+    "query": "सूर्यफूल मान मोड्या रोगावर (bud necrosis) उपाय?",
+    "expected_crop": "Sunflower",
+    "expected_intent": "disease",
+    "expected_keywords": ["सूर्यफूल", "मान मोड्या", "bud necrosis", "उपाय"],
+    "not_expected": ["Cotton"],
+    "location": "Latur",
+    "test_type": "rare crop disease"
+  },
+  {
+    "id": "q042",
+    "query": "तीळ पिकाला फुलोरा अवस्थेत पाणी द्यावे का?",
+    "expected_crop": "Sesame",
     "expected_intent": "irrigation",
-    "expected_keywords": ["सोयाबीन", "ठिबक"],
-    "location": "Nanded"
+    "expected_keywords": ["तीळ", "फुलोरा", "पाणी", "होय/नाही"],
+    "not_expected": ["Cotton"],
+    "location": "Nagpur",
+    "test_type": "critical stage irrigation"
   },
   {
-    "id": "q013",
-    "query": "मिरचीवरील विषाणू रोग उपाय?",
-    "expected_crop": "Chilli",
-    "expected_intent": "disease",
-    "expected_keywords": ["मिरची", "विषाणू"],
-    "not_expected": ["तेल्या रोग"],
-    "location": "Guntur"
+    "id": "q043",
+    "query": "मूग + कापूस आंतरपीकात कीड व्यवस्थापन कसे करावे?",
+    "expected_crop": "Cotton",
+    "expected_intent": "innovation",
+    "expected_keywords": ["मूग", "कापूस", "आंतरपीक", "कीड", "व्यवस्थापन"],
+    "not_expected": ["single crop"],
+    "location": "Akola",
+    "test_type": "intercrop IPM reasoning"
   },
   {
-    "id": "q014",
-    "query": "ऊसासाठी शासकीय अनुदान योजना?",
+    "id": "q044",
+    "query": "5 एकर ऊस साठी ठिबक खर्च काढा — 1 एकर 45000 तर?",
     "expected_crop": "Sugarcane",
     "expected_intent": "scheme",
-    "expected_keywords": ["योजना", "अनुदान"],
-    "location": "Kolhapur"
+    "expected_keywords": ["गणित", "5 एकर", "45000", "225000", "खर्च"],
+    "not_expected": ["track imd only"],
+    "location": "Kolhapur",
+    "test_type": "math reasoning"
   },
   {
-    "id": "q015",
-    "query": "टोमॅटो करपा रोग औषध?",
-    "expected_crop": "Tomato",
+    "id": "q045",
+    "query": "हळद पिकात कंद कुज रोगावर ट्रायकोडर्मा किती ग्रॅम प्रति किलो बियाणे?",
+    "expected_crop": "Turmeric",
     "expected_intent": "disease",
-    "expected_keywords": ["टोमॅटो", "करपा"],
-    "location": "Pune"
+    "expected_keywords": ["हळद", "कंद कुज", "ट्रायकोडर्मा", "10 ग्रॅम", "बियाणे"],
+    "not_expected": ["Cotton"],
+    "location": "Sangli",
+    "test_type": "seed treatment dose"
   },
   {
-    "id": "q016",
-    "query": "मुगावर पिवळा मोझॅक रोग उपाय?",
-    "expected_crop": "Green Gram",
-    "expected_intent": "disease",
-    "expected_keywords": ["मूग", "विषाणू"],
-    "location": "Latur"
-  },
-  {
-    "id": "q017",
-    "query": "कांद्याला खत व्यवस्थापन वेळापत्रक?",
-    "expected_crop": "Onion",
+    "id": "q046",
+    "query": "आले पिकाला शेणखत किती टन प्रति एकर द्यावे?",
+    "expected_crop": "Ginger",
     "expected_intent": "fertilizer",
-    "expected_keywords": ["कांदा", "खत"],
-    "location": "Nashik"
+    "expected_keywords": ["आले", "शेणखत", "टन", "एकर", "20-25"],
+    "not_expected": ["urea"],
+    "location": "Satara",
+    "test_type": "organic fertilizer"
   },
   {
-    "id": "q018",
-    "query": "कृषी ड्रोन फवारणी शासकीय सबसिडी योजना?",
-    "expected_crop": "Generic",
+    "id": "q047",
+    "query": "केळी बागेत हवा खेळती ठेवण्यासाठी छाटणी कशी करावी?",
+    "expected_crop": "Banana",
+    "expected_intent": "innovation",
+    "expected_keywords": ["केळी", "छाटणी", "हवा", "खेळती", "पद्धत"],
+    "not_expected": ["disease only"],
+    "location": "Jalgaon",
+    "test_type": "canopy management"
+  },
+  {
+    "id": "q048",
+    "query": "डाळिंब बागेसाठी शेततळे योजना अनुदान किती टक्के?",
+    "expected_crop": "Pomegranate",
     "expected_intent": "scheme",
-    "expected_keywords": ["योजना", "अनुदान"],
-    "location": "Pune"
+    "expected_keywords": ["डाळिंब", "शेततळे", "अनुदान", "50%", "75%"],
+    "not_expected": ["fertilizer only"],
+    "location": "Solapur",
+    "test_type": "scheme percentage"
   },
   {
-    "id": "q019",
-    "query": "गव्हावरील तांबेरा रोग नियंत्रण?",
-    "expected_crop": "Wheat",
-    "expected_intent": "disease",
-    "expected_keywords": ["गहू", "तांबेरा"],
-    "location": "Pune"
-  },
-  {
-    "id": "q020",
-    "query": "भातावरील तुडतुडे कीड औषध?",
+    "id": "q049",
+    "query": "वातावरण 35°C, आर्द्रता 90% — भात तुडतुडे वाढेल का? उपाय?",
     "expected_crop": "Rice",
     "expected_intent": "disease",
-    "expected_keywords": ["भात", "तुडतुडे"],
-    "location": "Bhandara"
+    "expected_keywords": ["भात", "तुडतुडे", "35°C", "90%", "होय", "उपाय"],
+    "not_expected": ["generic forecast"],
+    "location": "Konkan",
+    "test_type": "weather + pest multi-hop reasoning"
   },
   {
-    "id": "q021",
-    "query": "हळदीला ठिबक पाणी किती तास?",
-    "expected_crop": "Turmeric",
-    "expected_intent": "irrigation",
-    "expected_keywords": ["हळद", "ठिबक"],
-    "location": "Sangli"
-  },
-  {
-    "id": "q022",
-    "query": "मक्यावरील लष्करी अळी उपाय?",
-    "expected_crop": "Maize",
-    "expected_intent": "disease",
-    "expected_keywords": ["मका", "अळी"],
-    "location": "Satara"
-  },
-  {
-    "id": "q023",
-    "query": "द्राक्षाला एनपीके खत मात्रा?",
-    "expected_crop": "Grapes",
-    "expected_intent": "fertilizer",
-    "expected_keywords": ["द्राक्ष", "खत"],
-    "location": "Nashik"
-  },
-  {
-    "id": "q024",
-    "query": "भुईमुगावरील टिक्का रोग उपाय?",
-    "expected_crop": "Groundnut",
-    "expected_intent": "disease",
-    "expected_keywords": ["भुईमूग", "टिक्का"],
-    "location": "Dhule"
-  },
-  {
-    "id": "q025",
-    "query": "आंब्यावरील तुडतुडे नियंत्रण?",
-    "expected_crop": "Mango",
-    "expected_intent": "disease",
-    "expected_keywords": ["आंबा", "तुडतुडे"],
-    "location": "Ratnagiri"
-  },
-  {
-    "id": "q026",
-    "query": "सोयाबीन मंडी बाजारभाव किती?",
-    "expected_crop": "Soybean",
-    "expected_intent": "market",
-    "expected_keywords": ["सोयाबीन", "बाजारभाव"],
-    "location": "Latur"
-  },
-  {
-    "id": "q027",
-    "query": "मागेल त्याला शेततळे अर्ज कसा करावा?",
-    "expected_crop": "Generic",
-    "expected_intent": "scheme",
-    "expected_keywords": ["योजना", "शेततळे"],
-    "location": "Ahmednagar"
-  },
-  {
-    "id": "q028",
-    "query": "green gram moong market rate?",
-    "expected_crop": "Green Gram",
-    "expected_intent": "market",
-    "expected_keywords": ["मूग"],
-    "location": "Akola"
-  },
-  {
-    "id": "q029",
-    "query": "कापूस बोंड अळी जैविक नियंत्रण?",
+    "id": "q050",
+    "query": "कापूस + सोयाबीन फेरपालट (rotation) फायदा 3 मुद्दे?",
     "expected_crop": "Cotton",
-    "expected_intent": "disease",
-    "expected_keywords": ["कापूस", "नियंत्रण"],
-    "location": "Nagpur"
+    "expected_intent": "innovation",
+    "expected_keywords": ["फेरपालट", "कापूस", "सोयाबीन", "फायदा", "3 मुद्दे"],
+    "not_expected": ["single benefit only"],
+    "location": "Amravati",
+    "test_type": "rotation reasoning"
   },
   {
-    "id": "q030",
-    "query": "माती परीक्षण प्रयोगशाळा नोंदणी?",
-    "expected_crop": "Generic",
+    "id": "q051",
+    "query": "pune cotton mandi bhav today live?",
+    "expected_crop": "Cotton",
+    "expected_intent": "market",
+    "expected_keywords": ["cotton", "mandi", "Pune", "bhav", "price"],
+    "not_expected": ["fertilizer guide"],
+    "location": "Pune",
+    "test_type": "english transliteration market"
+  },
+  {
+    "id": "q052",
+    "query": "सोयाबीनला फुले येताना 19:19:19 फवारणी चालेल का? प्रमाण?",
+    "expected_crop": "Soybean",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["सोयाबीन", "19:19:19", "फुले", "प्रमाण", "5 ग्रॅम"],
+    "not_expected": ["track imd only"],
+    "location": "Yavatmal",
+    "test_type": "stage-specific fertilizer"
+  },
+  {
+    "id": "q053",
+    "query": "मिरची पिकात पांढरी माशी साठी पिवळा चिकट सापळा किती प्रति एकर?",
+    "expected_crop": "Chilli",
+    "expected_intent": "disease",
+    "expected_keywords": ["मिरची", "पांढरी माशी", "पिवळा सापळा", "20", "एकर"],
+    "not_expected": ["Cotton"],
+    "location": "Nashik",
+    "test_type": "IPM trap number"
+  },
+  {
+    "id": "q054",
+    "query": "आंबा हापूस आंबा निर्यातीसाठी APEDA नोंदणी कशी करावी?",
+    "expected_crop": "Mango",
     "expected_intent": "scheme",
-    "expected_keywords": ["माती", "योजना"],
-    "location": "Pune"
+    "expected_keywords": ["आंबा", "हापूस", "निर्यात", "APEDA", "नोंदणी"],
+    "not_expected": ["disease only"],
+    "location": "Ratnagiri",
+    "test_type": "export scheme"
+  },
+  {
+    "id": "q055",
+    "query": "भुईमूग शेंगा पोसण्यासाठी जिप्सम कधी टाकावे? पेरणीनंतर किती दिवसांनी?",
+    "expected_crop": "Groundnut",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["भुईमूग", "जिप्सम", "शेंगा", "40-45 दिवस", "पेरणीनंतर"],
+    "not_expected": ["Cotton"],
+    "location": "Latur",
+    "test_type": "timing reasoning"
+  },
+  {
+    "id": "q056",
+    "query": "मका + घेवडा आंतरपीक (maize + cowpea) फायदा आणि ओळ अंतर?",
+    "expected_crop": "Maize",
+    "expected_intent": "innovation",
+    "expected_keywords": ["मका", "घेवडा", "आंतरपीक", "फायदा", "अंतर"],
+    "not_expected": ["single crop"],
+    "location": "Pune",
+    "test_type": "intercrop English+Marathi mix"
+  },
+  {
+    "id": "q057",
+    "query": "2.5 एकर + 1.5 एकर = किती एकर? त्या क्षेत्रात कापूस बियाणे किती किलो लागेल (1.5 किलो/एकर)?",
+    "expected_crop": "Cotton",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["गणित", "4 एकर", "6 किलो", "बियाणे", "1.5"],
+    "not_expected": ["track imd"],
+    "location": "Pune",
+    "test_type": "2-step math reasoning"
+  },
+  {
+    "id": "q058",
+    "query": "डाळिंब तेल्या रोगावर स्ट्रेप्टोसायक्लीन + कॉपर किती ग्रॅम/लिटर?",
+    "expected_crop": "Pomegranate",
+    "expected_intent": "disease",
+    "expected_keywords": ["तेल्या", "स्ट्रेप्टोसायक्लीन", "0.5", "कॉपर", "2 ग्रॅम"],
+    "not_expected": ["generic remove infected parts only"],
+    "location": "Solapur",
+    "test_type": "exact dose accuracy — from your q025 PASS source"
+  },
+  {
+    "id": "q059",
+    "query": "green gram sowing time in Maharashtra kharif season?",
+    "expected_crop": "Green Gram",
+    "expected_intent": "innovation",
+    "expected_keywords": ["green gram", "sowing", "June", "July", "kharif"],
+    "not_expected": ["Gram chickpea"],
+    "location": "Jalgaon",
+    "test_type": "English + Green Gram alias fix validation"
+  },
+  {
+    "id": "q060",
+    "query": "माती परीक्षण रिपोर्टमध्ये नत्र कमी असेल तर युरिया ऐवजी काय पर्याय? 2 सेंद्रिय पर्याय द्या",
+    "expected_crop": "Generic",
+    "expected_intent": "fertilizer",
+    "expected_keywords": ["माती परीक्षण", "नत्र कमी", "युरिया", "शेणखत", "अझोटोबॅक्टर", "2 पर्याय"],
+    "not_expected": ["PM-Kisan scheme only"],
+    "location": "Maharashtra",
+    "test_type": "soil test -> fertilizer reasoning + 2 examples (fixes q030 pattern)"
   }
 ]

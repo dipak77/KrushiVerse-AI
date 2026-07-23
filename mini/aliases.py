@@ -36,11 +36,8 @@ EN_ALIAS = {
 }
 
 INNOVATION_HINTS = {
-    "drone", "sri", "intercrop", "biofertilizer", "drip",
-    "precision", "sensor", "iot", "aerosol", "spray drone",
-    "मेडामा", "शेती", "सर्वसमावेशक", "द्राक्षे", "छाटणी", "प्रुनिंग",
-    "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "आंतरपीकात", "sowing time", "spacing", "storage", "rotation",
-    "बोर्डो", "पेस्ट", "अंतर किती", "तापमान किती", "ठेवावे", "हवा खेळती"
+    "pruning", "छाटणी", "प्रुनिंग", "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "आंतरपीकात",
+    "sowing time", "spacing", "storage", "rotation", "बोर्डो", "पेस्ट", "हवा खेळती"
 }
 
 CROP_NAME_MAP = {
@@ -124,21 +121,35 @@ def detect_innovation(text: str) -> bool:
 @functools.lru_cache(maxsize=4096)
 def detect_intent(text: str) -> str:
     t = text.lower()
-    # Explicit intent keyword routing hierarchy
+
+    # 1. Market
     if any(k in t for k in ["market", "mandi", "price", "bhav", "भाव", "बाजार", "दर", "बाजारभाव"]):
         return "market"
+
+    # 2. Scheme
     if any(k in t for k in ["scheme", "subsidy", "yojana", "योजना", "सबसिडी", "pmfby", "विमा", "मागेल", "प्रीमियम", "योजनेत", "अनुदान", "पोर्टल", "शेततळे", "apeda", "नोंदणी"]):
         return "scheme"
-    if any(k in t for k in ["fertilizer", "खत", "npk", "urea", "dap", "mop", "19:19:19", "जिप्सम", "शेणखत", "डोस", "अन्नद्रव्ये"]):
+
+    # 3. Fertilizer (fertilizer dosing, seed rate math, nitrogen/urea alternatives)
+    if any(k in t for k in ["fertilizer", "खत", "npk", "urea", "dap", "mop", "19:19:19", "जिप्सम", "शेणखत", "डोस", "अन्नद्रव्ये", "बियाणे", "नत्र", "युरिया"]):
         return "fertilizer"
-    if detect_innovation(text):
+
+    # 4. Innovation (pruning, intercrop, spacing, storage, rotation, sowing time)
+    if any(k in t for k in ["pruning", "छाटणी", "प्रुनिंग", "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "आंतरपीकात", "sowing time", "spacing", "storage", "rotation", "बोर्डो", "पेस्ट", "हवा खेळती"]):
         return "innovation"
+
+    # 5. Irrigation & Cost math
     if any(k in t for k in ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन", "दिवसांनी", "तास", "खर्च"]):
         return "irrigation"
-    if any(k in t for k in ["soil test", "माती तपासणी", "soil health", "माती"]):
-        return "soil"
-    if any(k in t for k in ["pest", "disease", "रोग", "कीड", "symptom", "अळी", "करपा", "भुंगा", "नेक्रोसिस", "कुज", "विषाणू", "तुडतुडे", "बोंड अळी", "सापळा"]):
+
+    # 6. Disease & Pest
+    if any(k in t for k in ["pest", "disease", "रोग", "कीड", "symptom", "अळी", "करपा", "भुंगा", "नेक्रोसिस", "कुज", "विषाणू", "तुडतुडे", "बोंड अळी", "सापळा", "खोड माशी", "तेल्या", "ट्रायकोडर्मा"]):
         return "disease"
+
+    # 7. Soil
+    if any(k in t for k in ["soil test", "माती तपासणी", "soil health"]):
+        return "soil"
+
     return "general"
 
 if __name__ == "__main__":
