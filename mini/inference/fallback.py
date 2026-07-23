@@ -85,12 +85,29 @@ def _format_treatment(treatment_mr: str, treatment_en: str) -> str:
     return treatment_mr or treatment_en or "कृषी तज्ञांच्या सल्ल्यानुसार योग्य डोसची फवारणी करा."
 
 
+def generate_fallback_answer(*args, **kwargs):
+    query = kwargs.get("query") or (args[0] if args else "")
+    citations = kwargs.get("citations") or (args[1] if len(args) > 1 else [])
+    language = kwargs.get("language") or "mr"
+    intent = kwargs.get("intent") or ""
+    crops = kwargs.get("crops") or []
+    context_text = kwargs.get("context_text") or ""
+    return template_synthesize(
+        query=query,
+        intent=intent,
+        crops=crops,
+        context_text=context_text,
+        citations=citations,
+        language=language,
+    )
+
+
 def template_synthesize(
     *,
     query: str,
-    intent: str,
-    crops: list[str],
-    context_text: str,
+    intent: str = "",
+    crops: list[str] | None = None,
+    context_text: str = "",
     citations: list[dict[str, Any]],
     language: str = "en",
     reason: str = "low_confidence",

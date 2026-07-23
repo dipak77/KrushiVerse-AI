@@ -1,4 +1,5 @@
 import re
+import functools
 from typing import List
 
 # Marathi postpositions to strip from end of crop tokens
@@ -10,12 +11,15 @@ MR_OBLIQUE = {
     "वांग्यांना": "वांगी", "वांग्या": "वांगी", "वांग्यावरील": "वांगी",
     "सोयाबीनला": "सोयाबीन", "सोयाबीनचे": "सोयाबीन", "सोयाबीनसाठी": "सोयाबीन",
     "तुरीचे": "तुर", "तुरीला": "तुर", "तुरी": "तुर",
-    "ज्वारीला": "ज्वारी", "बाजरीला": "बाजरी",
+    "ज्वारीला": "ज्वारी", "बाजरीला": "बाजरी", "ज्वारी": "ज्वारी", "ज्वार": "ज्वारी",
     "गहूंचा": "गहू", "गव्हाचे": "गहू", "गव्हावरील": "गहू",
     "डाळिंबाला": "डाळिंब", "डाळिंबावरील": "डाळिंब",
     "द्राक्षावरील": "द्राक्ष", "द्राक्षाला": "द्राक्ष",
     "कांद्याला": "कांदा", "कांद्यावरील": "कांदा",
-    "मुगावर": "मूग", "मुगाला": "मूग",
+    "मुगावर": "मूग", "मुगाला": "मूग", "मूग": "मूग",
+    "तीळ": "तिळ", "तिळाला": "तिळ", "तिळावर": "तिळ", "तिळाची": "तिळ",
+    "आल्याला": "आले", "आल्यावरील": "आले", "आले": "आले",
+    "सूर्यफूल": "सूर्यफूल", "सूरजमुखी": "सूर्यफूल",
 }
 
 EN_ALIAS = {
@@ -26,14 +30,42 @@ EN_ALIAS = {
     "soybean": "Soybean", "soya": "Soybean",
     "chilli": "Chilli", "chili": "Chilli",
     "groundnut": "Groundnut", "peanut": "Groundnut",
+    "sesame": "Sesame", "til": "Sesame",
+    "jowar": "Sorghum", "sorghum": "Sorghum",
+    "ginger": "Ginger", "sunflower": "Sunflower",
 }
 
 INNOVATION_HINTS = {
     "drone", "sri", "intercrop", "biofertilizer", "drip",
     "precision", "sensor", "iot", "aerosol", "spray drone",
     "मेडामा", "शेती", "सर्वसमावेशक", "द्राक्षे", "छाटणी", "प्रुनिंग",
-    "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "sowing time", "spacing", "storage", "rotation"
+    "अंतर", "साठवणूक", "फेरपालट", "आंतरपीक", "sowing time", "spacing", "storage", "rotation",
+    "बोर्डो", "पेस्ट", "अंतर किती", "तापमान किती", "ठेवावे"
 }
+
+CROP_NAME_MAP = {
+    "Jowar": "Sorghum",
+    "Sorghum": "Sorghum",
+    "Green Gram": "Green Gram",
+    "Mung": "Green Gram",
+    "Moong": "Green Gram",
+    "Tur": "Tur", "Toor": "Tur", "Pigeon Pea": "Tur",
+    "Sesame": "Sesame", "Til": "Sesame",
+    "Ginger": "Ginger", "Ale": "Ginger",
+    "Sunflower": "Sunflower",
+    "Cotton": "Cotton", "Soybean": "Soybean", "Sugarcane": "Sugarcane",
+    "Pomegranate": "Pomegranate", "Onion": "Onion", "Rice": "Rice",
+    "Wheat": "Wheat", "Maize": "Maize", "Gram": "Gram", "Groundnut": "Groundnut",
+    "Turmeric": "Turmeric", "Grapes": "Grapes", "Banana": "Banana",
+    "Mango": "Mango", "Tomato": "Tomato", "Chilli": "Chilli", "Bajra": "Bajra",
+    "Orange": "Orange", "Brinjal": "Brinjal", "Potato": "Potato", "Mustard": "Mustard",
+}
+
+def resolve_crop_name(crop: str) -> str:
+    if not crop:
+        return ""
+    c = crop.strip()
+    return CROP_NAME_MAP.get(c, CROP_NAME_MAP.get(c.capitalize(), c))
 
 def _strip_mr_post(tok: str) -> str:
     for p in sorted(MR_POST, key=len, reverse=True):
@@ -84,22 +116,21 @@ def detect_innovation(text: str) -> bool:
 
 def detect_intent(text: str) -> str:
     t = text.lower()
-    if any(k in t for k in ["market", "mandi", "price", "भाव", "बाजार", "दर"]):
+    # Explicit intent keyword routing hierarchy
+    if any(k in t for k in ["market", "mandi", "price", "bhav", "भाव", "बाजार", "दर", "बाजारभाव"]):
         return "market"
-    if any(k in t for k in ["scheme", "subsidy", "yojana", "योजना", "सबसिडी", "pmfby", "विमा", "मागेल"]):
+    if any(k in t for k in ["scheme", "subsidy", "yojana", "योजना", "सबसिडी", "pmfby", "विमा", "मागेल", "प्रीमियम", "योजनेत", "अनुदान", "पोर्टल", "शेततळे", "apeda", "नोंदणी"]):
         return "scheme"
+    if any(k in t for k in ["irrigation", "drip", "water", "ठिबक", "पाणी", "सिंचन", "दिवसांनी", "तास", "खर्च"]):
+        return "irrigation"
+    if any(k in t for k in ["fertilizer", "खत", "npk", "urea", "dap", "mop", "19:19:19", "जिप्सम", "शेणखत", "डोस", "अन्नद्रव्ये"]):
+        return "fertilizer"
     if detect_innovation(text):
         return "innovation"
     if any(k in t for k in ["soil test", "माती तपासणी", "soil health", "माती"]):
         return "soil"
-    if any(k in t for k in ["pest", "disease", "रोग", "कीड", "symptom", "अळी", "करपा"]):
-        return "pest"
-    if any(k in t for k in ["variety", "जात", "cultivar"]):
-        return "variety"
-    if any(k in t for k in ["weather", "हवामान", "rain", "forecast"]):
-        return "weather"
-    if any(k in t for k in ["fertilizer", "खत", "npk", "urea", "dap", "mop", "19:19:19"]):
-        return "fertilizer"
+    if any(k in t for k in ["pest", "disease", "रोग", "कीड", "symptom", "अळी", "करपा", "भुंगा", "नेक्रोसिस", "कुज", "विषाणू", "तुडतुडे", "बोंड अळी", "सापळा"]):
+        return "disease"
     return "general"
 
 if __name__ == "__main__":

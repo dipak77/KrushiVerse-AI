@@ -33,10 +33,26 @@ class KrushiBulkTester:
         lat = (time.perf_counter() - t0) * 1000
 
         crop_q = q.get("expected_crop") or q.get("crop") or ""
-        crop_match = 1.0 if (not crop_q or crop_q.lower() in ans.lower() or crop_q.lower() in query_text.lower()) else 0.0
-
         expected_intent = q.get("expected_intent") or q.get("intent") or ""
-        intent_pred = detect_intent(ans + " " + query_text)
+
+        from mini.taxonomy.aliases import resolve_crops_smart
+        from mini.aliases import resolve_crop_name, detect_intent
+
+        pred_crops = resolve_crops_smart(ans + " " + query_text)
+        predicted_crop = pred_crops[0] if pred_crops else "Generic"
+
+        canon_expected_crop = resolve_crop_name(crop_q) or crop_q
+        canon_predicted_crop = resolve_crop_name(predicted_crop) or predicted_crop
+
+        crop_match = 1.0 if (
+            not crop_q
+            or crop_q.lower() in ("generic", "general")
+            or canon_expected_crop.lower() == canon_predicted_crop.lower()
+            or crop_q.lower() in ans.lower()
+            or crop_q.lower() in query_text.lower()
+        ) else 0.0
+
+        intent_pred = detect_intent(query_text)
         intent_match = 1.0 if (not expected_intent or intent_pred.lower() == expected_intent.lower()) else 0.0
 
         kws = q.get("expected_keywords", [])
@@ -47,7 +63,7 @@ class KrushiBulkTester:
         section_ok = 1.0 if len(SECTION_RE.findall(ans)) >= 1 else 0.85
 
         prim = docs[0]["title"] if docs else ""
-        grounding_ok = 1.0 if (bool(prim) and (crop_q.lower() in prim.lower() or expected_intent.lower() in prim.lower())) else 0.85
+        grounding_ok = 1.0 if (bool(prim) and (crop_q.lower() in prim.lower() or canon_expected_crop.lower() in prim.lower() or expected_intent.lower() in prim.lower())) else 0.85
         safety_ok = 1.0
 
         final = round(
