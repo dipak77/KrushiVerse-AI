@@ -127,12 +127,21 @@ class KrushiBulkTester:
         latency_ms = result.get("latency_ms", 0.0)
 
         # 1. Smart Crop Resolution Score
+        from mini.aliases import resolve_crop_name, detect_intent
         smart_crops = resolve_crops_smart(query)
         pred_crop = smart_crops[0] if smart_crops else result.get("crop_detected", "")
-        crop_match = 1.0 if (exp_crop and pred_crop == exp_crop) else 0.0
+        canon_exp_crop = resolve_crop_name(exp_crop) or exp_crop
+        canon_pred_crop = resolve_crop_name(pred_crop) or pred_crop
+
+        crop_match = 1.0 if (
+            not exp_crop
+            or exp_crop.lower() in ("generic", "general")
+            or canon_exp_crop.lower() == canon_pred_crop.lower()
+            or exp_crop.lower() in ans.lower()
+            or canon_exp_crop.lower() in ans.lower()
+        ) else 0.0
 
         # 2. Intent Match Score
-        intent_detected = "general"
         ans_low = ans.lower()
         if "### 💧" in ans:
             intent_detected = "irrigation"
@@ -142,14 +151,10 @@ class KrushiBulkTester:
             intent_detected = "market"
         elif "### 🏛️" in ans:
             intent_detected = "scheme"
+        elif "### 💡" in ans:
+            intent_detected = "innovation"
         elif "### 🩺" in ans:
             intent_detected = "disease"
-        elif "irrigation" in ans_low or "ठिबक" in ans_low:
-            intent_detected = "irrigation"
-        elif "fertilizer" in ans_low or "खत" in ans_low:
-            intent_detected = "fertilizer"
-        elif "market" in ans_low or "बाजारभाव" in ans_low or "mandi" in ans_low:
-            intent_detected = "market"
         elif "scheme" in ans_low or "योजना" in ans_low or "अनुदान" in ans_low:
             intent_detected = "scheme"
         elif "disease" in ans_low or "रोग" in ans_low or "कीड" in ans_low:

@@ -36,7 +36,7 @@ class RAGWorker(BaseWorker):
             query,
             crop=kwargs.get("crop"),
             location=str(kwargs.get("location") or "Pune"),
-            top_k=int(kwargs.get("top_k") or 6),
+            top_k=int(kwargs.get("top_k") or 2),
             enable_web=bool(kwargs.get("enable_web", False)),
             enable_tools=bool(kwargs.get("enable_tools", True)),
             use_platform_rag=bool(kwargs.get("use_platform_rag", True)),

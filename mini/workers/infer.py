@@ -32,7 +32,7 @@ class InferWorker(BaseWorker):
             max_new_tokens=int(kwargs.get("max_new_tokens") or 40),
             min_grounding=float(kwargs.get("min_grounding") or 0.08),
             seed=int(kwargs.get("seed") or 42),
-            top_k=int(kwargs.get("top_k") or 6),
+            top_k=int(kwargs.get("top_k") or 2),
         )
         ok = bool(report.get("ok")) if not dry_run else True
         return WorkerResult(
