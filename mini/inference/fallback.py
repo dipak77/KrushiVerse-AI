@@ -39,9 +39,12 @@ from mini.taxonomy.aliases import resolve_crops_smart
 
 
 def _filter_relevant_citations(citations: list[dict[str, Any]], query: str = "") -> list[dict[str, Any]]:
-    """Keep max 2 high-value docs, skip all checklist duplicates unconditionally, match query crop smartly."""
+    """Keep max 2 high-value docs, skip all checklist duplicates unconditionally, match query crop & intent smartly."""
     query_crops = resolve_crops_smart(query)
     query_crop_canon = query_crops[0] if query_crops else None
+
+    from mini.aliases import detect_intent
+    query_intent = detect_intent(query) if query else ""
 
     seen_title = set()
     filtered = []
@@ -53,6 +56,11 @@ def _filter_relevant_citations(citations: list[dict[str, Any]], query: str = "")
 
         if "checklist" in title or "checklist" in c_id or title.startswith("graphrag:"):
             continue  # Skip all stage checklists & GraphRAG node headers unconditionally
+
+        # Intent filtering: drop disease/pest docs for non-disease queries (irrigation, scheme, fertilizer, market, innovation)
+        if query_intent in ("irrigation", "scheme", "fertilizer", "market", "innovation"):
+            if "disease" in title or "pest" in title or "bollworm" in title or "wilt" in title or "rot" in title or "blight" in title:
+                continue
 
         # Smart crop match verification
         if query_crop_canon:
@@ -69,7 +77,7 @@ def _filter_relevant_citations(citations: list[dict[str, Any]], query: str = "")
         if len(filtered) >= 2:
             break
 
-    # If all citations were filtered out, keep first non-checklist doc
+    # If all citations were filtered out, keep first non-checklist doc matching crop/intent
     if not filtered:
         for c in citations:
             t_low = (c.get("title") or c.get("title_en") or "").lower()
@@ -137,16 +145,8 @@ def template_synthesize(
     q_low = query.lower()
     intent_low = (intent or "").lower()
 
-    if any(k in q_low for k in ("भाव", "दर", "मंडी", "बाजार", "market", "price", "apmc", "rate")) or "market" in intent_low:
-        intent_type = "market"
-    elif any(k in q_low for k in ("योजना", "अनुदान", "शेततळे", "scheme", "subsidy", "मागेल", "pm-kisan", "ड्रोन", "माती", "नोंदणी", "प्रयोगशाळा", "sri", "तंत्रज्ञान")) or "scheme" in intent_low or "innovation" in intent_low:
-        intent_type = "scheme" if any(k in q_low for k in ("योजना", "अनुदान", "सबसिडी", "मागेल", "pm-kisan", "नोंदणी")) else "innovation"
-    elif any(k in q_low for k in ("खत", "खते", "fertilizer", "mop", "dap", "urea", "npk", "मात्रा", "कॅल्शियम", "13:00:45", "19:19:19", "शेणखत", "डोस", "अन्नद्रव्ये")) or "fertilizer" in intent_low:
-        intent_type = "fertilizer"
-    elif any(k in q_low for k in ("ठिबक", "drip", "सिंचन", "irrigation", "पाणी", "तास", "पाण्या", "पाण्याची")) or "irrigation" in intent_low:
-        intent_type = "irrigation"
-    else:
-        intent_type = "disease"
+    from mini.aliases import detect_intent
+    intent_type = detect_intent(query)
 
     is_virus = any(k in q_low for k in ("विषाणू", "virus", "curl", "mosaic", "बोकड्या", "चुरडा", "वांझपणा"))
     is_powdery = any(k in q_low for k in ("भुरी", "powdery", "पांढरी भुकटी", "bhuri"))
@@ -155,7 +155,7 @@ def template_synthesize(
     diag_text = ""
     formatted_treatment = ""
 
-    if intent_type == "disease":
+    if intent_type in ("disease", "pest"):
         if is_virus:
             topic_title = "पानांचा चुरडा-मुरडा / विषाणू रोग तज्ञ सल्ला"
             diag_text = f"{crop_mr} पान आकुंचन विषाणू रोग (Leaf Curl Virus) — वाढ खुंटणे व पानांचा चुरडा"
@@ -201,11 +201,11 @@ def template_synthesize(
     # Actionable Weather Advice
     temp = 28.3
     hum = 81
-    rain = 12.0
-    if weather_info:
+    rain = 0.0
+    if weather_info and isinstance(weather_info, dict):
         temp = weather_info.get("temperature_c", 28.3)
         hum = weather_info.get("relative_humidity_pct", 81)
-        rain = weather_info.get("rainfall_mm_24h", 12.0)
+        rain = float(weather_info.get("rainfall_mm_24h", 0.0))
 
     doc_title = primary_cites[0].get("title") if primary_cites else "ICAR Package of Practices"
 

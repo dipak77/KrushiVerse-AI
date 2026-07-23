@@ -121,36 +121,66 @@ class AgronomicReasoningEngine:
             explanation_en=expl_en,
         )
 
+    DEFAULT_DRIP: dict[str, dict[str, float]] = {
+        "Cotton": {"lpd": 5.0, "lph": 4.0, "drippers": 1},
+        "Soybean": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Sugarcane": {"lpd": 8.0, "lph": 4.0, "drippers": 1},
+        "Pomegranate": {"lpd": 20.0, "lph": 8.0, "drippers": 2},
+        "Tur": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Onion": {"lpd": 3.5, "lph": 4.0, "drippers": 1},
+        "Grapes": {"lpd": 16.0, "lph": 8.0, "drippers": 2},
+        "Banana": {"lpd": 15.0, "lph": 8.0, "drippers": 1},
+        "Turmeric": {"lpd": 5.0, "lph": 4.0, "drippers": 1},
+        "Ginger": {"lpd": 5.0, "lph": 4.0, "drippers": 1},
+        "Mango": {"lpd": 25.0, "lph": 8.0, "drippers": 2},
+        "Tomato": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Chilli": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Brinjal": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Wheat": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Rice": {"lpd": 5.0, "lph": 4.0, "drippers": 1},
+        "Maize": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Gram": {"lpd": 3.5, "lph": 4.0, "drippers": 1},
+        "Green Gram": {"lpd": 3.5, "lph": 4.0, "drippers": 1},
+        "Groundnut": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Sorghum": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Bajra": {"lpd": 3.5, "lph": 4.0, "drippers": 1},
+        "Orange": {"lpd": 20.0, "lph": 8.0, "drippers": 2},
+        "Sunflower": {"lpd": 4.0, "lph": 4.0, "drippers": 1},
+        "Sesame": {"lpd": 3.5, "lph": 4.0, "drippers": 1},
+    }
+
     def calculate_irrigation_schedule(
         self, crop: str, temp_c: float = 28.0, rainfall_mm: float = 0.0
     ) -> IrrigationMathResult:
         """CoT drip physics & ET water calculator."""
-        if rainfall_mm >= 10.0:
+        crops = resolve_crops_smart(crop)
+        crop_key = crops[0] if crops else "Cotton"
+
+        if rainfall_mm >= 15.0:
             return IrrigationMathResult(
-                crop=crop,
+                crop=crop_key,
                 drip_hours_per_day=0.0,
                 liters_per_plant_day=0.0,
                 status="OFF_RAINFALL",
-                recommendation_mr=f"पाऊस {rainfall_mm:.1f} मिमी झाल्यामुळे पुढील २ दिवस ठिबक सिंचन बंद ठेवावे.",
+                recommendation_mr=f"पाऊस {rainfall_mm:.1f} मिमी असल्यामुळे पुढील २ दिवस ठिबक बंद ठेवावे.",
                 recommendation_en=f"Rainfall is {rainfall_mm:.1f}mm. Keep drip irrigation OFF for next 2 days.",
             )
 
-        base_hours = 2.5
-        liters = 5.0
+        cfg = self.DEFAULT_DRIP.get(crop_key, {"lpd": 5.0, "lph": 4.0, "drippers": 1})
+        lpd = cfg["lpd"]
         if temp_c >= 35.0:
-            base_hours += 1.0
-            liters += 2.0
-        elif temp_c <= 20.0:
-            base_hours = max(1.0, base_hours - 1.0)
-            liters = max(2.0, liters - 1.5)
+            lpd = round(lpd * 1.2, 1)
+
+        hours = lpd / (cfg["lph"] * cfg["drippers"])
+        hours = max(1.5, round(hours, 1))
 
         return IrrigationMathResult(
-            crop=crop,
-            drip_hours_per_day=round(base_hours, 1),
-            liters_per_plant_day=round(liters, 1),
+            crop=crop_key,
+            drip_hours_per_day=hours,
+            liters_per_plant_day=lpd,
             status="ACTIVE_DRIP",
-            recommendation_mr=f"तापमान {temp_c:.1f}°C असल्यामुळे दर आडदिवशी {base_hours:.1f} तास (प्रति झाड {liters:.1f} लिटर) ठिबक द्यावे.",
-            recommendation_en=f"At {temp_c:.1f}°C, run drip for {base_hours:.1f} hours alternate day ({liters:.1f} L/plant).",
+            recommendation_mr=f"दर आड दिवशी {hours:.1f} तास (प्रति झाड {lpd:.1f} लिटर) ठिबक सिंचन द्यावे.",
+            recommendation_en=f"Run drip for {hours:.1f} hours alternate day ({lpd:.1f} L/plant/day).",
         )
 
     def evaluate_disease_risk(

@@ -15,16 +15,6 @@ class KrushiRetriever:
     def __init__(self, kg_path: str = "data/kg_v2.jsonl"):
         self.docs: List[Dict] = []
         p = Path(kg_path)
-        if not p.exists():
-            alt = Path("data/knowledge_base.json")
-            if alt.exists():
-                try:
-                    data = json.loads(alt.read_text(encoding="utf-8"))
-                    if isinstance(data, list):
-                        self.docs = data
-                except Exception:
-                    pass
-
         if not self.docs and p.exists():
             with open(p, "r", encoding="utf-8") as f:
                 for line in f:
@@ -34,6 +24,23 @@ class KrushiRetriever:
                             self.docs.append(json.loads(line))
                         except Exception:
                             pass
+
+        if not self.docs:
+            data_dir = Path("data")
+            if data_dir.exists():
+                for jf in data_dir.glob("*.json"):
+                    if jf.name in ("knowledge_gap_report.json", "super_quality_report.json", "truth_sources_whitelist.json", "open_source_catalog.json", "knowledge_quality_report.md"):
+                        continue
+                    try:
+                        content = json.loads(jf.read_text(encoding="utf-8"))
+                        if isinstance(content, list):
+                            self.docs.extend(content)
+                        elif isinstance(content, dict):
+                            for k, v in content.items():
+                                if isinstance(v, list):
+                                    self.docs.extend(v)
+                    except Exception:
+                        pass
 
         if not self.docs:
             self.docs = [
@@ -64,7 +71,15 @@ class KrushiRetriever:
 
     def _index(self):
         for d in self.docs:
-            d["_tokens"] = set(split_tokens(d.get("title", "") + " " + d.get("text", "")))
+            title = d.get("title") or d.get("title_mr") or d.get("title_en") or d.get("name_mr") or d.get("name_en") or ""
+            text = d.get("text") or d.get("content") or d.get("content_mr") or d.get("content_en") or d.get("notes_mr") or ""
+            crop = d.get("crop") or d.get("crop_mr") or d.get("crop_en") or ""
+            cat = d.get("category") or d.get("type") or ""
+            full_text = f"{title} {crop} {cat} {text}"
+            d["_tokens"] = set(split_tokens(full_text))
+            if not d.get("title"):
+                d["title"] = title or f"{crop} {cat}".strip() or "Krushi Advisory"
+
         self.idf = {}
         N = len(self.docs)
         for d in self.docs:
